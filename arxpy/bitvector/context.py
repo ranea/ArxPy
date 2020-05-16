@@ -265,7 +265,7 @@ class ExecutionState(collections.abc.MutableMapping):
 
     def __init__(self, id_prefix="x"):
         """Initialize an ExecutionState."""
-        self.table = bidict.orderedbidict()
+        self.table = bidict.OrderedBidict()
         self.counter = 0
         self.id_prefix = id_prefix
 
@@ -326,7 +326,7 @@ class ExecutionState(collections.abc.MutableMapping):
 
             table[i] = (new_key, op.xreplace({old_id: new_id}))
 
-        self.table = bidict.orderedbidict(table)
+        self.table = bidict.OrderedBidict(table)
 
     def clear(self):
         """Clear the state."""
