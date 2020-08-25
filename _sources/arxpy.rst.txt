@@ -1,8 +1,12 @@
-.. include:: ../README.rst
+arxpy package
+=============
 
-===========
+.. automodule:: arxpy
+   :members:
+   :show-inheritance:
+
 Subpackages
-===========
+-----------
 
 .. toctree::
    :maxdepth: 4
