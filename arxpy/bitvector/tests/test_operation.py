@@ -1,11 +1,12 @@
-"""Tests for the expr module."""
+"""Tests for the operation module."""
 import doctest
 import unittest
 
-from hypothesis import given
+from hypothesis import given, settings
 from hypothesis.strategies import integers
 
 from arxpy.bitvector.core import Constant, Variable, bitvectify
+from arxpy.bitvector.extraop import PopCount, Reverse, PopCountSum2, PopCountSum3, PopCountDiff, LeadingZeros
 from arxpy.bitvector.operation import (
     BvAnd, BvOr, BvXor, BvComp, BvUlt, BvUle, BvUgt, BvUge, BvShl,
     BvLshr, RotateLeft, RotateRight, Concat, BvAdd, BvSub, BvMul, BvUdiv,
@@ -16,11 +17,11 @@ MIN_SIZE = 2
 MAX_SIZE = 32
 
 
-simple_op = set([
+simple_op = {
     BvAnd, BvOr, BvXor, BvComp, BvUlt, BvUle, BvUgt, BvUge, BvShl,
-    BvLshr, BvAdd, BvSub, BvMul, BvUdiv, BvUrem])
-unary_op = set([BvNeg, BvNot])
-others = set([RotateLeft, RotateRight, Concat, Extract, ZeroExtend, Repeat, Ite])
+    BvLshr, BvAdd, BvSub, BvMul, BvUdiv, BvUrem}
+unary_op = {BvNeg, BvNot}
+others = {RotateLeft, RotateRight, Concat, Extract, ZeroExtend, Repeat, Ite}
 
 
 class TestOperation(unittest.TestCase):
@@ -107,6 +108,7 @@ class TestOperation(unittest.TestCase):
         integers(min_value=0),
         integers(min_value=0),
     )
+    @settings(deadline=None)
     def test_pysmt_operations(self, width, x, y):
         try:
             from pysmt import shortcuts as sc
@@ -159,6 +161,7 @@ class TestOperation(unittest.TestCase):
             self.assertEqual(bvx / bvy, eval_pysmt(sc.BVUDiv(psx, psy)))
             self.assertEqual(bvx % bvy, eval_pysmt(sc.BVURem(psx, psy)))
 
+    # noinspection PyTypeChecker
     def test_invalid_operations(self):
         x = Variable("x", 8)
         y = Variable("y", 9)
@@ -225,99 +228,105 @@ class TestOperation(unittest.TestCase):
         with self.assertRaises((AssertionError, TypeError)):
             Ite(0, x, x)
 
+    # noinspection PyPep8
     def _simple_properties(self, x):
         width = x.width
-
         allones = BvNot(Constant(0, width))
 
-        assert ~~x == x
-        # assert ~(x & y) == (~x) | (~y)
-        # assert ~(x | y) == (~x) & (~y)
+        self.assertTrue( ~~x == x )
+        # self.assertTrue( ~(x & y) == (~x) | (~y) )
+        # self.assertTrue( ~(x | y) == (~x) & (~y) )
 
-        assert x & 0 == 0 & x == 0
-        assert x & allones == allones & x == x
-        assert x & x == x
-        assert x & (~x) == 0
+        self.assertTrue( x & 0 == 0 & x == 0 )
+        self.assertTrue( x & allones == allones & x == x )
+        self.assertTrue( x & x == x )
+        self.assertTrue( x & (~x) == 0 )
 
-        assert x | 0 == 0 | x == x
-        assert x | allones == allones | x == allones
-        assert x | x == x
-        assert x | (~x) == allones
+        self.assertTrue( x | 0 == 0 | x == x )
+        self.assertTrue( x | allones == allones | x == allones )
+        self.assertTrue( x | x == x )
+        self.assertTrue( x | (~x) == allones )
 
-        assert x ^ 0 == 0 ^ x == x
-        assert x ^ allones == allones ^ x == ~x
-        assert x ^ x == 0
-        assert x ^ (~x) == allones
+        self.assertTrue( x ^ 0 == 0 ^ x == x )
+        self.assertTrue( x ^ allones == allones ^ x == ~x )
+        self.assertTrue( x ^ x == 0 )
+        self.assertTrue( x ^ (~x) == allones )
 
-        assert x << 0 == x >> 0 == x
-        assert 0 << x == 0 >> x == 0
+        self.assertTrue( x << 0 == x >> 0 == x )
+        self.assertTrue( 0 << x == 0 >> x == 0 )
         if isinstance(x, Constant):
             r = min(2 * int(x), x.width)
-            assert (x << x) << x == x << r
-            assert (x >> x) >> x == x >> r
+            self.assertTrue( (x << x) << x == x << r )
+            self.assertTrue( (x >> x) >> x == x >> r )
         elif isinstance(x, Variable) and x.width >= 2:
-            assert (x << 1) << 1 == x << 2
-            assert (x >> 1) >> 1 == x >> 2
+            self.assertTrue( (x << 1) << 1 == x << 2 )
+            self.assertTrue( (x >> 1) >> 1 == x >> 2 )
 
         n = x.width
-        assert RotateLeft(x, 0) == RotateRight(x, 0) == x
+        self.assertTrue( RotateLeft(x, 0) == RotateRight(x, 0) == x )
         if x.width > 2:
-            assert RotateLeft(RotateLeft(x, 1), 1) == RotateLeft(x, 2)
-            assert RotateRight(RotateRight(x, 1), 1) == RotateRight(x, 2)
+            self.assertTrue( RotateLeft(RotateLeft(x, 1), 1) == RotateLeft(x, 2) )
+            self.assertTrue( RotateRight(RotateRight(x, 1), 1) == RotateRight(x, 2) )
         if x.width > 3:
-            assert RotateLeft(RotateRight(x, 1), 2) == RotateRight(x, n - 1)
-            assert RotateRight(RotateLeft(x, 1), 2) == RotateLeft(x, n - 1)
+            self.assertTrue( RotateLeft(RotateRight(x, 1), 2) == RotateRight(x, n - 1) )
+            self.assertTrue( RotateRight(RotateLeft(x, 1), 2) == RotateLeft(x, n - 1) )
 
         if isinstance(x, Constant):
             i = int(x) % (width - 1)
         elif isinstance(x, Variable) and x.width >= 2:
             i = width - 2
+        else:
+            raise ValueError("invalid x: {}".format(x))
         n = x.width
-        assert x[:] == x
-        assert x[:i][1:0] == x[i + 1:i]
-        assert Concat(x, x)[n - 1:i] == x[:i]  # n - 1 <= x.width - 1
-        assert Concat(x, x)[n + i:n] == x[i:]  # n >= x.wdith
-        assert (x << i)[:i] == x[n - 1 - i:]  # i <= i
-        assert RotateLeft(x, i)[:i + 1] == x[n - 1 - i: 1]  # i <= i + 1
-        assert (x >> i)[n - i - 1:] == x[n - 1:i]  # n - i - 1 < n - i
-        assert RotateRight(x, i)[n - i - 1:] == x[n - 1:i]
+        self.assertTrue( x[:] == x )
+        self.assertTrue( x[:i][1:0] == x[i + 1:i] )
+        self.assertTrue( Concat(x, x)[n - 1:i] == x[:i] ) # n - 1 <= x.width - 1
+        self.assertTrue( Concat(x, x)[n + i:n] == x[i:] ) # n >= x.width
+        self.assertTrue( (x << i)[:i] == x[n - 1 - i:] ) # i <= i
+        self.assertTrue( RotateLeft(x, i)[:i + 1] == x[n - 1 - i: 1] )  # i <= i + 1
+        self.assertTrue( (x >> i)[n - i - 1:] == x[n - 1:i] ) # n - i - 1 < n - i
+        self.assertTrue( RotateRight(x, i)[n - i - 1:] == x[n - 1:i] )
         # assert (x & y)[0] == x[0] & y[0]
 
         if isinstance(x, Constant):
             i = int(x) % (width - 1)
         else:
-            assert x.width >= 2
+            self.assertTrue( x.width >= 2 )
             i = width - 2
-        assert Concat(x[:i + 1], x[i:]) == x
+        self.assertTrue( Concat(x[:i + 1], x[i:]) == x )
+        zero_bit = Constant(0, 1)
+        self.assertTrue( Concat(zero_bit, Concat(zero_bit, x)) == Concat(Constant(0, 2), x) )
+        self.assertTrue( Concat(Concat(x, zero_bit), zero_bit) == Concat(x, Constant(0, 2)) )
 
-        assert -(-x) == x
+        self.assertTrue( -(-x) == x )
         # assert -(x + y) == -(x) + -(y)
         # assert -(x * y) == -(x) * y
         # assert -(x / y) == -(x) / y
         # assert -(x % y) == -(x) % y
         # assert -(x ^ y) == BvNot(x ^ y, evaluate=False)
 
-        assert x + 0 == 0 + x == x
-        assert x + (-x) == 0
+        self.assertTrue( x + 0 == 0 + x == x )
+        self.assertTrue( x + (-x) == 0 )
 
-        assert x - 0 == x
-        assert 0 - x == -x
-        assert x - x == 0
+        self.assertTrue( x - 0 == x )
+        self.assertTrue( 0 - x == -x )
+        self.assertTrue( x - x == 0 )
 
-        assert x * 0 == 0 * x == 0
-        assert x * 1 == 1 * x == x
+        self.assertTrue( x * 0 == 0 * x == 0 )
+        self.assertTrue( x * 1 == 1 * x == x )
 
         if x != 0:
-            assert x / x == 1
-            assert 0 / x == 0
-            assert x / 1 == x
+            self.assertTrue( x / x == 1 )
+            self.assertTrue( 0 / x == 0 )
+            self.assertTrue( x / 1 == x )
 
-            assert x % x == 0 % x == x % 1 == 0
+            self.assertTrue( x % x == 0 % x == x % 1 == 0 )
 
     @given(
         integers(min_value=MIN_SIZE, max_value=MAX_SIZE),
         integers(min_value=0),
     )
+    @settings(deadline=None)
     def test_constant_properties(self, width, x):
         self._simple_properties(Constant(x % (2 ** width), width))
 
@@ -398,15 +407,15 @@ class TestOperation(unittest.TestCase):
     def test_basic_simplify(self):
         x, y, z = Variable("x", 8), Variable("y", 8), Variable("z", 8)
 
-        allones = Constant((2 ** 8) - 1, 8)
-        notone = ~Constant(1, 8)
+        all_ones = Constant((2 ** 8) - 1, 8)
+        not_one = ~Constant(1, 8)
 
         # constants
 
-        self.assertEqual(1 + (x + allones), x)
+        self.assertEqual(1 + (x + all_ones), x)
         self.assertEqual(1 ^ (x ^ 1), x)
-        self.assertEqual(1 & (x & notone), 0)
-        self.assertEqual(1 | (x | notone), allones)
+        self.assertEqual(1 & (x & not_one), 0)
+        self.assertEqual(1 | (x | not_one), all_ones)
 
         # compatible terms
 
@@ -418,19 +427,21 @@ class TestOperation(unittest.TestCase):
         self.assertEqual((x ^ z) + (y - (x ^ z)), y)
         self.assertEqual((x + z) ^ (y ^ (x + z)), y)
 
-        self.assertEqual((x + z) + (y - x), z + y)
+        # self.assertEqual((x + z) + (y - x), z + y)
         self.assertEqual((x ^ z) ^ (y ^ x), z ^ y)
         self.assertEqual((x & z) & (y & (~x)), 0)
-        self.assertEqual((x | z) | (y | (~x)), allones)
+        self.assertEqual((x | z) | (y | (~x)), all_ones)
 
     def test_advanced_simplify(self):
         k = Variable("k", 8)
 
+        # noinspection PyShadowingNames
         def f(x, y):
             x = (RotateRight(x, 7) + y) ^ k
             y = RotateLeft(y, 2) ^ x
             return x, y
 
+        # noinspection PyShadowingNames
         def f_inverse(x, y):
             y = RotateRight(x ^ y, 2)
             x = RotateLeft((x ^ k) - y, 7)
@@ -441,9 +452,65 @@ class TestOperation(unittest.TestCase):
         self.assertEqual(f_inverse(*f(x, y)), (x, y))
         self.assertEqual(f(*f_inverse(x, y)), (x, y))
 
+    @given(
+        integers(min_value=MIN_SIZE, max_value=2*MAX_SIZE),
+        integers(min_value=0),
+    )
+    # @settings(max_examples=1000000)
+    def test_extraop(self, width, x):
+        bv = Constant(x % (2 ** width), width)
+        hw = PopCount(bv)
+        rev = Reverse(bv)
+        lz = LeadingZeros(bv)
 
+        lz_bf = ""
+        for i in bv.bin()[2:]:
+            if i == "0":
+                lz_bf += "1"
+            else:
+                break
+        lz_bf += "0"*(bv.width - len(lz_bf))
+
+        self.assertEqual(int(hw), bin(int(bv)).count("1"))
+        self.assertEqual(rev.bin()[2:], bv.bin()[2:][::-1])
+        self.assertEqual(lz.bin()[2:], lz_bf)
+
+
+    @given(
+        integers(min_value=MIN_SIZE, max_value=2*MAX_SIZE),
+        integers(min_value=0),
+        integers(min_value=0),
+        integers(min_value=0),
+    )
+    # @settings(max_examples=100000)
+    def test_PopCountExtra(self, width, x, y, z):
+        bvx = Constant(x % (2 ** width), width)
+        hwx = PopCount(bvx)
+        bvy = Constant(y % (2 ** width), width)
+        hwy = PopCount(bvy)
+        bvz = Constant(z % (2 ** width), width)
+        hwz = PopCount(bvz)
+
+        popsum2 = PopCountSum2(bvx, bvy)
+        popsum3 = PopCountSum3(bvx, bvy, bvz)
+        popdiff = PopCountDiff(bvx, bvy)
+
+        self.assertEqual(
+            int(hwx) + int(hwy),
+            int(popsum2))
+        self.assertEqual(
+            int(hwx) + int(hwy) + int(hwz),
+            int(popsum3))
+        self.assertEqual(
+            (int(hwx) - int(hwy)) % (2 ** popdiff.width),
+            int(popdiff))
+
+
+# noinspection PyUnusedLocal,PyUnusedLocal
 def load_tests(loader, tests, ignore):
     """Add doctests."""
     import arxpy.bitvector.operation
+    import arxpy.bitvector.extraop
     tests.addTests(doctest.DocTestSuite(arxpy.bitvector.operation))
+    tests.addTests(doctest.DocTestSuite(arxpy.bitvector.extraop))
     return tests

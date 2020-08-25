@@ -1,20 +1,19 @@
-"""The Operation module provides the common bit-vector operators."""
+"""Provide the common bit-vector operators."""
 import collections
-import enum
 import functools
 import itertools
 import math
 
 from sympy.core import cache
 from sympy.core import compatibility
-from sympy.printing import precedence as preced
+from sympy.printing import precedence as sympy_precedence
 
 from arxpy.bitvector import context
 from arxpy.bitvector import core
 
 
 def _cacheit(func):
-    """Cache functions if the CacheContext is enabled."""
+    """Cache functions if `CacheContext` is enabled."""
     cfunc = cache.cacheit(func)
 
     def cached_func(*args, **kwargs):
@@ -26,121 +25,65 @@ def _cacheit(func):
     return cached_func
 
 
-class OperatorType(enum.Enum):
-    """Enumeration for specifying the type of an bit-vector operator."""
-
-    Bitwise = enum.auto()
-    Relational = enum.auto()
-    Shift = enum.auto()
-    Rotation = enum.auto()
-    Arithmetic = enum.auto()
-    Other = enum.auto()
+def _tuplify(seq):
+    if isinstance(seq, collections.abc.Sequence):
+        return tuple(seq)
+    else:
+        return tuple([seq])
 
 
+# noinspection PyUnresolvedReferences
 class Operation(core.Term):
-    """Base class for bit-vector operators.
+    """Represent bit-vector operations.
 
-    A bit-vector operator represents an operation that takes some bit-vector
-    operands (i.e. terms) and and scalar operands (i.e. integer),
-    and computes a single bit-vector term. The application of a
-    bit-vector operator to a particular set of operands is called
-    a bit-vector operation (e.g. bvxor is a bit-vector operator and
-    bvxor(Constant(1, 8), Variable("x", 8)) is a bit-vector operation
-    with operand Constant(1, 8) and Variable("x", 8)).
+    A bit-vector operation takes some bit-vector operands (i.e. `Term`)
+    and some scalar operands (i.e. `int`), and returns a single
+    bit-vector term. Often, *operator* is used to denote the operation
+    as a function (without operands) and *operation* is used to denote
+    the application of a operator to some operands.
 
-    A operator has to specify a signature (its syntantic rules):
+    This class is not meant to be instantiated but to provide a base
+    class for the different types of bit-vector operations.
 
-    - arity: pair of number specifying the number of bit-vector operands
-      and scalar
-    - condition (optional): restriction on the bit-widths and the scalar
-      values
-    - output_width: the bit-width of the resulting bit-vector
+    Attributes:
+        arity: a pair of number specifying the number of bit-vector operands
+            (at least one) and scalar operands.
+        is_symmetric: True if the operator is symmetric with respect to
+            its operands. Operators with scalar operands cannot be symmetric.
+        is_simple: True if the operator is *simple*, that is, all its
+            operands are bit-vector of the same width. Simple operators allow
+            *Automatic Constant Conversion*, that is, instead of passing
+            all arguments as bit-vector types, it is possible to pass
+            arguments as plain integers.
 
-    In addition, a operator has also to specify:
+            ::
 
-    - is_symmetric: whether the operator is symmetric with respect to
-      its operand.
-    - operator_type (optional): a value from the enumeration OperatorType.
-    - operand_types (optional): a list specifying the types of the operands
-    in order.
-    - simple_operator (optional): an operator is *simple* if it has no scalar
-    operands and all the bit-vector operands have the same width. If that
-    is the case and simple_operator is True, the operator provides
-    *Automatic Constant Conversion*.
-    - short_name (optional): a string that will replace the name of the
-      operator when printing.
-    - unary_symbol/infix_symbool (optional): a string with the operator symbol
-      that will be used for printing.
+                >>> from arxpy.bitvector.core import Constant
+                >>> (Constant(1, 8) + 1).vrepr()
+                'Constant(0b00000010, width=8)'
 
-    Automatic Constant Conversion allows to pass integers as bit-vector
-    operands as long as one operand is passed as a bit-vector term
-    (to deduce the bit-width). For example, the modular addition is a
-    simple operator and provides Automatic Constant Conversion as shown:
-
-        >>> from arxpy.bitvector.core import Variable
-        >>> (Variable("x", 8) + 1).vrepr()
-        "BvAdd(Constant(0b00000001, width=8), Variable('x', width=8), width=8)"
-
-    Many operators can be used with the usual Python operators (+, ^, <=, ...).
-    See each operator for more information.
-
+        operand_types: a list specifying the types of the operands (optional
+            if all operands are bit-vectors)
+        alt_name: an alternative name used when printing (optional)
+        unary_symbol: a symbol used when printing (optional)
+        infix_symbol: a symbol used when printing (optional)
     """
 
     is_Atom = False
-    precedence = preced.PRECEDENCE["Func"]
+    precedence = sympy_precedence.PRECEDENCE["Func"]
 
-    operator_type = OperatorType.Other
-
-    @classmethod
-    def _parse_args(cls, *args):
-        # Automatic Constant Conversion
-        if getattr(cls, "simple_operator", False):
-            for a in args:
-                if isinstance(a, core.Term):
-                    w = a.width
-                    break
-            else:
-                msg = "{} expects at least 1 term operand"
-                raise TypeError(msg.format(cls.__name__))
-
-            args = [core.Constant(a, w) if isinstance(a, int) else a for a in args]
-
-        if getattr(cls, "operand_types", False):
-            if cls.is_symmetric:
-                op_types = collections.Counter(cls.operand_types)
-                arg_types = collections.Counter([type(a) for a in args])
-                assert op_types == arg_types
-            else:
-                for arg_type, arg in zip(cls.operand_types, args):
-                    assert isinstance(arg, arg_type)
-
-        num_terms = 0
-        num_scalars = 0
-        for a in args:
-            if isinstance(a, core.Term):
-                num_terms += 1
-            elif isinstance(a, int):
-                num_scalars += 1
-            else:
-                assert False
-        assert tuple(cls.arity) == (num_terms, num_scalars)
-
-        if cls.is_symmetric:
-            args = sorted(args, key=compatibility.default_sort_key)
-
-        if hasattr(cls, "condition"):
-            assert cls.condition(*args)
-
-        return args
+    is_simple = False
 
     @_cacheit
     def __new__(cls, *args, **options):
-        """Create the object."""
         val_op = options.pop("validate_operands",
                              context.Validation.current_context)
         evaluate = options.pop("evaluate", context.Evaluation.current_context)
-        simplify = options.pop("simplify", context.Simplification.current_context)
-        st = options.pop("state", context.StatefulExecution.current_context)
+        simplify = options.pop("simplify",
+                               context.Simplification.current_context)
+        st = options.pop("state", context.Memoization.current_context)
+        noteval = _tuplify(options.pop("notevaluate",
+                                       context.NotEvaluation.current_context))
 
         if val_op:
             args = cls._parse_args(*args)
@@ -156,64 +99,109 @@ class Operation(core.Term):
 
         width = cls.output_width(*args)
 
-        with context.StatefulExecution(None):
-            if evaluate:
+        if noteval is None:
+            noteval = []
+
+        with context.Memoization(None):
+            if evaluate and not(cls in noteval):
                 result = cls.eval(*args)
             else:
                 result = None
 
         if result is not None:
-            return result
+            # result is already a Term/Operation (possibly simplified)
+            obj = result
+        else:
+            obj = super().__new__(cls, *args, width=width)
 
-        obj = super().__new__(cls, *args, **options, width=width)
+            if isinstance(obj, Operation) and simplify and evaluate:
+                with context.Simplification(False), context.Memoization(None):
+                    while True:
+                        obj, modified = obj._simplify()
+                        if not modified or not isinstance(obj, Operation):
+                            break
 
         if isinstance(obj, Operation) and st is not None:
+            for arg in obj.args:
+                if isinstance(arg, Operation):
+                    raise ValueError("arg {} of {} was not memoized".format(arg, obj))
             if st.contain_op(obj):
                 return st.get_id(obj)
             else:
                 return st.add_op(obj)
 
-        if isinstance(obj, Operation) and simplify and evaluate:
-            with context.Simplification(False):
-                while True:
-                    obj, modified = obj._simplify()
-                    if not modified or not isinstance(obj, Operation):
-                        break
-
         return obj
 
+    @classmethod
+    def _parse_args(cls, *args):
+        # Automatic Constant Conversion
+        if cls.is_simple:
+            for a in args:
+                if isinstance(a, core.Term):
+                    w = a.width
+                    break
+            else:
+                msg = "{} expects at least 1 term operand"
+                raise TypeError(msg.format(cls.__name__))
+
+            args = [core.Constant(a, w) if isinstance(a, int) else a for a in args]
+
+        if hasattr(cls, "operand_types"):
+            operand_types = cls.operand_types
+        else:
+            operand_types = [core.Term for _ in args]
+        for arg_type, arg in zip(operand_types, args):
+            assert isinstance(arg, arg_type)
+
+        num_terms = 0
+        num_scalars = 0
+        for a in args:
+            if isinstance(a, core.Term):
+                num_terms += 1
+            elif isinstance(a, int):
+                num_scalars += 1
+            else:
+                assert False
+        assert tuple(cls.arity) == (num_terms, num_scalars)
+        assert num_terms >= 1
+
+        if cls.is_symmetric:
+            args = sorted(args, key=compatibility.default_sort_key)
+
+        assert cls.condition(*args), "{}.condition({}) did not hold".format(cls, args)
+
+        return args
+
     def _simplify(self):
-        """Simplify the bit-vector operation depending on the operation."""
+        """Simplify the bit-vector operation.
+
+        Return the simplified value and a boolean flag depending on
+        whether or not the expression was reduced.
+        """
         return self, False
 
     def _binary_symmetric_simplification(self, compatible_terms):
-        """Basic simplification for binary symmetric operator.
+        """Simplify a binary symmetric operation.
 
-        The arguments are assumed to be already simplified.
+        Replace pair of *compatible connected terms* by their resulting value.
+        * Two terms are connected if they are arguments of the same operator
+          node when the bit-vector expression is flattened (e.g. ``z``
+          and ``t`` are connected in ``((x ^ y) + z) + t``.
+        * Two connected terms are compatible if they can be simplified.
+          For example, two constants are always compatible.
 
-        Performs the following simplification:
+        Note that this function assumed the arguments of the operation
+        are already simplified.
 
-            - Given two compatible terms connected, it replaces them by
-              the operation with operands these two terms.
-
-        Two terms are connected if they are arguments of the same operator
-        node when the whole expression is flattened. For example, in
-        ((x ^ y) + z) + t, {x, t} are not connected by {z, t} are.
-
-        Two terms are compatible if they can be simplified. For example,
-        two constants are always compatible or {x, ~x} are compatible
-        if the root operation is bitwise.
-
-        The argument compatible_terms is a sequence of lambda functions
-        that computes each compatible terms. For example, BvXor has the
-        following compatible_terms sequence:
-
-            [lambda x: BvNot(x), lambda x: x]
+        Args:
+            compatible_terms: a list of lambda functions specifying
+            the compatible terms for a particular operator.
 
         """
         op = type(self)
-        assert isinstance(compatible_terms, collections.Sequence)
+        assert isinstance(compatible_terms, collections.abc.Sequence)
 
+        # noinspection PyShadowingNames
         def replace_constant(cte, expr):
             modified = False
             newargs = []
@@ -221,10 +209,10 @@ class Operation(core.Term):
             for arg in expr.args:
                 if not modified:
                     if isinstance(arg, core.Constant):
-                        arg = op(x, arg)
+                        arg = op(cte, arg)
                         modified = True
                     elif isinstance(arg, op):
-                        arg, modified = replace_constant(x, arg)
+                        arg, modified = replace_constant(cte, arg)
 
                     newargs.append(arg)
                 else:
@@ -235,20 +223,23 @@ class Operation(core.Term):
                 new_expr = newargs[0]
             elif len(newargs) == 2:
                 new_expr = op(*newargs)
+            else:
+                raise ValueError("invalid newargs length: {}".format(newargs))
 
             return new_expr, modified
 
-        def replace_term(x, compatible_terms, expr):
+        # noinspection PyShadowingNames
+        def replace_term(term, compatible_terms, expr):
             modified = False
             newargs = []
 
             for arg in expr.args:
                 if not modified:
                     if arg in compatible_terms:
-                        arg = op(x, arg)
+                        arg = op(term, arg)
                         modified = True
                     elif isinstance(arg, op):
-                        arg, modified = replace_term(x, compatible_terms, arg)
+                        arg, modified = replace_term(term, compatible_terms, arg)
 
                     newargs.append(arg)
                 else:
@@ -259,70 +250,82 @@ class Operation(core.Term):
                 new_expr = newargs[0]
             elif len(newargs) == 2:
                 new_expr = op(*newargs)
+            else:
+                raise ValueError("invalid newargs length: {}".format(newargs))
 
             return new_expr, modified
 
         x, y = self.args
 
-        mod = False  # modified
+        modified = False  # modified
 
         if isinstance(x, core.Constant) and isinstance(y, op):
-            new_expr, mod = replace_constant(x, y)
+            new_expr, modified = replace_constant(x, expr=y)
         elif isinstance(y, core.Constant) and isinstance(x, op):
-            new_expr, mod = replace_constant(y, x)
+            new_expr, modified = replace_constant(y, expr=x)
 
-        if not mod and not isinstance(x, core.Constant) and isinstance(y, op):
-            new_expr, mod = replace_term(x, [f(x) for f in compatible_terms], y)
+        if not modified and not isinstance(x, core.Constant) and isinstance(y, op):
+            new_expr, modified = replace_term(x, [f(x) for f in compatible_terms], y)
 
-        if not mod and not isinstance(y, core.Constant) and isinstance(x, op):
-            new_expr, mod = replace_term(y, [f(y) for f in compatible_terms], x)
+        if not modified and not isinstance(y, core.Constant) and isinstance(x, op):
+            new_expr, modified = replace_term(y, [f(y) for f in compatible_terms], x)
 
-        if not mod and isinstance(x, op) and isinstance(y, op):
+        if not modified and isinstance(x, op) and isinstance(y, op):
             x1, x2 = x.args
 
             if op(x1, y, evaluate=False) != op(x1, y):
                 new_expr = op(x2, op(x1, y))
-                mod = True
+                modified = True
 
-            if not mod and op(x2, y, evaluate=False) != op(x2, y):
+            if not modified and op(x2, y, evaluate=False) != op(x2, y):
                 new_expr = op(x1, op(x2, y))
-                mod = True
+                modified = True
 
-            if not mod:
-                new_expr, mod = op(x1, y)._simplify()
+            if not modified:
+                new_expr, modified = op(x1, y)._simplify()
                 new_expr = op(x2, new_expr)
 
-            if not mod:
-                new_expr, mod = op(x2, y)._simplify()
+            if not modified:
+                new_expr, modified = op(x2, y)._simplify()
                 new_expr = op(x1, new_expr)
 
-        if mod:
+        if modified:
+            # noinspection PyUnboundLocalVariable
             return new_expr, True
         else:
             return self, False
 
     @classmethod
-    def eval(cls, *args):
-        """Evaluate the bit-vector operator with the given arguments.
+    def condition(cls, *args):
+        """Check if the operands verify the restrictions of the operator."""
+        return True
 
-        Note that the operands in args have been already processed
-        so they are either Term or int.
+    def output_width(*args):
+        """Return the bit-width of the resulting bit-vector."""
+        raise NotImplementedError("subclasses need to override this method")
+
+    @classmethod
+    def eval(cls, *args):
+        """Evaluate the operator with given operands.
+
+        This is an internal method. To evaluate a bit-vector operation,
+        use the operator ``()``.
         """
-        return
+        raise NotImplementedError("subclasses need to override this method")
 
     @classmethod
     def class_key(cls):
-        """Return the identifier used for sorting."""
+        """Return the key (identifier) of the class for sorting."""
         return 3, 0, cls.__name__
 
     @property
     def formula_size(self):
         """The formula size of the operation."""
-        def L(n):
+        def log2(n):
             return int(math.ceil(math.log(n, 2)))
 
         def bin_enc(n):
-            return 1 + L(n + 1)
+            return 1 + log2(n + 1)
 
         size = 1 + bin_enc(self.width)
         for arg in self.args:
@@ -339,7 +342,7 @@ class Operation(core.Term):
 class BvNot(Operation):
     """Bitwise negation operation.
 
-    It overrides the operator ~. See Operation for more information.
+    It overrides the operator ~. See `Operation` for more information.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import BvNot
@@ -354,7 +357,6 @@ class BvNot(Operation):
 
     arity = [1, 0]
     is_symmetric = False
-    operator_type = OperatorType.Bitwise
     unary_symbol = "~"
 
     @classmethod
@@ -382,7 +384,7 @@ class BvAnd(Operation):
     """Bitwise AND (logical conjunction) operation.
 
     It overrides the operator & and provides Automatic Constant Conversion.
-    See Operation for more information.
+    See `Operation` for more information.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import BvAnd
@@ -399,8 +401,7 @@ class BvAnd(Operation):
 
     arity = [2, 0]
     is_symmetric = True
-    operator_type = OperatorType.Bitwise
-    simple_operator = True
+    is_simple = True
     infix_symbol = "&"
 
     @classmethod
@@ -413,7 +414,7 @@ class BvAnd(Operation):
 
     @classmethod
     def eval(cls, x, y):
-        def doit(x, y, width):
+        def doit(x, y):
             """AND operation when both operands are int."""
             return x & y
 
@@ -421,7 +422,7 @@ class BvAnd(Operation):
         allones = BvNot(zero)
 
         if isinstance(x, core.Constant) and isinstance(y, core.Constant):
-            return core.Constant(doit(int(x), int(y), x.width), x.width)
+            return core.Constant(doit(int(x), int(y)), x.width)
         elif x == zero or y == zero:
             return zero
         elif x == allones:
@@ -446,7 +447,7 @@ class BvOr(Operation):
     """Bitwise OR (logical disjunction) operation.
 
     It overrides the operator | and provides Automatic Constant Conversion.
-    See Operation for more information.
+    See `Operation` for more information.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import BvOr
@@ -463,8 +464,7 @@ class BvOr(Operation):
 
     arity = [2, 0]
     is_symmetric = True
-    operator_type = OperatorType.Bitwise
-    simple_operator = True
+    is_simple = True
     infix_symbol = "|"
 
     @classmethod
@@ -477,7 +477,7 @@ class BvOr(Operation):
 
     @classmethod
     def eval(cls, x, y):
-        def doit(x, y, width):
+        def doit(x, y):
             """OR operation when both operands are int."""
             return x | y
 
@@ -485,7 +485,7 @@ class BvOr(Operation):
         allones = BvNot(zero)
 
         if isinstance(x, core.Constant) and isinstance(y, core.Constant):
-            return core.Constant(doit(int(x), int(y), x.width), x.width)
+            return core.Constant(doit(int(x), int(y)), x.width)
         elif x == allones or y == allones:
             return allones
         elif x == zero:
@@ -510,7 +510,7 @@ class BvXor(Operation):
     """Bitwise XOR (exclusive-or) operation.
 
     It overrides the operator ^ and provides Automatic Constant Conversion.
-    See Operation for more information.
+    See `Operation` for more information.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import BvXor
@@ -527,8 +527,7 @@ class BvXor(Operation):
 
     arity = [2, 0]
     is_symmetric = True
-    operator_type = OperatorType.Bitwise
-    simple_operator = True
+    is_simple = True
     infix_symbol = "^"
 
     @classmethod
@@ -541,7 +540,7 @@ class BvXor(Operation):
 
     @classmethod
     def eval(cls, x, y):
-        def doit(x, y, width):
+        def doit(x, y):
             """XOR operation when both operands are int."""
             return x ^ y
 
@@ -549,7 +548,7 @@ class BvXor(Operation):
         allones = BvNot(zero)
 
         if isinstance(x, core.Constant) and isinstance(y, core.Constant):
-            return core.Constant(doit(int(x), int(y), x.width), x.width)
+            return core.Constant(doit(int(x), int(y)), x.width)
         elif x == zero:
             return y
         elif y == zero:
@@ -577,7 +576,7 @@ class BvXor(Operation):
 class BvComp(Operation):
     """Equality operator.
 
-    Provides Automatic Constant Conversion. See Operation for more
+    Provides Automatic Constant Conversion. See `Operation` for more
     information.
 
         >>> from arxpy.bitvector.core import Constant, Variable
@@ -591,8 +590,8 @@ class BvComp(Operation):
 
     The operator == is used for exact structural equality testing and
     it returns either True or False. On the other hand, BvComp
-    performs symbolic equality testing and if it cannot prove the objects
-    are equal (or unequal), it leaves the relation unevaluated.
+    performs symbolic equality testing and it leaves the relation unevaluated
+    if it cannot prove the objects are equal (or unequal).
 
         >>> Variable("x", 8) == Variable("y", 8)
         False
@@ -603,8 +602,7 @@ class BvComp(Operation):
 
     arity = [2, 0]
     is_symmetric = True
-    operator_type = OperatorType.Relational
-    simple_operator = True
+    is_simple = True
     infix_symbol = "=="
 
     @classmethod
@@ -630,7 +628,7 @@ class BvUlt(Operation):
     """Unsigned less than operator.
 
     It overrides < and provides Automatic Constant Conversion.
-    See Operation for moreinformation.
+    See `Operation` for more information.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import BvUlt
@@ -647,8 +645,7 @@ class BvUlt(Operation):
 
     arity = [2, 0]
     is_symmetric = False
-    operator_type = OperatorType.Relational
-    simple_operator = True
+    is_simple = True
     infix_symbol = "<"
 
     @classmethod
@@ -672,7 +669,7 @@ class BvUle(Operation):
     """Unsigned less than or equal operator.
 
     It overrides <= and provides Automatic Constant Conversion.
-    See Operation for moreinformation.
+    See `Operation` for more information.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import BvUle
@@ -689,8 +686,7 @@ class BvUle(Operation):
 
     arity = [2, 0]
     is_symmetric = False
-    operator_type = OperatorType.Relational
-    simple_operator = True
+    is_simple = True
     infix_symbol = "<="
 
     @classmethod
@@ -714,7 +710,7 @@ class BvUgt(Operation):
     """Unsigned greater than operator.
 
     It overrides > and provides Automatic Constant Conversion.
-    See Operation for moreinformation.
+    See `Operation` for more information.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import BvUgt
@@ -731,8 +727,7 @@ class BvUgt(Operation):
 
     arity = [2, 0]
     is_symmetric = False
-    operator_type = OperatorType.Relational
-    simple_operator = True
+    is_simple = True
     infix_symbol = ">"
 
     @classmethod
@@ -756,7 +751,7 @@ class BvUge(Operation):
     """Unsigned greater than or equal operator.
 
     It overrides >= and provides Automatic Constant Conversion.
-    See Operation for moreinformation.
+    See `Operation` for more information.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import BvUgt
@@ -773,8 +768,7 @@ class BvUge(Operation):
 
     arity = [2, 0]
     is_symmetric = False
-    operator_type = OperatorType.Relational
-    simple_operator = True
+    is_simple = True
     infix_symbol = ">="
 
     @classmethod
@@ -800,7 +794,7 @@ class BvShl(Operation):
     """Shift left operation.
 
     It overrides << and provides Automatic Constant Conversion.
-    See Operation for more information.
+    See `Operation` for more information.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import BvShl
@@ -817,8 +811,7 @@ class BvShl(Operation):
 
     arity = [2, 0]
     is_symmetric = False
-    operator_type = OperatorType.Shift
-    simple_operator = True
+    is_simple = True
     infix_symbol = "<<"
 
     @classmethod
@@ -854,7 +847,7 @@ class BvLshr(Operation):
     """Logical right shift operation.
 
     It overrides >> and provides Automatic Constant Conversion.
-    See Operation for more information.
+    See `Operation` for more information.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import BvLshr
@@ -871,8 +864,7 @@ class BvLshr(Operation):
 
     arity = [2, 0]
     is_symmetric = False
-    operator_type = OperatorType.Shift
-    simple_operator = True
+    is_simple = True
     infix_symbol = ">>"
 
     @classmethod
@@ -885,14 +877,14 @@ class BvLshr(Operation):
 
     @classmethod
     def eval(cls, x, y):
-        def doit(x, y, width):
+        def doit(x, y):
             """Logical right shift operation when both operands are int."""
             return x >> y
 
         zero = core.Constant(0, x.width)
 
         if isinstance(x, core.Constant) and isinstance(y, core.Constant):
-            return core.Constant(doit(int(x), int(y), x.width), x.width)
+            return core.Constant(doit(int(x), int(y)), x.width)
         elif isinstance(y, core.Constant) and y >= x.width:
             return zero
         elif x == zero or y == zero:
@@ -917,8 +909,8 @@ class RotateLeft(Operation):
 
     arity = [1, 1]
     is_symmetric = False
-    operator_type = OperatorType.Rotation
     infix_symbol = "<<<"
+    operand_types = [core.Term, int]
 
     @classmethod
     def condition(cls, x, r):
@@ -930,16 +922,11 @@ class RotateLeft(Operation):
 
     @classmethod
     def eval(cls, x, r):
-        # if isinstance(x, core.Constant):
-        #     if x.width == 1 or r == 0:
-        #         return x
-        #     else:
-        #         return Concat(x[x.width - r - 1:], x[x.width - 1: x.width - r])
-
         def doit(val, r, width):
             """Left cyclic rotation operation when both operands are int."""
             mask = 2 ** width - 1
-            return ((val << r) & mask) | ((val & mask) >> (width) - r)
+            r = r % width
+            return ((val << r) & mask) | ((val & mask) >> (width - r))
 
         if isinstance(x, core.Constant):
             return core.Constant(doit(int(x), r, x.width), x.width)
@@ -954,7 +941,7 @@ class RotateLeft(Operation):
 class RotateRight(Operation):
     """Circular right rotation operation.
 
-    It provides Automatic Constant Conversion. See Operation for more
+    It provides Automatic Constant Conversion. See `Operation` for more
     information.
 
         >>> from arxpy.bitvector.core import Constant, Variable
@@ -968,8 +955,8 @@ class RotateRight(Operation):
 
     arity = [1, 1]
     is_symmetric = False
-    operator_type = OperatorType.Rotation
     infix_symbol = ">>>"
+    operand_types = [core.Term, int]
 
     @classmethod
     def condition(cls, x, r):
@@ -981,12 +968,6 @@ class RotateRight(Operation):
 
     @classmethod
     def eval(cls, x, r):
-        # if isinstance(x, core.Constant):
-        #     if x.width == 1 or r == 0:
-        #         return x
-        #     else:
-        #         return Concat(x[r - 1:], x[x.width - 1: r])
-
         def doit(val, r, width):
             """Right cyclic rotation operation when both operands are int."""
             mask = 2 ** width - 1
@@ -1008,7 +989,7 @@ class RotateRight(Operation):
 class Ite(Operation):
     """If-then-else operator.
 
-    Ite(b, x, y) returns x if b is 0b0 (True) and y if b is 0b1 (False).
+    ``Ite(b, x, y)`` returns ``x`` if ``b == 0b1`` and ``y`` otherwise.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import Ite
@@ -1041,25 +1022,28 @@ class Ite(Operation):
 class Extract(Operation):
     """Extraction of bits.
 
-    Given the bit-vector (t[n-1], ...., t[1], t[0]), extract(t, i, j)
-    extracts the bits from t[i] down t[j] (end points included). This
-    can also be done by t[i:j] since the operator [] is overriden
-    for bit-vector types. In particular, t[i] = t[i:i].
+    ``Extract(t, i, j)`` extracts the bits from position ``i`` down
+    position ``j`` (end points included, position 0 corresponding
+    to the least significant bit).
 
-    Note that the indices can be omitted when they reference the MSB or the LSB
-    (i.e. t[n-1:j] = t[:j] and t[i:0] = t[i:]).
+    It overrides the operation [], that is, ``Extract(t, i, j)``
+    is equivalent to ``t[i:j]``.
 
-    .. Warning:
+    Note that the indices can be omitted when they point the most
+    significant bit or the least significant bit.
+    For example, if ``t`` is a bit-vector of length ``n``,
+    then ``t[n-1:j] = t[:j]`` and ``t[i:0] = t[i:]``
 
-        In Python, the operator [] has a different meaning for other
-        data types. In general, given a sequence l (e.g. a list),
-        l[i:j] extracts the elements from the position i up to (but no
-        included) the position j.
+    Warning:
+        In python, given a list ``l``, ``l[i:j]`` denotes the elements
+        from position ``i`` up to (but no included) position ``j``.
+        Note that with bit-vectors, the order of the arguments is
+        swapped and both end points are included.
 
-        For example, for a given list l and bit-vector t, l[0:1] equals
-        to l[0] and t[1:0] equals to (t[0], t[1]).
+        For example, for a given list ``l`` and bit-vector ``t``,
+        ``l[0:1] == l[0]`` and ``t[1:0] == (t[0], t[1])``.
 
-    Usage:
+    ::
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import Extract
@@ -1112,40 +1096,37 @@ class Extract(Operation):
                 # 4-bit x, y: concat(x, y)[:5] = x[:1]
                 offset = x.args[1].width
                 return Extract(x.args[0], i - offset, j - offset)
-        elif isinstance(x, (BvShl, RotateLeft)) and x.args[1] <= j:
+        elif isinstance(x, (BvShl, RotateLeft)) and \
+                isinstance(x.args[1], (int, core.Constant)) and x.args[1] <= j:
             # (x << 1)[:2] = x[n-2: 1]
             offset = int(x.args[1])
             return Extract(x.args[0], i - offset, j - offset)
-        elif isinstance(x, (BvLshr, RotateRight)) and i < x.width - x.args[1]:
+        elif isinstance(x, (BvLshr, RotateRight)) and \
+                isinstance(x.args[1], (int, core.Constant)) and i < x.width - x.args[1]:
             # (x >> 1)[n-3:] = x[n-2: 1]
             offset = int(x.args[1])
             return Extract(x.args[0], i + offset, j + offset)
-
-        # # disabled (all op equal precedence)
-        # if isinstance(x, (BvAnd, BvOr, BvXor, BvNot)):
-        #     args = [Extract(end, start, a) for a in x.args]
-        #     return x.func(*args)
 
 
 class Concat(Operation):
     """Concatenation operation.
 
-    Given the bit-vectors (x[n-1], ...., x[1], x[0]) and
-    (y[m-1], ...., y[1], y[0]), concat(x, y) returns the bit-vector
-    (x[n-1], ...., x[1], x[0], y[m-1], ...., y[1], y[0]).
+    Given the bit-vectors :math:`(x_{n-1}, \dots, x_0)` and
+    :math:`(y_{m-1}, \dots, y_0)`, ``Concat(x, y)`` returns the bit-vector
+    :math:`(x_{n-1}, \dots, x_0, y_{m-1}, \dots, y_0)`.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import Concat
         >>> Concat(Constant(0x12, 8), Constant(0x345, 12))
         0x12345
         >>> Concat(Variable("x", 8), Variable("y", 8))
-        x ∘ y
+        x :: y
 
     """
 
     arity = [2, 0]
     is_symmetric = False
-    infix_symbol = "∘"
+    infix_symbol = "::"
 
     @classmethod
     def output_width(cls, x, y):
@@ -1159,7 +1140,6 @@ class Concat(Operation):
 
         if isinstance(x, core.Constant) and isinstance(y, core.Constant):
             return core.Constant(doit(x, y), cls.output_width(x, y))
-        # TODO: add test
         elif isinstance(x, core.Constant) and isinstance(y, Concat) and \
                 isinstance(y.args[0], core.Constant):
             return Concat(Concat(x, y.args[0]), y.args[1])
@@ -1180,13 +1160,14 @@ class ZeroExtend(Operation):
         >>> ZeroExtend(Constant(0x12, 8), 4)
         0x012
         >>> ZeroExtend(Variable("x", 8), 4)
-        0x0 ∘ x
+        0x0 :: x
 
     """
 
     arity = [1, 1]
     is_symmetric = False
-    short_name = "ext"
+    alt_name = "ext"
+    operand_types = [core.Term, int]
 
     @classmethod
     def condition(cls, x, i):
@@ -1205,19 +1186,20 @@ class ZeroExtend(Operation):
 
 
 class Repeat(Operation):
-    """Repeat n-times a given bit-vector.
+    """Concatenate a bit-vector with itself a given number of times.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import Repeat
         >>> Repeat(Constant(0x1, 4), 4)
         0x1111
         >>> Repeat(Variable("x", 8), 4)
-        ((x ∘ x) ∘ x) ∘ x
+        x :: x :: x :: x
 
     """
 
     arity = [1, 1]
     is_symmetric = False
+    operand_types = [core.Term, int]
 
     @classmethod
     def condition(cls, x, i):
@@ -1232,6 +1214,7 @@ class Repeat(Operation):
         if i == 1:
             return x
         else:
+            # noinspection PyTypeChecker
             return functools.reduce(Concat, itertools.repeat(x, i))
 
 
@@ -1240,7 +1223,7 @@ class Repeat(Operation):
 class BvNeg(Operation):
     """Unary minus operation.
 
-    It overrides the unary operator -. See Operation for more information.
+    It overrides the unary operator -. See `Operation` for more information.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import BvNeg
@@ -1255,7 +1238,6 @@ class BvNeg(Operation):
 
     arity = [1, 0]
     is_symmetric = False
-    operator_type = OperatorType.Arithmetic
     unary_symbol = "-"
 
     @classmethod
@@ -1283,7 +1265,7 @@ class BvAdd(Operation):
     """Modular addition operation.
 
     It overrides the operator + and provides Automatic Constant Conversion.
-    See Operation for more information.
+    See `Operation` for more information.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import BvAdd
@@ -1300,8 +1282,7 @@ class BvAdd(Operation):
 
     arity = [2, 0]
     is_symmetric = True
-    operator_type = OperatorType.Arithmetic
-    simple_operator = True
+    is_simple = True
     infix_symbol = "+"
 
     @classmethod
@@ -1329,6 +1310,12 @@ class BvAdd(Operation):
             return x
         elif x == BvNeg(y):
             return zero
+        elif isinstance(x, BvSub):  # (x0 - x1) + y
+            if x.args[1] == y:
+                return x.args[0]
+        elif isinstance(y, BvSub):  # x + (y0 - y1)
+            if y.args[1] == x:
+                return y.args[0]
 
     def _simplify(self, *args, **kwargs):
         compatible_terms = [
@@ -1342,7 +1329,7 @@ class BvSub(Operation):
     """Modular subtraction operation.
 
     It overrides the operator - and provides Automatic Constant Conversion.
-    See Operation for more information.
+    See `Operation` for more information.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import BvSub
@@ -1353,14 +1340,13 @@ class BvSub(Operation):
         >>> Constant(1, 8) - 2
         0xff
         >>> Variable("x", 8) - Variable("y", 8)
-        x + -y
+        x - y
 
     """
 
     arity = [2, 0]
     is_symmetric = False
-    operator_type = OperatorType.Arithmetic
-    simple_operator = True
+    is_simple = True
     infix_symbol = "-"
 
     @classmethod
@@ -1373,14 +1359,38 @@ class BvSub(Operation):
 
     @classmethod
     def eval(cls, x, y):
-        return BvAdd(x, BvNeg(y))
+        def doit(x, y, width):
+            """Modular subtraction when both operands are integers."""
+            return (x - y) % (2 ** width)
+
+        if isinstance(x, core.Constant) and isinstance(y, core.Constant):
+            return core.Constant(doit(int(x), int(y), x.width), x.width)
+
+        zero = core.Constant(0, x.width)
+
+        if x == zero:
+            return BvNeg(y)
+        elif y == zero:
+            return x
+        elif x == y:
+            return zero
+        elif isinstance(x, BvAdd):  # (x0 + x1) - y
+            if x.args[0] == y:
+                return x.args[1]
+            elif x.args[1] == y:
+                return x.args[0]
+        elif isinstance(y, BvAdd):  # x - (y0 + y1)
+            if y.args[0] == x:
+                return BvNeg(y.args[1])
+            elif y.args[1] == x:
+                return BvNeg(y.args[0])
 
 
 class BvMul(Operation):
     """Modular multiplication operation.
 
     It overrides the operator * and provides Automatic Constant Conversion.
-    See Operation for more information.
+    See `Operation` for more information.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import BvMul
@@ -1397,8 +1407,7 @@ class BvMul(Operation):
 
     arity = [2, 0]
     is_symmetric = True
-    operator_type = OperatorType.Arithmetic
-    simple_operator = True
+    is_simple = True
     infix_symbol = "*"
 
     @classmethod
@@ -1433,7 +1442,7 @@ class BvUdiv(Operation):
     """Unsigned and truncated division operation.
 
     It overrides the operator / and provides Automatic Constant Conversion.
-    See Operation for more information.
+    See `Operation` for more information.
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import BvUdiv
@@ -1445,15 +1454,12 @@ class BvUdiv(Operation):
         0x04
         >>> Variable("x", 8) / Variable("y", 8)
         x / y
-        >>> Constant(0x01, 8) / 0  # special case
-        0x01 / 0x00
 
     """
 
     arity = [2, 0]
     is_symmetric = False
-    operator_type = OperatorType.Arithmetic
-    simple_operator = True
+    is_simple = True
     infix_symbol = "/"
 
     @classmethod
@@ -1466,7 +1472,7 @@ class BvUdiv(Operation):
 
     @classmethod
     def eval(cls, x, y):
-        def doit(x, y, width):
+        def doit(x, y):
             """Division operation (truncated) when both operands are int."""
             assert y != 0
             return x // y
@@ -1474,11 +1480,10 @@ class BvUdiv(Operation):
         zero = core.Constant(0, x.width)
         one = core.Constant(1, x.width)
 
-        if y == zero:
-            return None
+        assert y != zero
 
         if isinstance(x, core.Constant) and isinstance(y, core.Constant):
-            return core.Constant(doit(int(x), int(y), x.width), x.width)
+            return core.Constant(doit(int(x), int(y)), x.width)
         elif x == y:
             return one
         elif x == zero:
@@ -1502,15 +1507,12 @@ class BvUrem(Operation):
         0x01
         >>> Variable("x", 8) % Variable("y", 8)
         x % y
-        >>> Constant(0x01, 8) % 0  # special case
-        0x01 % 0x00
 
     """
 
     arity = [2, 0]
     is_symmetric = False
-    operator_type = OperatorType.Arithmetic
-    simple_operator = True
+    is_simple = True
     infix_symbol = "%"
 
     @classmethod
@@ -1523,7 +1525,7 @@ class BvUrem(Operation):
 
     @classmethod
     def eval(cls, x, y):
-        def doit(x, y, width):
+        def doit(x, y):
             """Remainder operation when both operands are int."""
             assert y != 0
             return x % y
@@ -1531,10 +1533,9 @@ class BvUrem(Operation):
         zero = core.Constant(0, x.width)
         one = core.Constant(1, x.width)
 
-        if y == zero:
-            return None
+        assert y != zero
 
         if isinstance(x, core.Constant) and isinstance(y, core.Constant):
-            return core.Constant(doit(int(x), int(y), x.width), x.width)
+            return core.Constant(doit(int(x), int(y)), x.width)
         elif x == y or x == zero or y == one:
             return zero
