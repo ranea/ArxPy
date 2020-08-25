@@ -1,0 +1,471 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.bitvector.printing &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html#subpackages">Subpackages</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>arxpy.bitvector.printing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for arxpy.bitvector.printing</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Manage the representation of bit-vector expressions.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">sympy.printing</span> <span class="kn">import</span> <span class="nb">repr</span> <span class="k">as</span> <span class="n">sympy_repr</span>
+<span class="kn">from</span> <span class="nn">sympy.printing</span> <span class="kn">import</span> <span class="nb">str</span> <span class="k">as</span> <span class="n">sympy_str</span>
+
+
+<span class="c1"># noinspection PyPep8Naming,PyMethodMayBeStatic</span>
+<div class="viewcode-block" id="BvStrPrinter"><a class="viewcode-back" href="../../../arxpy.bitvector.printing.html#arxpy.bitvector.printing.BvStrPrinter">[docs]</a><span class="k">class</span> <span class="nc">BvStrPrinter</span><span class="p">(</span><span class="n">sympy_str</span><span class="o">.</span><span class="n">StrPrinter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Printing class that handles the `str` method of `Term`.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_need_parentheses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bv</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return true if bv need parenthesis when used in infix notation.&quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">core</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">Term</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Term</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="nb">type</span><span class="p">(</span><span class="n">parent</span><span class="p">):</span>
+            <span class="c1"># avoid a == b == c == d instead of (a == b) == (c == d)</span>
+            <span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">operation</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvComp</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">_print_Term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bv</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">]</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_print_Constant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bv</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">bv</span><span class="o">.</span><span class="n">hex</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">bv</span><span class="o">.</span><span class="n">bin</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_print_Variable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bv</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">bv</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">_print_Operation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bv</span><span class="p">):</span>
+        <span class="n">has_symbol</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="s2">&quot;unary_symbol&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="s2">&quot;infix_symbol&quot;</span><span class="p">)</span>
+        <span class="n">op_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="s2">&quot;alt_name&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">has_symbol</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_need_parentheses</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">bv</span><span class="p">):</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_print</span><span class="p">(</span><span class="n">a</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_print</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">has_symbol</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">sum</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">arity</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">arity</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">unary_symbol</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="nb">sum</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">arity</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bv</span><span class="o">.</span><span class="n">infix_symbol</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">op_name</span><span class="p">,</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_print_Extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bv</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span>
+        <span class="n">delimiter</span> <span class="o">=</span> <span class="s2">&quot;:&quot;</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">:</span>
+            <span class="n">delimiter</span> <span class="o">=</span> <span class="n">i</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_need_parentheses</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bv</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_print</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">[</span><span class="si">{}{}{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BvShortPrinter"><a class="viewcode-back" href="../../../arxpy.bitvector.printing.html#arxpy.bitvector.printing.BvShortPrinter">[docs]</a><span class="k">class</span> <span class="nc">BvShortPrinter</span><span class="p">(</span><span class="n">BvStrPrinter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Printing class that handles the `srepr` method of `Term`.&quot;&quot;&quot;</span>
+
+    <span class="n">lvl</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">max_lvl</span> <span class="o">=</span> <span class="mi">5</span>
+
+    <span class="k">def</span> <span class="nf">_print_Term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bv</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="kc">False</span>
+        <span class="c1"># args = [self._print(a) for a in bv.args]</span>
+        <span class="c1"># return &quot;{}({})&quot;.format(type(bv).__name__, &quot;, &quot;.join(args))</span>
+
+    <span class="k">def</span> <span class="nf">_print_Operation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bv</span><span class="p">):</span>
+        <span class="n">has_symbol</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="s2">&quot;unary_symbol&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="s2">&quot;infix_symbol&quot;</span><span class="p">)</span>
+        <span class="n">op_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="s2">&quot;alt_name&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+        <span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">extraop</span>
+        <span class="c1"># if all(isinstance(a, (int, core.Constant, core.Variable))</span>
+        <span class="c1">#        or type(a) == type(bv) for a in bv.args):</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="p">(</span><span class="n">extraop</span><span class="o">.</span><span class="n">Reverse</span><span class="p">,</span> <span class="n">extraop</span><span class="o">.</span><span class="n">PopCount</span><span class="p">,</span> <span class="n">extraop</span><span class="o">.</span><span class="n">PopCountSum2</span><span class="p">,</span>
+                              <span class="n">extraop</span><span class="o">.</span><span class="n">PopCountSum3</span><span class="p">,</span> <span class="n">extraop</span><span class="o">.</span><span class="n">PopCountDiff</span><span class="p">))</span> <span class="ow">or</span>
+               <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">):</span>
+            <span class="n">next_lvl</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">next_lvl</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">next_lvl</span><span class="p">:</span>
+            <span class="n">BvShortPrinter</span><span class="o">.</span><span class="n">lvl</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">BvShortPrinter</span><span class="o">.</span><span class="n">lvl</span> <span class="o">&gt;</span> <span class="n">BvShortPrinter</span><span class="o">.</span><span class="n">max_lvl</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">has_symbol</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_need_parentheses</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">bv</span><span class="p">):</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_print</span><span class="p">(</span><span class="n">a</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_print</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">next_lvl</span><span class="p">:</span>
+            <span class="n">BvShortPrinter</span><span class="o">.</span><span class="n">lvl</span> <span class="o">-=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">has_symbol</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">sum</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">arity</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">arity</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">unary_symbol</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="nb">sum</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">arity</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bv</span><span class="o">.</span><span class="n">infix_symbol</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">op_name</span><span class="p">,</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">))</span></div>
+
+
+<span class="c1"># noinspection PyPep8Naming,PyMethodMayBeStatic</span>
+<div class="viewcode-block" id="BvReprPrinter"><a class="viewcode-back" href="../../../arxpy.bitvector.printing.html#arxpy.bitvector.printing.BvReprPrinter">[docs]</a><span class="k">class</span> <span class="nc">BvReprPrinter</span><span class="p">(</span><span class="n">sympy_repr</span><span class="o">.</span><span class="n">ReprPrinter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Printing class that handles the `Term.vrepr` method.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_print_Term</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bv</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">])</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">, width=</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(width=</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_print_Constant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bv</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">, width=</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">bin</span><span class="p">(),</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_print_Variable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bv</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_print</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">, width=</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BvWrapPrinter"><a class="viewcode-back" href="../../../arxpy.bitvector.printing.html#arxpy.bitvector.printing.BvWrapPrinter">[docs]</a><span class="k">class</span> <span class="nc">BvWrapPrinter</span><span class="p">(</span><span class="n">BvStrPrinter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Printing class that wrap the representation of `Term`.&quot;&quot;&quot;</span>
+
+    <span class="n">len_prefix</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">max_line_width</span> <span class="o">=</span> <span class="mi">100</span>
+
+    <span class="k">def</span> <span class="nf">_print_Operation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bv</span><span class="p">):</span>
+        <span class="n">standard_repr</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_print_Operation</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">standard_repr</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">len_prefix</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">max_line_width</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">standard_repr</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="s2">&quot;unary_symbol&quot;</span><span class="p">):</span>
+            <span class="n">op_name</span> <span class="o">=</span> <span class="n">bv</span><span class="o">.</span><span class="n">unary_symbol</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="s2">&quot;infix_symbol&quot;</span><span class="p">):</span>
+            <span class="n">op_name</span> <span class="o">=</span> <span class="n">bv</span><span class="o">.</span><span class="n">infix_symbol</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">op_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="s2">&quot;alt_name&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+        <span class="n">old_len_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">len_prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">len_prefix</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">op_name</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_print</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">len_prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_print</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+
+        <span class="c1"># end = &quot;\n&quot; + &quot; &quot;*old_len_prefix + &quot;)&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">len_prefix</span> <span class="o">=</span> <span class="n">old_len_prefix</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">op_name</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">))</span> <span class="c1"># + end</span></div>
+
+
+<div class="viewcode-block" id="dotprinting"><a class="viewcode-back" href="../../../arxpy.bitvector.printing.html#arxpy.bitvector.printing.dotprinting">[docs]</a><span class="k">def</span> <span class="nf">dotprinting</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="n">vrepr_label</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">vrepr_id</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Print the given bit-vector expression to graphviz format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        bv: a bit-vector `Term`</span>
+<span class="sd">        vrepr_label: if True, the verbose representation (`Term.vrepr`) is used</span>
+<span class="sd">            to label the nodes (instead of the default representation)</span>
+<span class="sd">        vrepr_id: if True, the verbose representation is used to</span>
+<span class="sd">            identify the nodes (instead of the hash value)</span>
+
+<span class="sd">    ::</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.core import Constant, Variable</span>
+<span class="sd">        &gt;&gt;&gt; expr = Constant(1, 8) + ~Variable(&quot;x&quot;, 8)</span>
+<span class="sd">        &gt;&gt;&gt; print(dotprinting(expr))  # doctest: +SKIP</span>
+<span class="sd">        digraph {</span>
+<span class="sd">            graph [rankdir=TD]</span>
+<span class="sd">            8318688407297900065 [label=BvAdd color=black shape=ellipse]</span>
+<span class="sd">            2830213174350589301 [label=&quot;0x01&quot; color=black shape=ellipse]</span>
+<span class="sd">            8318688407297900065 -&gt; 2830213174350589301</span>
+<span class="sd">            6499762230957827102 [label=BvNot color=black shape=ellipse]</span>
+<span class="sd">            8990231514331719946 [label=x color=black shape=ellipse]</span>
+<span class="sd">            6499762230957827102 -&gt; 8990231514331719946</span>
+<span class="sd">            8318688407297900065 -&gt; 6499762230957827102</span>
+<span class="sd">        }</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">         This method requires `graphviz &lt;https://www.graphviz.org/&gt;`_</span>
+<span class="sd">         and its `python interface &lt;https://pypi.org/project/graphviz/&gt;`_</span>
+<span class="sd">         to be installed.</span>
+
+<span class="sd">    .. Useful links</span>
+
+<span class="sd">        * http://matthiaseisen.com/articles/graphviz/</span>
+<span class="sd">        * https://graphviz.readthedocs.io/</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">graphviz</span> <span class="k">as</span> <span class="nn">gv</span>
+    <span class="k">except</span> <span class="ne">ModuleNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ModuleNotFoundError</span><span class="p">(</span><span class="s2">&quot;dotprinting requires graphviz and its python interface; </span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+    <span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">core</span>
+
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Term</span><span class="p">)</span>
+
+    <span class="n">digraph</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">Digraph</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;pdf&#39;</span><span class="p">)</span>
+
+    <span class="n">digraph</span><span class="o">.</span><span class="n">graph_attr</span><span class="p">[</span><span class="s1">&#39;rankdir&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;TD&#39;</span>
+    <span class="n">default_node_options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="s1">&#39;ellipse&#39;</span><span class="p">,</span>
+        <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">default_edge_options</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="n">node_bv</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the caption to be displayed.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_bv</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Term</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_bv</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">node_bv</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">node_bv</span><span class="o">.</span><span class="n">is_Atom</span><span class="p">:</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="n">node_bv</span><span class="o">.</span><span class="n">vrepr</span><span class="p">()</span> <span class="k">if</span> <span class="n">vrepr_label</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">node_bv</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">node_bv</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+
+        <span class="k">return</span> <span class="n">string</span>
+
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="n">node_bv</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the unique identifier for the node.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">vrepr_id</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_bv</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Term</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">node_bv</span><span class="o">.</span><span class="n">vrepr</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">node_bv</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="nb">hash</span><span class="p">(</span><span class="n">node_bv</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">traverse</span><span class="p">(</span><span class="n">dg</span><span class="p">,</span> <span class="n">node_bv</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_bv</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">node_bv</span><span class="o">.</span><span class="n">is_Atom</span><span class="p">:</span>
+            <span class="c1"># noinspection PyTypeChecker</span>
+            <span class="n">dg</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">name</span><span class="p">(</span><span class="n">node_bv</span><span class="p">),</span> <span class="n">label</span><span class="p">(</span><span class="n">node_bv</span><span class="p">),</span> <span class="o">**</span><span class="n">default_node_options</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dg</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">name</span><span class="p">(</span><span class="n">node_bv</span><span class="p">),</span> <span class="n">label</span><span class="p">(</span><span class="n">node_bv</span><span class="p">),</span> <span class="o">**</span><span class="n">default_node_options</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">node_arg</span> <span class="ow">in</span> <span class="n">node_bv</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
+                <span class="n">traverse</span><span class="p">(</span><span class="n">dg</span><span class="p">,</span> <span class="n">node_arg</span><span class="p">)</span>
+
+                <span class="n">dg</span><span class="o">.</span><span class="n">edge</span><span class="p">(</span><span class="n">name</span><span class="p">(</span><span class="n">node_bv</span><span class="p">),</span> <span class="n">name</span><span class="p">(</span><span class="n">node_arg</span><span class="p">),</span> <span class="o">**</span><span class="n">default_edge_options</span><span class="p">)</span>
+
+    <span class="n">traverse</span><span class="p">(</span><span class="n">digraph</span><span class="p">,</span> <span class="n">bv</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">digraph</span><span class="o">.</span><span class="n">source</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

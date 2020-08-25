@@ -1,0 +1,307 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.smt.types module &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="arxpy.smt.verification module" href="arxpy.smt.verification.html" />
+    <link rel="prev" title="arxpy.smt.search module" href="arxpy.smt.search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="arxpy.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arxpy.bitvector.html">arxpy.bitvector package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.differential.html">arxpy.differential package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.primitives.html">arxpy.primitives package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="arxpy.smt.html">arxpy.smt package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="arxpy.smt.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="arxpy.smt.search.html">arxpy.smt.search module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">arxpy.smt.types module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.smt.verification.html">arxpy.smt.verification module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="arxpy.html">ArxPy 0.2</a> &raquo;</li>
+        
+          <li><a href="arxpy.smt.html">arxpy.smt package</a> &raquo;</li>
+        
+      <li>arxpy.smt.types module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/arxpy.smt.types.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-arxpy.smt.types">
+<span id="arxpy-smt-types-module"></span><h1>arxpy.smt.types module<a class="headerlink" href="#module-arxpy.smt.types" title="Permalink to this headline">¶</a></h1>
+<p>Convert between <a class="reference external" href="https://github.com/pysmt/pysmt">pySMT</a> types and <a class="reference internal" href="arxpy.bitvector.html#module-arxpy.bitvector" title="arxpy.bitvector"><code class="xref any py py-mod docutils literal notranslate"><span class="pre">bitvector</span></code></a> types.</p>
+<dl class="py function">
+<dt id="arxpy.smt.types.bv2pysmt">
+<code class="sig-prename descclassname">arxpy.smt.types.</code><code class="sig-name descname">bv2pysmt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bv</span></em>, <em class="sig-param"><span class="n">boolean</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">strict_shift</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">env</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/types.html#bv2pysmt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.types.bv2pysmt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a bit-vector type to a pySMT type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bv</strong> – the bit-vector <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Term</span></code></a> to convert</p></li>
+<li><p><strong>boolean</strong> – if True, boolean pySMT types (e.g., <a class="reference external" href="https://pysmt.readthedocs.io/en/latest/api_ref.html#pysmt.shortcuts.Bool" title="(in pySMT v0.7)"><code class="xref any docutils literal notranslate"><span class="pre">pysmt.shortcuts.Bool</span></code></a>) are used instead of
+bit-vector pySMT types (e.g., <a class="reference external" href="https://pysmt.readthedocs.io/en/latest/api_ref.html#pysmt.shortcuts.BV" title="(in pySMT v0.7)"><code class="xref any docutils literal notranslate"><span class="pre">pysmt.shortcuts.BV</span></code></a>).</p></li>
+<li><p><strong>strict_shift</strong> – if <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref any docutils literal notranslate"><span class="pre">True</span></code></a>, shifts and rotation by non-power-of-two offsets
+are power of two are translated to pySMT’s shifts and
+rotation directly.</p></li>
+<li><p><strong>env</strong> – a <a class="reference external" href="https://pysmt.readthedocs.io/en/latest/api_ref.html#pysmt.environment.Environment" title="(in pySMT v0.7)"><code class="xref any docutils literal notranslate"><span class="pre">pysmt.environment.Environment</span></code></a>; if not specified, a new pySMT environment is created.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.types</span> <span class="kn">import</span> <span class="n">bv2pysmt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">bv2pysmt</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mb">0b00000001</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">boolean</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">get_type</span><span class="p">()</span>
+<span class="go">(1_8, BV{8})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">bv2pysmt</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">get_type</span><span class="p">()</span>
+<span class="go">(x, BV{8})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">bv2pysmt</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span>  <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">get_type</span><span class="p">()</span>
+<span class="go">((x + y), BV{8})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">bv2pysmt</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span>  <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">get_type</span><span class="p">()</span>
+<span class="go">((x u&lt;= y), Bool)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">bv2pysmt</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span> <span class="mi">2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">get_type</span><span class="p">()</span>
+<span class="go">(x[2:4], BV{3})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="arxpy.smt.types.pysmt2bv">
+<code class="sig-prename descclassname">arxpy.smt.types.</code><code class="sig-name descname">pysmt2bv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ps</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/types.html#pysmt2bv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.types.pysmt2bv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a pySMT type to a bit-vector type.</p>
+<p>Currently, only conversion from <a class="reference external" href="https://pysmt.readthedocs.io/en/latest/api_ref.html#pysmt.shortcuts.BV" title="(in pySMT v0.7)"><code class="xref any docutils literal notranslate"><span class="pre">pysmt.shortcuts.BV</span></code></a>
+and <a class="reference external" href="https://pysmt.readthedocs.io/en/latest/api_ref.html#pysmt.shortcuts.Symbol" title="(in pySMT v0.7)"><code class="xref any docutils literal notranslate"><span class="pre">pysmt.shortcuts.Symbol</span></code></a> is supported.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pysmt</span> <span class="kn">import</span> <span class="n">shortcuts</span><span class="p">,</span> <span class="n">typing</span>  <span class="c1"># pySMT shortcuts and typing modules</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.types</span> <span class="kn">import</span> <span class="n">pysmt2bv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">env</span> <span class="o">=</span> <span class="n">shortcuts</span><span class="o">.</span><span class="n">reset_env</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pysmt2bv</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">formula_manager</span><span class="o">.</span><span class="n">Symbol</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">type_manager</span><span class="o">.</span><span class="n">BVType</span><span class="p">(</span><span class="mi">8</span><span class="p">)))</span><span class="o">.</span><span class="n">vrepr</span><span class="p">()</span>
+<span class="go">&quot;Variable(&#39;x&#39;, width=8)&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pysmt2bv</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">formula_manager</span><span class="o">.</span><span class="n">BV</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span><span class="o">.</span><span class="n">vrepr</span><span class="p">()</span>
+<span class="go">&#39;Constant(0b00000001, width=8)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="arxpy.smt.types.pysmt_model2bv_model">
+<code class="sig-prename descclassname">arxpy.smt.types.</code><code class="sig-name descname">pysmt_model2bv_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">differences</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/types.html#pysmt_model2bv_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.types.pysmt_model2bv_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a <a class="reference external" href="https://pysmt.readthedocs.io/en/latest/api_ref.html#pysmt.solvers.solver.Model" title="(in pySMT v0.7)"><code class="xref any docutils literal notranslate"><span class="pre">pysmt.solvers.solver.Model</span></code></a> into a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref any docutils literal notranslate"><span class="pre">dict</span></code></a> of bit-vector types.</p>
+<p>To return <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Difference</span></code></a> values instead of <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Term</span></code></a> values,
+a list of symbolic differences can be passed as argument.
+In that case, variables in the model also present in <code class="docutils literal notranslate"><span class="pre">differences</span></code>
+will be added to the bit-vector model as <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Difference</span></code></a> objects.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pysmt</span> <span class="kn">import</span> <span class="n">shortcuts</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.types</span> <span class="kn">import</span> <span class="n">pysmt_model2bv_model</span>  <span class="c1"># pySMT shortcuts</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">env</span> <span class="o">=</span> <span class="n">shortcuts</span><span class="o">.</span><span class="n">reset_env</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fm</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">formula_manager</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">formula</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Equals</span><span class="p">(</span><span class="n">fm</span><span class="o">.</span><span class="n">BV</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">fm</span><span class="o">.</span><span class="n">Symbol</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">type_manager</span><span class="o">.</span><span class="n">BVType</span><span class="p">(</span><span class="mi">8</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pysmt_model</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">formula</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">pysmt_model</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">var</span><span class="o">.</span><span class="n">get_type</span><span class="p">(),</span> <span class="n">val</span><span class="o">.</span><span class="n">get_type</span><span class="p">())</span>
+<span class="go">x 0_8 BV{8} BV{8}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bv_model</span> <span class="o">=</span> <span class="n">pysmt_model2bv_model</span><span class="p">(</span><span class="n">pysmt_model</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">bv_model</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">var</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+<span class="go">x 0x00 &lt;class &#39;arxpy.bitvector.core.Variable&#39;&gt; &lt;class &#39;arxpy.bitvector.core.Constant&#39;&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="arxpy.smt.verification.html" class="btn btn-neutral float-right" title="arxpy.smt.verification module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="arxpy.smt.search.html" class="btn btn-neutral float-left" title="arxpy.smt.search module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

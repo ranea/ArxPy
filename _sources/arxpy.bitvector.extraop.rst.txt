@@ -1,0 +1,6 @@
+arxpy.bitvector.extraop module
+==============================
+
+.. automodule:: arxpy.bitvector.extraop
+   :members:
+   :show-inheritance:

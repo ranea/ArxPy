@@ -1,0 +1,264 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.primitives.tea &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html#subpackages">Subpackages</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>arxpy.primitives.tea</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for arxpy.primitives.tea</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Tea cipher.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span>
+
+<span class="kn">from</span> <span class="nn">arxpy.primitives.primitives</span> <span class="kn">import</span> <span class="n">KeySchedule</span><span class="p">,</span> <span class="n">Encryption</span><span class="p">,</span> <span class="n">Cipher</span>
+
+
+<div class="viewcode-block" id="TeaKeySchedule"><a class="viewcode-back" href="../../../arxpy.primitives.tea.html#arxpy.primitives.tea.TeaKeySchedule">[docs]</a><span class="k">class</span> <span class="nc">TeaKeySchedule</span><span class="p">(</span><span class="n">KeySchedule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Key schedule function.&quot;&quot;&quot;</span>
+
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">input_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">]</span>
+    <span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">]</span>
+
+<div class="viewcode-block" id="TeaKeySchedule.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.tea.html#arxpy.primitives.tea.TeaKeySchedule.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="TeaKeySchedule.eval"><a class="viewcode-back" href="../../../arxpy.primitives.tea.html#arxpy.primitives.tea.TeaKeySchedule.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">master_key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">master_key</span></div></div>
+
+
+<div class="viewcode-block" id="TeaEncryption"><a class="viewcode-back" href="../../../arxpy.primitives.tea.html#arxpy.primitives.tea.TeaEncryption">[docs]</a><span class="k">class</span> <span class="nc">TeaEncryption</span><span class="p">(</span><span class="n">Encryption</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Encryption function.&quot;&quot;&quot;</span>
+
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="n">input_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">]</span>
+    <span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">]</span>
+    <span class="n">round_keys</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="TeaEncryption.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.tea.html#arxpy.primitives.tea.TeaEncryption.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span></div>
+
+<div class="viewcode-block" id="TeaEncryption.eval"><a class="viewcode-back" href="../../../arxpy.primitives.tea.html#arxpy.primitives.tea.TeaEncryption.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="n">v0</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">v1</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x9e3779b9</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+        <span class="n">k0</span><span class="p">,</span> <span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">k3</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">round_keys</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="n">delta</span>
+            <span class="n">v0</span> <span class="o">+=</span> <span class="p">((</span><span class="n">v1</span> <span class="o">&lt;&lt;</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span> <span class="o">+</span> <span class="n">k0</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">v1</span> <span class="o">+</span> <span class="n">s</span><span class="p">)</span> <span class="o">^</span> <span class="p">((</span><span class="n">v1</span> <span class="o">&gt;&gt;</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span> <span class="o">+</span> <span class="n">k1</span><span class="p">)</span>
+            <span class="n">v1</span> <span class="o">+=</span> <span class="p">((</span><span class="n">v0</span> <span class="o">&lt;&lt;</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span> <span class="o">+</span> <span class="n">k2</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">v0</span> <span class="o">+</span> <span class="n">s</span><span class="p">)</span> <span class="o">^</span> <span class="p">((</span><span class="n">v0</span> <span class="o">&gt;&gt;</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span> <span class="o">+</span> <span class="n">k3</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v0</span><span class="p">,</span> <span class="n">v1</span></div></div>
+
+
+<div class="viewcode-block" id="TeaCipher"><a class="viewcode-back" href="../../../arxpy.primitives.tea.html#arxpy.primitives.tea.TeaCipher">[docs]</a><span class="k">class</span> <span class="nc">TeaCipher</span><span class="p">(</span><span class="n">Cipher</span><span class="p">):</span>
+    <span class="n">key_schedule</span> <span class="o">=</span> <span class="n">TeaKeySchedule</span>
+    <span class="n">encryption</span> <span class="o">=</span> <span class="n">TeaEncryption</span>
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">32</span>
+
+<div class="viewcode-block" id="TeaCipher.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.tea.html#arxpy.primitives.tea.TeaCipher.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">encryption</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="n">new_rounds</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TeaCipher.test"><a class="viewcode-back" href="../../../arxpy.primitives.tea.html#arxpy.primitives.tea.TeaCipher.test">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test tea with official test vectors.&quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+
+        <span class="n">plaintext</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">cls</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mh">0x41EA3A0A</span><span class="p">,</span> <span class="mh">0x94BAA940</span><span class="p">)</span>
+
+        <span class="n">plaintext</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0x01020304</span><span class="p">,</span> <span class="mh">0x05060708</span><span class="p">)</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0x00112233</span><span class="p">,</span> <span class="mh">0x44556677</span><span class="p">,</span> <span class="mh">0x8899AABB</span><span class="p">,</span> <span class="mh">0xCCDDEEFF</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">cls</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mh">0xDEB1C0A2</span><span class="p">,</span> <span class="mh">0x7E745DB3</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

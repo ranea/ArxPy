@@ -1,0 +1,16 @@
+arxpy.smt package
+=================
+
+.. automodule:: arxpy.smt
+   :members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   arxpy.smt.search
+   arxpy.smt.types
+   arxpy.smt.verification

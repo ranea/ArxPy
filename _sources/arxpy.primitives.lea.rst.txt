@@ -1,0 +1,6 @@
+arxpy.primitives.lea module
+===========================
+
+.. automodule:: arxpy.primitives.lea
+   :members:
+   :show-inheritance:

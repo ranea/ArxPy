@@ -1,0 +1,804 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.differential.derivative module &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="arxpy.differential.difference module" href="arxpy.differential.difference.html" />
+    <link rel="prev" title="arxpy.differential.characteristic module" href="arxpy.differential.characteristic.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="arxpy.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arxpy.bitvector.html">arxpy.bitvector package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="arxpy.differential.html">arxpy.differential package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="arxpy.differential.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="arxpy.differential.characteristic.html">arxpy.differential.characteristic module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">arxpy.differential.derivative module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.differential.difference.html">arxpy.differential.difference module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.primitives.html">arxpy.primitives package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.smt.html">arxpy.smt package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="arxpy.html">ArxPy 0.2</a> &raquo;</li>
+        
+          <li><a href="arxpy.differential.html">arxpy.differential package</a> &raquo;</li>
+        
+      <li>arxpy.differential.derivative module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/arxpy.differential.derivative.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-arxpy.differential.derivative">
+<span id="arxpy-differential-derivative-module"></span><h1>arxpy.differential.derivative module<a class="headerlink" href="#module-arxpy.differential.derivative" title="Permalink to this headline">¶</a></h1>
+<p>Manipulate derivatives of bit-vector operations.</p>
+<dl class="py class">
+<dt id="arxpy.differential.derivative.Derivative">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.differential.derivative.</code><code class="sig-name descname">Derivative</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#Derivative"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.Derivative" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represent derivatives of bit-vector operations.</p>
+<p>Given a <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Difference</span></code></a> operation <span class="math notranslate nohighlight">\(-\)</span>  and its inverse <span class="math notranslate nohighlight">\(+\)</span>,
+the derivative of an <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.Operation" title="arxpy.bitvector.operation.Operation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a> <span class="math notranslate nohighlight">\(f\)</span>
+at the input difference <span class="math notranslate nohighlight">\(\alpha\)</span> is defined as
+<span class="math notranslate nohighlight">\(f_{\alpha} (x) = f(x + \alpha) - f(x)\)</span>
+(see also <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference.derivative" title="arxpy.differential.difference.Difference.derivative"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Difference.derivative</span></code></a>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Derivatives of functions with scalar args are not supported.</p>
+</div>
+<p>This class is not meant to be instantiated but to provide a base
+class for creating derivatives.</p>
+<dl class="py attribute">
+<dt id="arxpy.differential.derivative.Derivative.diff_type">
+<code class="sig-name descname">diff_type</code><a class="headerlink" href="#arxpy.differential.derivative.Derivative.diff_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>the type of <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Difference</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.differential.derivative.Derivative.op">
+<code class="sig-name descname">op</code><a class="headerlink" href="#arxpy.differential.derivative.Derivative.op" title="Permalink to this definition">¶</a></dt>
+<dd><p>the bit-vector <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.Operation" title="arxpy.bitvector.operation.Operation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a> <span class="math notranslate nohighlight">\(f\)</span></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.differential.derivative.Derivative.input_diff">
+<code class="sig-name descname">input_diff</code><a class="headerlink" href="#arxpy.differential.derivative.Derivative.input_diff" title="Permalink to this definition">¶</a></dt>
+<dd><p>a list containing the <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Difference</span></code></a> of each bit-vector
+operand.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.Derivative.eval">
+<code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#Derivative.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.Derivative.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the derivative at <span class="math notranslate nohighlight">\(x\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the corresponding output difference</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Difference</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.Derivative.is_possible">
+<code class="sig-name descname">is_possible</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#Derivative.is_possible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.Derivative.is_possible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the given output <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Difference</span></code></a> is possible.</p>
+<p>An output difference <span class="math notranslate nohighlight">\(\beta\)</span> is possible if exists
+<span class="math notranslate nohighlight">\(x\)</span> such that <span class="math notranslate nohighlight">\(f_{\alpha} (x) = \beta\)</span>.</p>
+<p>If the output difference is a constant value, this method returns
+the <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Constant" title="arxpy.bitvector.core.Constant"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Constant</span></code></a> <code class="docutils literal notranslate"><span class="pre">0b1</span></code> or <code class="docutils literal notranslate"><span class="pre">0b0</span></code> depending on whether the output
+difference in possible. If the output difference is symbolic,
+this method returns a bit-vector <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Term</span></code></a> that evaluates to <code class="docutils literal notranslate"><span class="pre">0b1</span></code>
+or <code class="docutils literal notranslate"><span class="pre">0b0</span></code> depending on whether the symbolic output difference is
+replaced by a valid output difference.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.Derivative.has_probability_one">
+<code class="sig-name descname">has_probability_one</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#Derivative.has_probability_one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.Derivative.has_probability_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the input difference propagates to the given output difference
+with probability one.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.Derivative.weight">
+<code class="sig-name descname">weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#Derivative.weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.Derivative.weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the weight of a possible output <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Difference</span></code></a>.</p>
+<p>Let <span class="math notranslate nohighlight">\(\beta\)</span> be the given output difference. The <em>probability of the differential</em>
+<span class="math notranslate nohighlight">\(p = Pr(\alpha \xrightarrow{f} \beta)\)</span> is defined as the <em>proportion</em> of
+<span class="math notranslate nohighlight">\(f_{\alpha}\)</span>-preimages of <span class="math notranslate nohighlight">\(\beta\)</span>, that is,
+<span class="math notranslate nohighlight">\(p \ = \ \# \{ x \ : \ f_{\alpha} (x) = \beta \} / 2^{n}\)</span>,
+where <span class="math notranslate nohighlight">\(n\)</span> is the bit-width of <span class="math notranslate nohighlight">\(x\)</span>.</p>
+<p>By default, the weight is defined as the closest integer of <span class="math notranslate nohighlight">\(- \log_2(p)\)</span>,
+but some derivatives may consider other definitions of weight.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.Derivative.max_weight">
+<code class="sig-name descname">max_weight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#Derivative.max_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.Derivative.max_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the maximum value the weight can achieve.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.Derivative.exact_weight">
+<code class="sig-name descname">exact_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#Derivative.exact_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.Derivative.exact_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the weight without rounding to the closest integer.</p>
+<p>It is assumed the exact weight is always smaller than the weight.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.Derivative.num_frac_bits">
+<code class="sig-name descname">num_frac_bits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#Derivative.num_frac_bits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.Derivative.num_frac_bits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of fractional bits in the weight.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.Derivative.error">
+<code class="sig-name descname">error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#Derivative.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.Derivative.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the maximum difference between the weight and the exact weight.</p>
+<p>This method returns an upper bound (in absolute value) of the maximum difference
+(over all input and output difference) between the weight and the exact weight.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.differential.derivative.XDA">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.differential.derivative.</code><code class="sig-name descname">XDA</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#XDA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.XDA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#arxpy.differential.derivative.Derivative" title="arxpy.differential.derivative.Derivative"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.differential.derivative.Derivative</span></code></a></p>
+<p>Represent the <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.XorDiff" title="arxpy.differential.difference.XorDiff"><code class="xref any py py-class docutils literal notranslate"><span class="pre">XorDiff</span></code></a> <a class="reference internal" href="#arxpy.differential.derivative.Derivative" title="arxpy.differential.derivative.Derivative"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Derivative</span></code></a> of <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.BvAdd" title="arxpy.bitvector.operation.BvAdd"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvAdd</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.derivative</span> <span class="kn">import</span> <span class="n">XDA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDA</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># f(x + alpha) - f(x)</span>
+<span class="go">XorDiff(0x0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">max_weight</span><span class="p">(),</span> <span class="n">f</span><span class="o">.</span><span class="n">error</span><span class="p">(),</span> <span class="n">f</span><span class="o">.</span><span class="n">num_frac_bits</span><span class="p">()</span>
+<span class="go">(3, 0, 0)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt id="arxpy.differential.derivative.XDA.diff_type">
+<code class="sig-name descname">diff_type</code><a class="headerlink" href="#arxpy.differential.derivative.XDA.diff_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.XorDiff" title="arxpy.differential.difference.XorDiff"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.differential.difference.XorDiff</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.differential.derivative.XDA.op">
+<code class="sig-name descname">op</code><a class="headerlink" href="#arxpy.differential.derivative.XDA.op" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.BvAdd" title="arxpy.bitvector.operation.BvAdd"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.operation.BvAdd</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.XDA.is_possible">
+<code class="sig-name descname">is_possible</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#XDA.is_possible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.XDA.is_possible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the given output <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.XorDiff" title="arxpy.differential.difference.XorDiff"><code class="xref any py py-class docutils literal notranslate"><span class="pre">XorDiff</span></code></a> is possible.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.derivative</span> <span class="kn">import</span> <span class="n">XDA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDA</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">beta</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">is_possible</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span>
+<span class="go">0b1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a0</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;a0&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">a0</span><span class="p">),</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">a1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDA</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">beta</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">is_possible</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
+<span class="go">0x0 == ((~(a0 &lt;&lt; 0x1) ^ (a1 &lt;&lt; 0x1)) &amp; (~(a0 &lt;&lt; 0x1) ^ (b &lt;&lt; 0x1)) &amp; ((a0 &lt;&lt; 0x1) ^ b ^ a0 ^ a1))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">xreplace</span><span class="p">({</span><span class="n">a0</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">a1</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">b</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)})</span>
+<span class="go">0b1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a1</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">a0</span><span class="p">),</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">a1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDA</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">beta</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">is_possible</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
+<span class="go">0x0 == (~(a0 &lt;&lt; 0x1) &amp; ~(b &lt;&lt; 0x1) &amp; (a0 ^ b))</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="#arxpy.differential.derivative.Derivative.is_possible" title="arxpy.differential.derivative.Derivative.is_possible"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Derivative.is_possible</span></code></a> for more information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.XDA.has_probability_one">
+<code class="sig-name descname">has_probability_one</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#XDA.has_probability_one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.XDA.has_probability_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the input diff propagates to the output diff with probability one.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.derivative</span> <span class="kn">import</span> <span class="n">XDA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDA</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">has_probability_one</span><span class="p">(</span><span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+<span class="go">0b1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.XDA.weight">
+<code class="sig-name descname">weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#XDA.weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.XDA.weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the weight of a possible output <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.XorDiff" title="arxpy.differential.difference.XorDiff"><code class="xref any py py-class docutils literal notranslate"><span class="pre">XorDiff</span></code></a>.</p>
+<p>For XDA, the probability of a valid differential is <span class="math notranslate nohighlight">\(2^{-i}\)</span>
+for some <span class="math notranslate nohighlight">\(i\)</span>, and the weight is defined as the exponent
+<span class="math notranslate nohighlight">\(i\)</span>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.derivative</span> <span class="kn">import</span> <span class="n">XDA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)),</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDA</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">weight</span><span class="p">(</span><span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)))</span>
+<span class="go">0b00</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a0</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;a0&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">a0</span><span class="p">),</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">a1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDA</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">weight</span><span class="p">(</span><span class="n">XorDiff</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>  
+<span class="go">(0b0 :: (~((a1 ^ ~a0) &amp; (b ^ ~a0))[0])) + (0b0 :: (~((a1 ^ ~a0) &amp; (b ^ ~a0))[1])) +</span>
+<span class="go">(0b0 :: (~((a1 ^ ~a0) &amp; (b ^ ~a0))[2]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">xreplace</span><span class="p">({</span><span class="n">a0</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">a1</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">b</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)})</span>
+<span class="go">0b00</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="#arxpy.differential.derivative.Derivative.weight" title="arxpy.differential.derivative.Derivative.weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Derivative.weight</span></code></a> for more information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.XDA.max_weight">
+<code class="sig-name descname">max_weight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#XDA.max_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.XDA.max_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the maximum value the weight can achieve.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.XDA.exact_weight">
+<code class="sig-name descname">exact_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#XDA.exact_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.XDA.exact_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the weight without rounding to the closest integer.</p>
+<p>It is assumed the exact weight is always smaller than the weight.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.XDA.num_frac_bits">
+<code class="sig-name descname">num_frac_bits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#XDA.num_frac_bits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.XDA.num_frac_bits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of fractional bits in the weight.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.XDA.error">
+<code class="sig-name descname">error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#XDA.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.XDA.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the maximum difference between the weight and the exact weight.</p>
+<p>This method returns an upper bound (in absolute value) of the maximum difference
+(over all input and output difference) between the weight and the exact weight.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.differential.derivative.XDS">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.differential.derivative.</code><code class="sig-name descname">XDS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#XDS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.XDS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#arxpy.differential.derivative.XDA" title="arxpy.differential.derivative.XDA"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.differential.derivative.XDA</span></code></a></p>
+<p>Represent the <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.XorDiff" title="arxpy.differential.difference.XorDiff"><code class="xref any py py-class docutils literal notranslate"><span class="pre">XorDiff</span></code></a> <a class="reference internal" href="#arxpy.differential.derivative.Derivative" title="arxpy.differential.derivative.Derivative"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Derivative</span></code></a> of <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.BvSub" title="arxpy.bitvector.operation.BvSub"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvSub</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.derivative</span> <span class="kn">import</span> <span class="n">XDS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDS</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># f(x + alpha) - f(x)</span>
+<span class="go">XorDiff(0x0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">max_weight</span><span class="p">(),</span> <span class="n">f</span><span class="o">.</span><span class="n">error</span><span class="p">(),</span> <span class="n">f</span><span class="o">.</span><span class="n">num_frac_bits</span><span class="p">()</span>
+<span class="go">(3, 0, 0)</span>
+</pre></div>
+</div>
+<p>The differential model of the modular substraction
+is the same as the model for the modular addition
+(see <a class="reference internal" href="#arxpy.differential.derivative.XDA" title="arxpy.differential.derivative.XDA"><code class="xref any py py-class docutils literal notranslate"><span class="pre">XDA</span></code></a>).</p>
+<dl class="py attribute">
+<dt id="arxpy.differential.derivative.XDS.diff_type">
+<code class="sig-name descname">diff_type</code><a class="headerlink" href="#arxpy.differential.derivative.XDS.diff_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.XorDiff" title="arxpy.differential.difference.XorDiff"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.differential.difference.XorDiff</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.differential.derivative.XDS.op">
+<code class="sig-name descname">op</code><a class="headerlink" href="#arxpy.differential.derivative.XDS.op" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.BvSub" title="arxpy.bitvector.operation.BvSub"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.operation.BvSub</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.differential.derivative.RXDA">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.differential.derivative.</code><code class="sig-name descname">RXDA</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#RXDA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.RXDA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#arxpy.differential.derivative.Derivative" title="arxpy.differential.derivative.Derivative"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.differential.derivative.Derivative</span></code></a></p>
+<p>Represent the <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.RXDiff" title="arxpy.differential.difference.RXDiff"><code class="xref any py py-class docutils literal notranslate"><span class="pre">RXDiff</span></code></a> <a class="reference internal" href="#arxpy.differential.derivative.Derivative" title="arxpy.differential.derivative.Derivative"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Derivative</span></code></a> of <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.BvAdd" title="arxpy.bitvector.operation.BvAdd"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvAdd</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">RXDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.derivative</span> <span class="kn">import</span> <span class="n">RXDA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">)),</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">RXDA</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># f(x + alpha) - f(x)</span>
+<span class="go">RXDiff(0x0000)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">max_weight</span><span class="p">(),</span> <span class="n">f</span><span class="o">.</span><span class="n">error</span><span class="p">(),</span> <span class="n">f</span><span class="o">.</span><span class="n">num_frac_bits</span><span class="p">()</span>
+<span class="go">(136, 0.03999347239201656, 3)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt id="arxpy.differential.derivative.RXDA.diff_type">
+<code class="sig-name descname">diff_type</code><a class="headerlink" href="#arxpy.differential.derivative.RXDA.diff_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.RXDiff" title="arxpy.differential.difference.RXDiff"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.differential.difference.RXDiff</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.differential.derivative.RXDA.op">
+<code class="sig-name descname">op</code><a class="headerlink" href="#arxpy.differential.derivative.RXDA.op" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.BvAdd" title="arxpy.bitvector.operation.BvAdd"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.operation.BvAdd</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.RXDA.is_possible">
+<code class="sig-name descname">is_possible</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#RXDA.is_possible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.RXDA.is_possible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the given output <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.RXDiff" title="arxpy.differential.difference.RXDiff"><code class="xref any py py-class docutils literal notranslate"><span class="pre">RXDiff</span></code></a> is possible.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">RXDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.derivative</span> <span class="kn">import</span> <span class="n">RXDA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">RXDA</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">beta</span> <span class="o">=</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">is_possible</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span>
+<span class="go">0b1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a0</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;a0&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">a0</span><span class="p">),</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">a1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">RXDA</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">beta</span> <span class="o">=</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">is_possible</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>  
+<span class="go">0b11 == (~(((((a0[:1]) ^ (a1[:1]) ^ (b[:1])) &lt;&lt; 0b001) ^ (a0[:1]) ^ (a1[:1]) ^ (b[:1]))[:1]) |</span>
+<span class="go">((((a0[:1]) ^ (b[:1])) | ((a1[:1]) ^ (b[:1])))[1:]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">xreplace</span><span class="p">({</span><span class="n">a0</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">a1</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">b</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)})</span>
+<span class="go">0b1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a1</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">a0</span><span class="p">),</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">a1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">RXDA</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">beta</span> <span class="o">=</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">is_possible</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>  
+<span class="go">0b11 == (~(((((a0[:1]) ^ (b[:1])) &lt;&lt; 0b001) ^ (a0[:1]) ^ (b[:1]))[:1])</span>
+<span class="go">| ((((a0[:1]) ^ (b[:1])) | (b[:1]))[1:]))</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="#arxpy.differential.derivative.Derivative.is_possible" title="arxpy.differential.derivative.Derivative.is_possible"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Derivative.is_possible</span></code></a> for more information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.RXDA.has_probability_one">
+<code class="sig-name descname">has_probability_one</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#RXDA.has_probability_one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.RXDA.has_probability_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the input diff propagates to the output diff with probability one.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.RXDA.decimal2bin">
+<em class="property">static </em><code class="sig-name descname">decimal2bin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">number</span></em>, <em class="sig-param"><span class="n">precision</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#RXDA.decimal2bin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.RXDA.decimal2bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a binary representation of a positive real number.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.RXDA.weight">
+<code class="sig-name descname">weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#RXDA.weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.RXDA.weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the weight of a possible output <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.RXDiff" title="arxpy.differential.difference.RXDiff"><code class="xref any py py-class docutils literal notranslate"><span class="pre">RXDiff</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">RXDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.derivative</span> <span class="kn">import</span> <span class="n">RXDA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)),</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">RXDA</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">weight</span><span class="p">(</span><span class="n">RXDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)))</span>
+<span class="go">0b001001</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a0</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;a0&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">a0</span><span class="p">),</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">a1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">RXDA</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">weight</span><span class="p">(</span><span class="n">RXDiff</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>  
+<span class="go">((0x0 :: ((0b0 :: ((((a0[:1]) ^ (b[:1])) | ((a1[:1]) ^ (b[:1])))[0])) + (0b0 :: ((((a0[:1]) ^ (b[:1])) |</span>
+<span class="go">((a1[:1]) ^ (b[:1])))[1])))) &lt;&lt; 0b000011) + (Ite(~((a0[1]) ^ (a1[1]) ^ (b[1])), 0b001001, 0b011000))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">xreplace</span><span class="p">({</span><span class="n">a0</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">a1</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">b</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)})</span>
+<span class="go">0b001001</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="#arxpy.differential.derivative.Derivative.weight" title="arxpy.differential.derivative.Derivative.weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Derivative.weight</span></code></a> for more information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.RXDA.max_weight">
+<code class="sig-name descname">max_weight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#RXDA.max_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.RXDA.max_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the maximum value the weight can achieve.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.RXDA.exact_weight">
+<code class="sig-name descname">exact_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#RXDA.exact_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.RXDA.exact_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the weight without rounding to the closest integer.</p>
+<p>When the input/output differences have width smaller than 16,
+the exact weight does not coincide with the actual real weight.
+For example, for width=8, the error can be as high as 1.2.
+Moreover, in this case the exact weight is not always smaller
+than the weight.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.RXDA.num_frac_bits">
+<code class="sig-name descname">num_frac_bits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#RXDA.num_frac_bits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.RXDA.num_frac_bits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of fractional bits in the weight.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.RXDA.error">
+<code class="sig-name descname">error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#RXDA.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.RXDA.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>“Return the maximum difference between the weight and the exact weight.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># docstring for debugging purposes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">RXDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.derivative</span> <span class="kn">import</span> <span class="n">RXDA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">old_prec</span> <span class="o">=</span> <span class="n">RXDA</span><span class="o">.</span><span class="n">precision</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">RXDA</span><span class="o">.</span><span class="n">precision</span> <span class="o">=</span> <span class="n">p</span>
+<span class="gp">... </span>    <span class="n">alpha</span> <span class="o">=</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)),</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="n">f</span> <span class="o">=</span> <span class="n">RXDA</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">error</span><span class="p">(),</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">RXDA</span><span class="o">.</span><span class="n">precision</span> <span class="o">=</span> <span class="n">old_prec</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">errors</span>
+<span class="go">[0.415, 0.415, 0.165, 0.04, 0.04, 0.0087, 0.0087, 0.0009, 0.0009, 0.0009, 0.0009, 0.0004]</span>
+</pre></div>
+</div>
+<p>As opposed to <a class="reference internal" href="#arxpy.differential.derivative.XDCA" title="arxpy.differential.derivative.XDCA"><code class="xref any py py-class docutils literal notranslate"><span class="pre">XDCA</span></code></a>, the exact weight in <a class="reference internal" href="#arxpy.differential.derivative.RXDA" title="arxpy.differential.derivative.RXDA"><code class="xref any py py-class docutils literal notranslate"><span class="pre">RXDA</span></code></a> is bigger.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.differential.derivative.XDCA">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.differential.derivative.</code><code class="sig-name descname">XDCA</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_diff</span></em>, <em class="sig-param"><span class="n">cte</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#XDCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.XDCA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#arxpy.differential.derivative.Derivative" title="arxpy.differential.derivative.Derivative"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.differential.derivative.Derivative</span></code></a></p>
+<p>Represent the derivative of addition by a constant w.r.t XOR differences.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.derivative</span> <span class="kn">import</span> <span class="n">XDCA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span><span class="p">,</span> <span class="n">cte</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDCA</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">cte</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># f(x + alpha) - f(x)</span>
+<span class="go">XorDiff(0x0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">max_weight</span><span class="p">(),</span> <span class="n">f</span><span class="o">.</span><span class="n">error</span><span class="p">(),</span> <span class="n">f</span><span class="o">.</span><span class="n">num_frac_bits</span><span class="p">()</span>
+<span class="go">(6, 0.0860713320559343, 1)</span>
+</pre></div>
+</div>
+<p>The class attribute <code class="docutils literal notranslate"><span class="pre">precision</span></code> controls how many fraction bits
+are used to approximate the weight. Its default value is <code class="docutils literal notranslate"><span class="pre">3</span></code>,
+and lower values lead to simpler formulas with higher errors.</p>
+<dl class="py attribute">
+<dt id="arxpy.differential.derivative.XDCA.diff_type">
+<code class="sig-name descname">diff_type</code><a class="headerlink" href="#arxpy.differential.derivative.XDCA.diff_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.XorDiff" title="arxpy.differential.difference.XorDiff"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.differential.difference.XorDiff</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.XDCA.is_possible">
+<code class="sig-name descname">is_possible</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#XDCA.is_possible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.XDCA.is_possible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the given output <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.XorDiff" title="arxpy.differential.difference.XorDiff"><code class="xref any py py-class docutils literal notranslate"><span class="pre">XorDiff</span></code></a> is possible.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.derivative</span> <span class="kn">import</span> <span class="n">XDCA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span><span class="p">,</span> <span class="n">cte</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDCA</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">cte</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">is_possible</span><span class="p">(</span><span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+<span class="go">0b1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDCA</span><span class="p">(</span><span class="n">XorDiff</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">cte</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">is_possible</span><span class="p">(</span><span class="n">XorDiff</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>  
+<span class="go">0x0 == (((u &lt;&lt; 0x1) &amp; (v &lt;&lt; 0x1) &amp; ~(0x9 ^ u ^ v) &amp; (~((~(u &lt;&lt; 0x1) &amp; ~(v &lt;&lt; 0x1)) &lt;&lt; 0x1) |</span>
+<span class="go">       (~((~(u &lt;&lt; 0x1) &amp; ~(v &lt;&lt; 0x1)) &lt;&lt; 0x1) ^ ((0x9 &amp; ~(u &lt;&lt; 0x1) &amp; ~(v &lt;&lt; 0x1)) + ~((~(u &lt;&lt; 0x1) &amp;</span>
+<span class="go">       ~(v &lt;&lt; 0x1)) &lt;&lt; 0x1)) ^ (0x9 &amp; ~(u &lt;&lt; 0x1) &amp; ~(v &lt;&lt; 0x1))))) | (~(u &lt;&lt; 0x1) &amp; ~(v &lt;&lt; 0x1) &amp; (u ^ v)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">xreplace</span><span class="p">({</span><span class="n">u</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">v</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)})</span>
+<span class="go">0b1</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="#arxpy.differential.derivative.Derivative.is_possible" title="arxpy.differential.derivative.Derivative.is_possible"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Derivative.is_possible</span></code></a> for more information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.XDCA.has_probability_one">
+<code class="sig-name descname">has_probability_one</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#XDCA.has_probability_one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.XDCA.has_probability_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the input diff propagates to the output diff with probability one.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.derivative</span> <span class="kn">import</span> <span class="n">XDCA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span><span class="p">,</span> <span class="n">cte</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDCA</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">cte</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">has_probability_one</span><span class="p">(</span><span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+<span class="go">0b1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDCA</span><span class="p">(</span><span class="n">XorDiff</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">cte</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">has_probability_one</span><span class="p">(</span><span class="n">XorDiff</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span>
+<span class="go">0xf == (~(u &lt;&lt; 0x1) &amp; ~(v &lt;&lt; 0x1) &amp; ~(u ^ v))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">xreplace</span><span class="p">({</span><span class="n">u</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">v</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)})</span>
+<span class="go">0b1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.XDCA.weight">
+<code class="sig-name descname">weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">debug</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">version</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#XDCA.weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.XDCA.weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the weight of a possible output <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.XorDiff" title="arxpy.differential.difference.XorDiff"><code class="xref any py py-class docutils literal notranslate"><span class="pre">XorDiff</span></code></a>.</p>
+<p>If the output difference is symbolic, a pair
+<code class="docutils literal notranslate"><span class="pre">(weight,</span> <span class="pre">assertions)</span></code> is returned, where <code class="docutils literal notranslate"><span class="pre">assertions</span></code> is
+a tuple of equalities fixing some temporary variables.
+If the output difference is a constant value,
+only the value of the weight is returned.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.context</span> <span class="kn">import</span> <span class="n">NotEvaluation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.printing</span> <span class="kn">import</span> <span class="n">BvWrapPrinter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.extraop</span> <span class="kn">import</span> <span class="n">PopCount</span><span class="p">,</span> <span class="n">PopCountSum2</span><span class="p">,</span> <span class="n">PopCountSum3</span><span class="p">,</span> <span class="n">PopCountDiff</span><span class="p">,</span> <span class="n">Reverse</span><span class="p">,</span> <span class="n">LeadingZeros</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.derivative</span> <span class="kn">import</span> <span class="n">XDCA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span><span class="p">,</span> <span class="n">cte</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDCA</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">cte</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">weight</span><span class="p">(</span><span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+<span class="go">0x0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDCA</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">cte</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">beta</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">NotEvaluation</span><span class="p">([</span><span class="n">Reverse</span><span class="p">,</span> <span class="n">PopCount</span><span class="p">,</span> <span class="n">PopCountDiff</span><span class="p">,</span> <span class="n">PopCountSum2</span><span class="p">,</span> <span class="n">PopCountSum3</span><span class="p">,</span> <span class="n">LeadingZeros</span><span class="p">]):</span>
+<span class="gp">... </span>    <span class="n">weight_value</span><span class="p">,</span> <span class="n">assertions</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">weight</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">BvWrapPrinter</span><span class="p">()</span><span class="o">.</span><span class="n">doprint</span><span class="p">(</span><span class="n">weight_value</span><span class="p">))</span>
+<span class="go">-(::(PopCountDiff((~_0lz &amp; ((~u &amp; ~v) &lt;&lt; 0x1)) | ((u ^ v) &lt;&lt; 0x1),</span>
+<span class="go">                  (_1rev &amp; _4rev) ^ (0x1 + _1rev) ^ (0x1 + _1rev + (_1rev &amp; _4rev)),</span>
+<span class="go">     0b0,</span>
+<span class="go">  ::(0b0,</span>
+<span class="go">     PopCount(&amp;(_4rev &amp; ((_1rev &amp; _4rev) ^ (0x1 + _1rev) ^ (0x1 + _1rev + (_1rev &amp; _4rev))),</span>
+<span class="go">                ~(((_1rev &amp; _4rev) ^ (0x1 + _1rev) ^ (0x1 + _1rev + (_1rev &amp; _4rev))) &lt;&lt; 0x1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">assertions</span>  
+<span class="go">[_0lz == LeadingZeros(~((~u &amp; ~v) &lt;&lt; 0x1)),</span>
+<span class="go">_1rev == Reverse((~u &amp; ~v) &lt;&lt; 0x1),</span>
+<span class="go">_2rev == Reverse(~(((~u &amp; ~v) &lt;&lt; 0x1) &gt;&gt; 0x1) &amp; ((~u &amp; ~v) &lt;&lt; 0x1) &amp; (~(0x2 ^ u ^ v) &gt;&gt; 0x1)),</span>
+<span class="go">_3rev == Reverse(_2rev ^ _1rev ^ (_1rev + _2rev)),</span>
+<span class="go">_4rev == Reverse((((0x1 &amp; (((~u &amp; ~v) &lt;&lt; 0x1) &gt;&gt; 0x1)) + (0x2 &amp; (((~u &amp; ~v) &lt;&lt; 0x1) &gt;&gt; 0x1) &amp; ~((~u &amp; ~v) &lt;&lt; 0x1))) &amp; ~(_3rev | (~(((~u &amp; ~v) &lt;&lt; 0x1) &gt;&gt; 0x1) &amp; ((~u &amp; ~v) &lt;&lt; 0x1) &amp; (~(0x2 ^ u ^ v) &gt;&gt; 0x1)))) | ((~(((~u &amp; ~v) &lt;&lt; 0x1) &gt;&gt; 0x1) &amp; ((~u &amp; ~v) &lt;&lt; 0x1) &amp; (~(0x2 ^ u ^ v) &gt;&gt; 0x1)) - (((0x1 &amp; (((~u &amp; ~v) &lt;&lt; 0x1) &gt;&gt; 0x1)) + (0x2 &amp; (((~u &amp; ~v) &lt;&lt; 0x1) &gt;&gt; 0x1) &amp; ~((~u &amp; ~v) &lt;&lt; 0x1))) &amp; (_3rev | (~(((~u &amp; ~v) &lt;&lt; 0x1) &gt;&gt; 0x1) &amp; ((~u &amp; ~v) &lt;&lt; 0x1) &amp; (~(0x2 ^ u ^ v) &gt;&gt; 0x1))))))]</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="#arxpy.differential.derivative.Derivative.weight" title="arxpy.differential.derivative.Derivative.weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Derivative.weight</span></code></a> for more information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.XDCA.max_weight">
+<code class="sig-name descname">max_weight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#XDCA.max_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.XDCA.max_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the maximum value the weight can achieve.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.XDCA.exact_weight">
+<code class="sig-name descname">exact_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#XDCA.exact_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.XDCA.exact_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the weight without rounding to the closest integer.</p>
+<p>It is assumed the exact weight is always smaller than the weight.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.XDCA.num_frac_bits">
+<code class="sig-name descname">num_frac_bits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#XDCA.num_frac_bits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.XDCA.num_frac_bits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of fractional bits in the weight.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.derivative.XDCA.error">
+<code class="sig-name descname">error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/derivative.html#XDCA.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.derivative.XDCA.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the maximum difference between the weight and the exact weight.</p>
+<p>This method returns an upper bound (in absolute value) of the maximum difference
+(over all input and output difference) between the weight and the exact weight.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="arxpy.differential.difference.html" class="btn btn-neutral float-right" title="arxpy.differential.difference module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="arxpy.differential.characteristic.html" class="btn btn-neutral float-left" title="arxpy.differential.characteristic module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

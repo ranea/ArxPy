@@ -1,0 +1,6 @@
+arxpy.differential.difference module
+====================================
+
+.. automodule:: arxpy.differential.difference
+   :members:
+   :show-inheritance:

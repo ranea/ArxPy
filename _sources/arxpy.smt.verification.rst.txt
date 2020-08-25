@@ -1,0 +1,6 @@
+arxpy.smt.verification module
+=============================
+
+.. automodule:: arxpy.smt.verification
+   :members:
+   :show-inheritance:

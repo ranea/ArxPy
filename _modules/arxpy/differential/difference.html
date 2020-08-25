@@ -1,0 +1,625 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.differential.difference &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html#subpackages">Subpackages</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>arxpy.differential.difference</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for arxpy.differential.difference</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Manipulate differences.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+
+<span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">core</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">operation</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">extraop</span>
+
+
+<span class="k">def</span> <span class="nf">_tuplify</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">seq</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="Difference"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.Difference">[docs]</a><span class="k">class</span> <span class="nc">Difference</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent differences.</span>
+
+<span class="sd">    The *difference* between two `Term` :math:`x` and :math:`y`</span>
+<span class="sd">    is defined as :math:`\\alpha = y - x`,</span>
+<span class="sd">    where the *difference operation* :math:`-`</span>
+<span class="sd">    is a bit-vector `Operation`. In other words, the pair</span>
+<span class="sd">    :math:`(x, x + \\alpha)` has difference :math:`\\alpha`,</span>
+<span class="sd">    where :math:`+` is the inverse of the difference operation.</span>
+
+<span class="sd">    The most common difference used in differential cryptanalysis</span>
+<span class="sd">    is the XOR difference `XorDiff` (where the difference operation</span>
+<span class="sd">    is `BvXor`). Other examples are the additive difference</span>
+<span class="sd">    (where the difference operation is `BvSub`) or the rotational-XOR</span>
+<span class="sd">    difference `RXDiff`.</span>
+
+<span class="sd">    Note that arithmetic with differences is not supported.</span>
+<span class="sd">    For example, two `Difference` objects ``d1`` and ``d2``</span>
+<span class="sd">    cannot be XORed, i.e., ``d1 ^ d2``.</span>
+<span class="sd">    This can be done instead by performing the arithmetic with</span>
+<span class="sd">    the difference values and converting the resulting</span>
+<span class="sd">    `Term` to a difference, that is, ``Difference(d1.val ^ d2.val)``</span>
+
+<span class="sd">    This class is not meant to be instantiated but to provide a base</span>
+<span class="sd">    class for the different types of differences.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        val: a `Term` representing the value of the difference.</span>
+<span class="sd">        diff_op: the difference `Operation`.</span>
+<span class="sd">        inv_diff_op: the inverse of the difference operation.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">diff_op</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">inv_diff_op</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Term</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the non-verbose string representation.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">val</span><span class="p">))</span>
+
+    <span class="fm">__repr__</span> <span class="o">=</span> <span class="fm">__str__</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">val</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">val</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="Difference.xreplace"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.Difference.xreplace">[docs]</a>    <span class="k">def</span> <span class="nf">xreplace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Replace occurrences of differences within the expression.</span>
+
+<span class="sd">        The argument ``rule`` is a dict-like object representing</span>
+<span class="sd">        the replacement rule.</span>
+
+<span class="sd">        This method is similar to SymPy `xreplace</span>
+<span class="sd">        &lt;https://docs.sympy.org/latest/modules/core.html?highlight=xreplace#</span>
+<span class="sd">        sympy.core.basic.Basic.xreplace&gt;`_ but with the restriction that</span>
+<span class="sd">        only differences objects are allowed in ``rule``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">rule</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rule</span><span class="p">[</span><span class="n">d</span><span class="p">],</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+        <span class="n">rule</span> <span class="o">=</span> <span class="p">{</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="p">:</span> <span class="n">rule</span><span class="p">[</span><span class="n">d</span><span class="p">]</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">rule</span><span class="p">}</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">val</span><span class="o">.</span><span class="n">xreplace</span><span class="p">(</span><span class="n">rule</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Difference.vrepr"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.Difference.vrepr">[docs]</a>    <span class="k">def</span> <span class="nf">vrepr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a verbose string representation.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">val</span><span class="o">.</span><span class="n">vrepr</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Difference.from_pair"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.Difference.from_pair">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_pair</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the `Difference` :math:`\\alpha = y - x` given two `Term`.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Term</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Term</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">diff_op</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>  <span class="c1"># The order of the operands is important</span></div>
+
+<div class="viewcode-block" id="Difference.get_pair_element"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.Difference.get_pair_element">[docs]</a>    <span class="k">def</span> <span class="nf">get_pair_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the `Term` :math:`y` such that :math:`y = \\alpha + x`.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Term</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_diff_op</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">val</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Difference.derivative"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.Difference.derivative">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">derivative</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">input_diff</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the derivative of ``op`` at the point ``input_diff``.</span>
+
+<span class="sd">        The derivative of an `Operation` :math:`f`</span>
+<span class="sd">        at the point :math:`\\alpha` (also called the input difference)</span>
+<span class="sd">        is defined as :math:`f_{\\alpha} (x) = f(x + \\alpha) - f(x)`.</span>
+<span class="sd">        Note that :math:`f_{\\alpha} (x)` is the difference of</span>
+<span class="sd">        :math:`(f(x), f(x + \\alpha))`.</span>
+
+<span class="sd">        If :math:`f` has multiple operands, :math:`\\alpha` is a list</span>
+<span class="sd">        containing the `Difference` of each operand and the</span>
+<span class="sd">        computation :math:`x + \\alpha` is defined component-wise, that is,</span>
+<span class="sd">        :math:`x = (x_1, \dots, x_n)`, :math:`\\alpha = (\\alpha_1, \dots, \\alpha_n)`,</span>
+<span class="sd">        and :math:`x + \\alpha = (x_1 + \\alpha_1, \dots, x_n + \\alpha_n)`.</span>
+
+<span class="sd">        For some operations, there is a unique output difference :math:`\\beta`</span>
+<span class="sd">        for every input difference :math:`\\alpha`, that is, :math:`f_{\\alpha}(x) = \\beta`</span>
+<span class="sd">        is a constant function. In this case, this method returns the `Difference`</span>
+<span class="sd">        :math:`\\beta`. Otherwise, it returns a `Derivative` object representing</span>
+<span class="sd">        :math:`f_{\\alpha}`.</span>
+
+<span class="sd">        Operations with scalar operands are not supported, but these</span>
+<span class="sd">        operands can be removed with `make_partial_operation` and</span>
+<span class="sd">        the derivative of the resulting operator can then be computed.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            op:  a bit-vector operator</span>
+<span class="sd">            input_diff: a list containing the difference of each operand</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;subclasses need to override this method&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="XorDiff"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.XorDiff">[docs]</a><span class="k">class</span> <span class="nc">XorDiff</span><span class="p">(</span><span class="n">Difference</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent XOR differences.</span>
+
+<span class="sd">    The XOR difference of two `Term` is given by the XOR</span>
+<span class="sd">    of the terms. In other words, the *difference operation*</span>
+<span class="sd">    of `XorDiff` is the `BvXor` (see `Difference`).</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.core import Constant, Variable</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.differential.difference import XorDiff</span>
+<span class="sd">        &gt;&gt;&gt; x, y = Constant(0b000, 3), Constant(0b000, 3)</span>
+<span class="sd">        &gt;&gt;&gt; alpha = XorDiff.from_pair(x, y)</span>
+<span class="sd">        &gt;&gt;&gt; alpha</span>
+<span class="sd">        XorDiff(0b000)</span>
+<span class="sd">        &gt;&gt;&gt; alpha.get_pair_element(x)</span>
+<span class="sd">        0b000</span>
+<span class="sd">        &gt;&gt;&gt; x, y = Constant(0b010, 3), Constant(0b101, 3)</span>
+<span class="sd">        &gt;&gt;&gt; alpha = XorDiff.from_pair(x, y)</span>
+<span class="sd">        &gt;&gt;&gt; alpha</span>
+<span class="sd">        XorDiff(0b111)</span>
+<span class="sd">        &gt;&gt;&gt; alpha.get_pair_element(x)</span>
+<span class="sd">        0b101</span>
+<span class="sd">        &gt;&gt;&gt; k = Variable(&quot;k&quot;, 8)</span>
+<span class="sd">        &gt;&gt;&gt; alpha = XorDiff.from_pair(k, k)</span>
+<span class="sd">        &gt;&gt;&gt; alpha</span>
+<span class="sd">        XorDiff(0x00)</span>
+<span class="sd">        &gt;&gt;&gt; alpha.get_pair_element(k)</span>
+<span class="sd">        k</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">diff_op</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvXor</span>
+    <span class="n">inv_diff_op</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvXor</span>
+
+<div class="viewcode-block" id="XorDiff.derivative"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.XorDiff.derivative">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">derivative</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">input_diff</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the derivative of ``op`` at the point ``input_diff``.</span>
+
+<span class="sd">        See `Difference.derivative` for more information.</span>
+
+<span class="sd">            &gt;&gt;&gt; from arxpy.bitvector.core import Variable, Constant</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.bitvector.operation import BvAdd, BvXor, RotateLeft, BvSub</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.bitvector.extraop import make_partial_operation</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.differential.difference import XorDiff</span>
+<span class="sd">            &gt;&gt;&gt; d1, d2 = XorDiff(Variable(&quot;d1&quot;, 8)), XorDiff(Variable(&quot;d2&quot;, 8))</span>
+<span class="sd">            &gt;&gt;&gt; XorDiff.derivative(BvXor, [d1, d2])</span>
+<span class="sd">            XorDiff(d1 ^ d2)</span>
+<span class="sd">            &gt;&gt;&gt; Xor1 = make_partial_operation(BvXor, tuple([None, Constant(1, 8)]))</span>
+<span class="sd">            &gt;&gt;&gt; XorDiff.derivative(Xor1, d1)</span>
+<span class="sd">            XorDiff(d1)</span>
+<span class="sd">            &gt;&gt;&gt; Rotate1 = make_partial_operation(RotateLeft, tuple([None, 1]))</span>
+<span class="sd">            &gt;&gt;&gt; XorDiff.derivative(Rotate1, d1)</span>
+<span class="sd">            XorDiff(d1 &lt;&lt;&lt; 1)</span>
+<span class="sd">            &gt;&gt;&gt; XorDiff.derivative(BvAdd, [d1, d2])</span>
+<span class="sd">            XDA(XorDiff(d1), XorDiff(d2))</span>
+<span class="sd">            &gt;&gt;&gt; XorDiff.derivative(BvSub, [d1, d2])</span>
+<span class="sd">            XDS(XorDiff(d1), XorDiff(d2))</span>
+<span class="sd">            &gt;&gt;&gt; CteAdd1 = make_partial_operation(BvAdd, tuple([None, Constant(1, 8)]))</span>
+<span class="sd">            &gt;&gt;&gt; XorDiff.derivative(CteAdd1, d1)</span>
+<span class="sd">            XDCA_0x01(XorDiff(d1))</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">input_diff</span> <span class="o">=</span> <span class="n">_tuplify</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span> <span class="o">==</span> <span class="nb">sum</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">arity</span><span class="p">)</span>
+
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;invalid arguments: op=</span><span class="si">{}</span><span class="s2">, input_diff=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">op</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">vrepr</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Term</span><span class="p">)</span> <span class="k">else</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span> <span class="k">for</span> <span class="n">diff</span> <span class="ow">in</span> <span class="n">input_diff</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvNot</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">input_diff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvXor</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">op</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">Concat</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">op</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvAdd</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">arxpy.differential</span> <span class="kn">import</span> <span class="n">derivative</span>
+            <span class="k">return</span> <span class="n">derivative</span><span class="o">.</span><span class="n">XDA</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvSub</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">arxpy.differential</span> <span class="kn">import</span> <span class="n">derivative</span>
+            <span class="k">return</span> <span class="n">derivative</span><span class="o">.</span><span class="n">XDS</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">extraop</span><span class="o">.</span><span class="n">PartialOperation</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">base_op</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvXor</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+                <span class="n">d1</span> <span class="o">=</span> <span class="n">input_diff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">d2</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_pair</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+                <span class="n">input_diff</span> <span class="o">=</span> <span class="p">[</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">]</span>
+                <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">base_op</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff</span><span class="p">]))</span>
+
+            <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">base_op</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvAnd</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+                <span class="n">d1</span> <span class="o">=</span> <span class="n">input_diff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">base_op</span><span class="p">(</span><span class="n">d1</span><span class="o">.</span><span class="n">val</span><span class="p">,</span> <span class="n">val</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">base_op</span> <span class="ow">in</span> <span class="p">[</span><span class="n">operation</span><span class="o">.</span><span class="n">RotateLeft</span><span class="p">,</span> <span class="n">operation</span><span class="o">.</span><span class="n">RotateRight</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+                    <span class="n">d</span> <span class="o">=</span> <span class="n">input_diff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">base_op</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="p">,</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">base_op</span> <span class="ow">in</span> <span class="p">[</span><span class="n">operation</span><span class="o">.</span><span class="n">BvShl</span><span class="p">,</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvLshr</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+                    <span class="n">d</span> <span class="o">=</span> <span class="n">input_diff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">base_op</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="p">,</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">base_op</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">Extract</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+                    <span class="n">d</span> <span class="o">=</span> <span class="n">input_diff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">base_op</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="p">,</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">base_op</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">Concat</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+                <span class="n">d1</span> <span class="o">=</span> <span class="n">input_diff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">input_diff</span> <span class="o">=</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">from_pair</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">val</span><span class="p">),</span> <span class="n">d1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">input_diff</span> <span class="o">=</span> <span class="p">[</span><span class="n">d1</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_pair</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">val</span><span class="p">)]</span>
+                <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">base_op</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff</span><span class="p">]))</span>
+
+            <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">base_op</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvAdd</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="n">input_diff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">cte</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="kn">from</span> <span class="nn">arxpy.differential</span> <span class="kn">import</span> <span class="n">derivative</span>
+                <span class="k">return</span> <span class="n">derivative</span><span class="o">.</span><span class="n">XDCA</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">cte</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="s2">&quot;xor_derivative&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">op</span><span class="o">.</span><span class="n">xor_derivative</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span>
+
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="RXOp"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.RXOp">[docs]</a><span class="k">class</span> <span class="nc">RXOp</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">Operation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The difference operation of `RXDiff`.&quot;&quot;&quot;</span>
+
+    <span class="n">arity</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">is_symmetric</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">is_simple</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="RXOp.condition"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.RXOp.condition">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">condition</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="n">y</span><span class="o">.</span><span class="n">width</span></div>
+
+<div class="viewcode-block" id="RXOp.output_width"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.RXOp.output_width">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">output_width</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span></div>
+
+<div class="viewcode-block" id="RXOp.eval"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.RXOp.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">operation</span><span class="o">.</span><span class="n">RotateLeft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">^</span> <span class="n">y</span></div></div>
+
+
+<div class="viewcode-block" id="RXInvOp"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.RXInvOp">[docs]</a><span class="k">class</span> <span class="nc">RXInvOp</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">Operation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The inverse of the  difference operation of `RXDiff`.&quot;&quot;&quot;</span>
+
+    <span class="n">arity</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">is_symmetric</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">is_simple</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="RXInvOp.condition"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.RXInvOp.condition">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">condition</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="n">d</span><span class="o">.</span><span class="n">width</span></div>
+
+<div class="viewcode-block" id="RXInvOp.output_width"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.RXInvOp.output_width">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">output_width</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span></div>
+
+<div class="viewcode-block" id="RXInvOp.eval"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.RXInvOp.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">operation</span><span class="o">.</span><span class="n">RotateLeft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">^</span> <span class="n">d</span></div></div>
+
+
+<div class="viewcode-block" id="RXDiff"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.RXDiff">[docs]</a><span class="k">class</span> <span class="nc">RXDiff</span><span class="p">(</span><span class="n">Difference</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent rotational-XOR (RX) differences.</span>
+
+<span class="sd">    The pair ``(x, (x &lt;&lt;&lt; 1) ^ d)`` has RX difference ``d``.</span>
+<span class="sd">    In other words,  the RX difference of two `Term` ``x`` and ``y``</span>
+<span class="sd">    is defined as ``(x &lt;&lt;&lt; 1) ^ y``.</span>
+
+<span class="sd">    See `Difference` for more information.</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.core import Constant, Variable</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.differential.difference import RXDiff</span>
+<span class="sd">        &gt;&gt;&gt; x, y = Constant(0b000, 3), Constant(0b000, 3)</span>
+<span class="sd">        &gt;&gt;&gt; alpha = RXDiff.from_pair(x, y)</span>
+<span class="sd">        &gt;&gt;&gt; alpha</span>
+<span class="sd">        RXDiff(0b000)</span>
+<span class="sd">        &gt;&gt;&gt; alpha.get_pair_element(x)</span>
+<span class="sd">        0b000</span>
+<span class="sd">        &gt;&gt;&gt; x, y = Constant(0b000, 3), Constant(0b001, 3)</span>
+<span class="sd">        &gt;&gt;&gt; alpha = RXDiff.from_pair(x, y)</span>
+<span class="sd">        &gt;&gt;&gt; alpha</span>
+<span class="sd">        RXDiff(0b001)</span>
+<span class="sd">        &gt;&gt;&gt; alpha.get_pair_element(x)</span>
+<span class="sd">        0b001</span>
+<span class="sd">        &gt;&gt;&gt; k = Variable(&quot;k&quot;, 8)</span>
+<span class="sd">        &gt;&gt;&gt; alpha = RXDiff.from_pair(k, k)</span>
+<span class="sd">        &gt;&gt;&gt; alpha</span>
+<span class="sd">        RXDiff(k ^ (k &lt;&lt;&lt; 1))</span>
+<span class="sd">        &gt;&gt;&gt; alpha.get_pair_element(k)</span>
+<span class="sd">        k</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">diff_op</span> <span class="o">=</span> <span class="n">RXOp</span>
+    <span class="n">inv_diff_op</span> <span class="o">=</span> <span class="n">RXInvOp</span>
+
+<div class="viewcode-block" id="RXDiff.derivative"><a class="viewcode-back" href="../../../arxpy.differential.difference.html#arxpy.differential.derivative.RXDiff.derivative">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">derivative</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">input_diff</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the derivative of ``op`` at the point ``input_diff``.</span>
+
+<span class="sd">        See `Difference.derivative` for more information.</span>
+
+<span class="sd">            &gt;&gt;&gt; from arxpy.bitvector.core import Variable, Constant</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.bitvector.operation import BvAdd, BvXor, RotateLeft</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.bitvector.extraop import make_partial_operation</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.differential.difference import RXDiff</span>
+<span class="sd">            &gt;&gt;&gt; d1, d2 = RXDiff(Variable(&quot;d1&quot;, 8)), RXDiff(Variable(&quot;d2&quot;, 8))</span>
+<span class="sd">            &gt;&gt;&gt; RXDiff.derivative(BvXor, [d1, d2])</span>
+<span class="sd">            RXDiff(d1 ^ d2)</span>
+<span class="sd">            &gt;&gt;&gt; Xor1 = make_partial_operation(BvXor, tuple([None, Constant(1, 8)]))</span>
+<span class="sd">            &gt;&gt;&gt; RXDiff.derivative(Xor1, d1)</span>
+<span class="sd">            RXDiff(0x03 ^ d1)</span>
+<span class="sd">            &gt;&gt;&gt; Rotate1 = make_partial_operation(RotateLeft, tuple([None, 1]))</span>
+<span class="sd">            &gt;&gt;&gt; RXDiff.derivative(Rotate1, d1)</span>
+<span class="sd">            RXDiff(d1 &lt;&lt;&lt; 1)</span>
+<span class="sd">            &gt;&gt;&gt; RXDiff.derivative(BvAdd, [d1, d2])</span>
+<span class="sd">            RXDA(RXDiff(d1), RXDiff(d2))</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">input_diff</span> <span class="o">=</span> <span class="n">_tuplify</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span> <span class="o">==</span> <span class="nb">sum</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">arity</span><span class="p">)</span>
+
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;invalid arguments: op=</span><span class="si">{}</span><span class="s2">, input_diff=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">op</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">vrepr</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Term</span><span class="p">)</span> <span class="k">else</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span> <span class="k">for</span> <span class="n">diff</span> <span class="ow">in</span> <span class="n">input_diff</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvNot</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">input_diff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvXor</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">op</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvAdd</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">arxpy.differential</span> <span class="kn">import</span> <span class="n">derivative</span>
+            <span class="k">return</span> <span class="n">derivative</span><span class="o">.</span><span class="n">RXDA</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span>
+
+        <span class="c1"># Concact, BvSub</span>
+
+        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">extraop</span><span class="o">.</span><span class="n">PartialOperation</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">base_op</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvXor</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+                <span class="n">d1</span> <span class="o">=</span> <span class="n">input_diff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">d2</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_pair</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+                <span class="n">input_diff</span> <span class="o">=</span> <span class="p">[</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">]</span>
+                <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">base_op</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff</span><span class="p">]))</span>
+
+            <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">base_op</span> <span class="ow">in</span> <span class="p">[</span><span class="n">operation</span><span class="o">.</span><span class="n">RotateLeft</span><span class="p">,</span> <span class="n">operation</span><span class="o">.</span><span class="n">RotateRight</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+                    <span class="n">d</span> <span class="o">=</span> <span class="n">input_diff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">base_op</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="p">,</span> <span class="n">op</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+            <span class="c1"># BvShl, Extract</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="s2">&quot;rx_derivative&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">op</span><span class="o">.</span><span class="n">rx_derivative</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span>
+
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

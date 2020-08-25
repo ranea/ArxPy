@@ -1,0 +1,6 @@
+arxpy.primitives.cham module
+============================
+
+.. automodule:: arxpy.primitives.cham
+   :members:
+   :show-inheritance:

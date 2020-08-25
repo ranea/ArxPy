@@ -1,0 +1,6 @@
+arxpy.primitives.speck module
+=============================
+
+.. automodule:: arxpy.primitives.speck
+   :members:
+   :show-inheritance:

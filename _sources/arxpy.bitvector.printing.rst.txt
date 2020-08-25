@@ -1,0 +1,6 @@
+arxpy.bitvector.printing module
+===============================
+
+.. automodule:: arxpy.bitvector.printing
+   :members:
+   :show-inheritance:

@@ -1,0 +1,1143 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.smt.search module &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="arxpy.smt.types module" href="arxpy.smt.types.html" />
+    <link rel="prev" title="arxpy.smt package" href="arxpy.smt.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="arxpy.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arxpy.bitvector.html">arxpy.bitvector package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.differential.html">arxpy.differential package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.primitives.html">arxpy.primitives package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="arxpy.smt.html">arxpy.smt package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="arxpy.smt.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">arxpy.smt.search module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.smt.types.html">arxpy.smt.types module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.smt.verification.html">arxpy.smt.verification module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="arxpy.html">ArxPy 0.2</a> &raquo;</li>
+        
+          <li><a href="arxpy.smt.html">arxpy.smt package</a> &raquo;</li>
+        
+      <li>arxpy.smt.search module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/arxpy.smt.search.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-arxpy.smt.search">
+<span id="arxpy-smt-search-module"></span><h1>arxpy.smt.search module<a class="headerlink" href="#module-arxpy.smt.search" title="Permalink to this headline">¶</a></h1>
+<p>Search for characteristics by modeling the search as a SMT problem.</p>
+<dl class="py class">
+<dt id="arxpy.smt.search.DerMode">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search.</code><code class="sig-name descname">DerMode</code><a class="reference internal" href="_modules/arxpy/smt/search.html#DerMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.DerMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Represent the different constraints available for the derivative weights of a characteristic.</p>
+<dl class="py attribute">
+<dt id="arxpy.smt.search.DerMode.Default">
+<code class="sig-name descname">Default</code><a class="headerlink" href="#arxpy.smt.search.DerMode.Default" title="Permalink to this definition">¶</a></dt>
+<dd><p>no additional constraint is added</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.DerMode.ProbabilityOne">
+<code class="sig-name descname">ProbabilityOne</code><a class="headerlink" href="#arxpy.smt.search.DerMode.ProbabilityOne" title="Permalink to this definition">¶</a></dt>
+<dd><p>fix all derivative weights to zero</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.DerMode.Valid">
+<code class="sig-name descname">Valid</code><a class="headerlink" href="#arxpy.smt.search.DerMode.Valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>only the validity constraint is added (weight is ignored)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.DerMode.XDCA_Approx">
+<code class="sig-name descname">XDCA_Approx</code><a class="headerlink" href="#arxpy.smt.search.DerMode.XDCA_Approx" title="Permalink to this definition">¶</a></dt>
+<dd><p>for the weights of <a class="reference internal" href="arxpy.differential.derivative.html#arxpy.differential.derivative.XDCA" title="arxpy.differential.derivative.XDCA"><code class="xref any py py-class docutils literal notranslate"><span class="pre">XDCA</span></code></a>, the <code class="docutils literal notranslate"><span class="pre">precision</span></code> is set to <code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.smt.search.ChSearchMode">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search.</code><code class="sig-name descname">ChSearchMode</code><a class="reference internal" href="_modules/arxpy/smt/search.html#ChSearchMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.ChSearchMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Represent the different options for searching <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.BvCharacteristic" title="arxpy.differential.characteristic.BvCharacteristic"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvCharacteristic</span></code></a>.</p>
+<p>A characteristic is said to be <em>valid</em> if its weight
+<span class="math notranslate nohighlight">\(w = - \log_2(p)\)</span>, where <em>p</em> is the probability of the characteristic,
+is lower than the bit-size of the input difference.</p>
+<p>A derivative weight is said to be <em>non-exact</em> if its weight
+does not match its exact weight.</p>
+<dl class="py attribute">
+<dt id="arxpy.smt.search.ChSearchMode.FirstCh">
+<code class="sig-name descname">FirstCh</code><a class="headerlink" href="#arxpy.smt.search.ChSearchMode.FirstCh" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the 1st characteristic found by iteratively searching with increasing weight.
+The characteristic found is returned as a <a class="reference internal" href="#arxpy.smt.search.ChFound" title="arxpy.smt.search.ChFound"><code class="xref any py py-class docutils literal notranslate"><span class="pre">ChFound</span></code></a> object, but it may not have
+optimal theoretical weight if it contains a non-exact derivative weight
+or it may be empirically invalid. If no characteristic is found,
+<code class="docutils literal notranslate"><span class="pre">None</span></code> is returned.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.ChSearchMode.FirstChValid">
+<code class="sig-name descname">FirstChValid</code><a class="headerlink" href="#arxpy.smt.search.ChSearchMode.FirstChValid" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to <a class="reference internal" href="#arxpy.smt.search.ChSearchMode.FirstCh" title="arxpy.smt.search.ChSearchMode.FirstCh"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstCh</span></code></a>, but if the characteristic found is
+empirically invalid (after computing its empirical weight), the search continues.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.ChSearchMode.Optimal">
+<code class="sig-name descname">Optimal</code><a class="headerlink" href="#arxpy.smt.search.ChSearchMode.Optimal" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to <a class="reference internal" href="#arxpy.smt.search.ChSearchMode.FirstCh" title="arxpy.smt.search.ChSearchMode.FirstCh"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstCh</span></code></a>, but several characteristics are found to ensure
+that the one returned has the optimal theoretical weight.
+(only differs from <a class="reference internal" href="#arxpy.smt.search.ChSearchMode.FirstCh" title="arxpy.smt.search.ChSearchMode.FirstCh"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstCh</span></code></a> if there is a non-exact derivative weight).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.ChSearchMode.OptimalDifferential">
+<code class="sig-name descname">OptimalDifferential</code><a class="headerlink" href="#arxpy.smt.search.ChSearchMode.OptimalDifferential" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to <a class="reference internal" href="#arxpy.smt.search.ChSearchMode.Optimal" title="arxpy.smt.search.ChSearchMode.Optimal"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">Optimal</span></code></a>, but once a characteristic is found,
+only characteristics with different input/output differences are searched.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.ChSearchMode.AllOptimal">
+<code class="sig-name descname">AllOptimal</code><a class="headerlink" href="#arxpy.smt.search.ChSearchMode.AllOptimal" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to <a class="reference internal" href="#arxpy.smt.search.ChSearchMode.Optimal" title="arxpy.smt.search.ChSearchMode.Optimal"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">Optimal</span></code></a>, but the search never stops.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.ChSearchMode.TopDifferentials">
+<code class="sig-name descname">TopDifferentials</code><a class="headerlink" href="#arxpy.smt.search.ChSearchMode.TopDifferentials" title="Permalink to this definition">¶</a></dt>
+<dd><p>searches for <code class="xref any docutils literal notranslate"><span class="pre">MAX_CH_FOUND</span></code> characteristics
+(as in <a class="reference internal" href="#arxpy.smt.search.ChSearchMode.FirstCh" title="arxpy.smt.search.ChSearchMode.FirstCh"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstCh</span></code></a>) and return the differentials obtained
+by gathering those characteristics.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.ChSearchMode.AllValid">
+<code class="sig-name descname">AllValid</code><a class="headerlink" href="#arxpy.smt.search.ChSearchMode.AllValid" title="Permalink to this definition">¶</a></dt>
+<dd><p>a non-stop search of valid characteristics with no
+additional constraints.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.smt.search.SkChSearchMode">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search.</code><code class="sig-name descname">SkChSearchMode</code><a class="reference internal" href="_modules/arxpy/smt/search.html#SkChSearchMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.SkChSearchMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Represent the different options for searching <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.SingleKeyCh" title="arxpy.differential.characteristic.SingleKeyCh"><code class="xref any py py-class docutils literal notranslate"><span class="pre">SingleKeyCh</span></code></a>.</p>
+<p>The options are the same as <a class="reference internal" href="#arxpy.smt.search.ChSearchMode" title="arxpy.smt.search.ChSearchMode"><code class="xref any py py-class docutils literal notranslate"><span class="pre">ChSearchMode</span></code></a>, but <a class="reference internal" href="#arxpy.smt.search.SkChFound" title="arxpy.smt.search.SkChFound"><code class="xref any py py-class docutils literal notranslate"><span class="pre">SkChFound</span></code></a> objects are returned instead of <a class="reference internal" href="#arxpy.smt.search.ChFound" title="arxpy.smt.search.ChFound"><code class="xref any py py-class docutils literal notranslate"><span class="pre">ChFound</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.smt.search.RkChSearchMode">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search.</code><code class="sig-name descname">RkChSearchMode</code><a class="reference internal" href="_modules/arxpy/smt/search.html#RkChSearchMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.RkChSearchMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Represent the different options for searching <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.RelatedKeyCh" title="arxpy.differential.characteristic.RelatedKeyCh"><code class="xref any py py-class docutils literal notranslate"><span class="pre">RelatedKeyCh</span></code></a>.</p>
+<p>A related-key characteristic is said to be <em>valid</em> if its encryption weight
+is lower than the bit-size of the plaintext difference and
+its key schedule weight is lower than the bit-size of the master-key difference.</p>
+<dl class="py attribute">
+<dt id="arxpy.smt.search.RkChSearchMode.FirstMinSum">
+<code class="sig-name descname">FirstMinSum</code><a class="headerlink" href="#arxpy.smt.search.RkChSearchMode.FirstMinSum" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the 1st related-key characteristic found
+by iteratively searching with increasing <em>weight</em>, where the <em>weight</em>
+is taken as the sum of the key schedule weight and the encryption weight.
+The characteristic found is returned as a <a class="reference internal" href="#arxpy.smt.search.RkChFound" title="arxpy.smt.search.RkChFound"><code class="xref any py py-class docutils literal notranslate"><span class="pre">RkChFound</span></code></a> object,
+but it may not have optimal theoretical weight if it it contains
+a non-exact derivative weight or it may be empirically invalid.
+If no characteristic is found, <code class="docutils literal notranslate"><span class="pre">None</span></code> is returned.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.RkChSearchMode.FirstMinSumValid">
+<code class="sig-name descname">FirstMinSumValid</code><a class="headerlink" href="#arxpy.smt.search.RkChSearchMode.FirstMinSumValid" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.FirstMinSum" title="arxpy.smt.search.RkChSearchMode.FirstMinSum"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstMinSum</span></code></a>, but if the characteristic found is
+empirically invalid (after computing its empirical weight), the search continues.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.RkChSearchMode.OptimalMinSum">
+<code class="sig-name descname">OptimalMinSum</code><a class="headerlink" href="#arxpy.smt.search.RkChSearchMode.OptimalMinSum" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.FirstMinSum" title="arxpy.smt.search.RkChSearchMode.FirstMinSum"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstMinSum</span></code></a>, but several characteristics are found to ensure
+that the one returned has the optimal theoretical weight.
+(only differs from <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.FirstMinSum" title="arxpy.smt.search.RkChSearchMode.FirstMinSum"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstMinSum</span></code></a> if there is a non-exact derivative weight).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.RkChSearchMode.OptimalMinSumDifferential">
+<code class="sig-name descname">OptimalMinSumDifferential</code><a class="headerlink" href="#arxpy.smt.search.RkChSearchMode.OptimalMinSumDifferential" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.OptimalMinSum" title="arxpy.smt.search.RkChSearchMode.OptimalMinSum"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">OptimalMinSum</span></code></a>, but once a characteristic is found,
+only characteristics with different input/output differences are searched.
+(to ensure optimality).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.RkChSearchMode.FirstValidKeyMinEnc">
+<code class="sig-name descname">FirstValidKeyMinEnc</code><a class="headerlink" href="#arxpy.smt.search.RkChSearchMode.FirstValidKeyMinEnc" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.FirstMinSum" title="arxpy.smt.search.RkChSearchMode.FirstMinSum"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstMinSum</span></code></a>,
+but the <em>weight</em> is taken as the encryption weight and the
+key schedule weight is restricted to be smaller than the key size.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.RkChSearchMode.FirstValidKeyMinEncValid">
+<code class="sig-name descname">FirstValidKeyMinEncValid</code><a class="headerlink" href="#arxpy.smt.search.RkChSearchMode.FirstValidKeyMinEncValid" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.FirstMinSumValid" title="arxpy.smt.search.RkChSearchMode.FirstMinSumValid"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstMinSumValid</span></code></a>,
+but the <em>weight</em> is defined as <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.FirstValidKeyMinEnc" title="arxpy.smt.search.RkChSearchMode.FirstValidKeyMinEnc"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstValidKeyMinEnc</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.RkChSearchMode.OptimalValidKeyMinEnc">
+<code class="sig-name descname">OptimalValidKeyMinEnc</code><a class="headerlink" href="#arxpy.smt.search.RkChSearchMode.OptimalValidKeyMinEnc" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.OptimalMinSum" title="arxpy.smt.search.RkChSearchMode.OptimalMinSum"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">OptimalMinSum</span></code></a>,
+but the <em>weight</em> is defined as <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.FirstValidKeyMinEnc" title="arxpy.smt.search.RkChSearchMode.FirstValidKeyMinEnc"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstValidKeyMinEnc</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.RkChSearchMode.OptimalValidKeyMinEncDifferential">
+<code class="sig-name descname">OptimalValidKeyMinEncDifferential</code><a class="headerlink" href="#arxpy.smt.search.RkChSearchMode.OptimalValidKeyMinEncDifferential" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.OptimalMinSumDifferential" title="arxpy.smt.search.RkChSearchMode.OptimalMinSumDifferential"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">OptimalMinSumDifferential</span></code></a>,
+but the <em>weight</em> is  defined as <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.FirstValidKeyMinEnc" title="arxpy.smt.search.RkChSearchMode.FirstValidKeyMinEnc"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstValidKeyMinEnc</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.RkChSearchMode.FirstFixEncMinKey">
+<code class="sig-name descname">FirstFixEncMinKey</code><a class="headerlink" href="#arxpy.smt.search.RkChSearchMode.FirstFixEncMinKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.FirstMinSum" title="arxpy.smt.search.RkChSearchMode.FirstMinSum"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstMinSum</span></code></a>,
+but the <em>weight</em> is taken as the key schedule weight and
+the encryption weight is fixed to a given value.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.RkChSearchMode.FirstFixEncMinKeyValid">
+<code class="sig-name descname">FirstFixEncMinKeyValid</code><a class="headerlink" href="#arxpy.smt.search.RkChSearchMode.FirstFixEncMinKeyValid" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.FirstMinSumValid" title="arxpy.smt.search.RkChSearchMode.FirstMinSumValid"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstMinSumValid</span></code></a>,
+but the <em>weight</em> is defined as <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.FirstFixEncMinKey" title="arxpy.smt.search.RkChSearchMode.FirstFixEncMinKey"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstFixEncMinKey</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.RkChSearchMode.OptimalFixEncMinKey">
+<code class="sig-name descname">OptimalFixEncMinKey</code><a class="headerlink" href="#arxpy.smt.search.RkChSearchMode.OptimalFixEncMinKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.OptimalMinSum" title="arxpy.smt.search.RkChSearchMode.OptimalMinSum"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">OptimalMinSum</span></code></a>,
+but the <em>weight</em> is defined as <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.FirstFixEncMinKey" title="arxpy.smt.search.RkChSearchMode.FirstFixEncMinKey"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstFixEncMinKey</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.RkChSearchMode.OptimalFixEncMinKeyDifferential">
+<code class="sig-name descname">OptimalFixEncMinKeyDifferential</code><a class="headerlink" href="#arxpy.smt.search.RkChSearchMode.OptimalFixEncMinKeyDifferential" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.OptimalMinSumDifferential" title="arxpy.smt.search.RkChSearchMode.OptimalMinSumDifferential"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">OptimalMinSumDifferential</span></code></a>,
+but the <em>weight</em> is defined as <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.FirstFixEncMinKey" title="arxpy.smt.search.RkChSearchMode.FirstFixEncMinKey"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstFixEncMinKey</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.RkChSearchMode.AllOptimalMinSum">
+<code class="sig-name descname">AllOptimalMinSum</code><a class="headerlink" href="#arxpy.smt.search.RkChSearchMode.AllOptimalMinSum" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to <a class="reference internal" href="#arxpy.smt.search.RkChSearchMode.OptimalMinSum" title="arxpy.smt.search.RkChSearchMode.OptimalMinSum"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">OptimalMinSum</span></code></a>, but the search never stops.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.RkChSearchMode.AllValid">
+<code class="sig-name descname">AllValid</code><a class="headerlink" href="#arxpy.smt.search.RkChSearchMode.AllValid" title="Permalink to this definition">¶</a></dt>
+<dd><p>a non-stop search of valid characteristics with no
+additional constraints.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt id="arxpy.smt.search.ExactWeightError">
+<em class="property">exception </em><code class="sig-prename descclassname">arxpy.smt.search.</code><code class="sig-name descname">ExactWeightError</code><a class="reference internal" href="_modules/arxpy/smt/search.html#ExactWeightError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.ExactWeightError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>The exception raised in <a class="reference internal" href="#arxpy.smt.search.ChFound.check_empirical_weight" title="arxpy.smt.search.ChFound.check_empirical_weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">ChFound.check_empirical_weight</span></code></a> and similar functions.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.smt.search.ChFound">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search.</code><code class="sig-name descname">ChFound</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ch</span></em>, <em class="sig-param"><span class="n">ch_weight</span></em>, <em class="sig-param"><span class="n">der_weights</span></em>, <em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">aux_model</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#ChFound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.ChFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represent (non-symbolic) characteristics found.</p>
+<dl class="py attribute">
+<dt id="arxpy.smt.search.ChFound.ch">
+<code class="sig-name descname">ch</code><a class="headerlink" href="#arxpy.smt.search.ChFound.ch" title="Permalink to this definition">¶</a></dt>
+<dd><p>the associated symbolic characteristic</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.ChFound.ch_weight">
+<code class="sig-name descname">ch_weight</code><a class="headerlink" href="#arxpy.smt.search.ChFound.ch_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>a <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Constant" title="arxpy.bitvector.core.Constant"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Constant</span></code></a> denoting the the characteristic weight</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.ChFound.der_weights">
+<code class="sig-name descname">der_weights</code><a class="headerlink" href="#arxpy.smt.search.ChFound.der_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>a list, where the i-th element is a pair containing
+the i-th derivative symbolic weight and its value</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.ChFound.input_diff">
+<code class="sig-name descname">input_diff</code><a class="headerlink" href="#arxpy.smt.search.ChFound.input_diff" title="Permalink to this definition">¶</a></dt>
+<dd><p>a list, where the i-th element is a pair containing
+the i-th input symbolic difference and its value</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.ChFound.nonlinear_diffs">
+<code class="sig-name descname">nonlinear_diffs</code><a class="headerlink" href="#arxpy.smt.search.ChFound.nonlinear_diffs" title="Permalink to this definition">¶</a></dt>
+<dd><p>aa list, where the i-th element is a pair containing
+the i-th non-linear symbolic difference and its value</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.ChFound.output_diff">
+<code class="sig-name descname">output_diff</code><a class="headerlink" href="#arxpy.smt.search.ChFound.output_diff" title="Permalink to this definition">¶</a></dt>
+<dd><p>a list, where the i-th element is a pair containing
+the i-th output symbolic difference and its value</p>
+</dd></dl>
+
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.operation</span> <span class="kn">import</span> <span class="n">BvComp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="n">RXDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">BvCharacteristic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.chaskey</span> <span class="kn">import</span> <span class="n">ChaskeyPi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search</span> <span class="kn">import</span> <span class="n">SearchCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">BvCharacteristic</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;dv0&quot;</span><span class="p">,</span> <span class="s2">&quot;dv1&quot;</span><span class="p">,</span> <span class="s2">&quot;dv2&quot;</span><span class="p">,</span> <span class="s2">&quot;dv3&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span> <span class="o">=</span> <span class="n">SearchCh</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span> <span class="o">=</span> <span class="n">search_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span><span class="o">.</span><span class="n">ch_weight</span>
+<span class="go">0b0000000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span><span class="o">.</span><span class="n">der_weights</span>
+<span class="go">[[w0w1w2, 0b0000000], [w3, 0b00000]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span><span class="o">.</span><span class="n">input_diff</span>  
+<span class="go">[[XorDiff(dv0), XorDiff(...)], [XorDiff(dv1), XorDiff(...)],</span>
+<span class="go">[XorDiff(dv2), XorDiff(...)], [XorDiff(dv3), XorDiff(...)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span><span class="o">.</span><span class="n">nonlinear_diffs</span>  
+<span class="go">[[XorDiff(d0), XorDiff(...)], [XorDiff(d4), XorDiff(...)],</span>
+<span class="go">[XorDiff(d7), XorDiff(...)], [XorDiff(d10), XorDiff(...)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span><span class="o">.</span><span class="n">output_diff</span>  
+<span class="go">[[XorDiff(d7), XorDiff(...)], [XorDiff(d12), XorDiff(...)],</span>
+<span class="go">[XorDiff(d13), XorDiff(...)], [XorDiff(d9), XorDiff(...)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ch_found</span><span class="p">)</span>  
+<span class="go">{&#39;ch_weight&#39;: 0,</span>
+<span class="go"> &#39;der_weights&#39;: [[w0w1w2, 0], [w3, 0]],</span>
+<span class="go"> &#39;exact_weight&#39;: 0,</span>
+<span class="go"> &#39;input_diff&#39;: [[dv0, ...], [dv1, ...], [dv2, ...], [dv3, ...]],</span>
+<span class="go"> &#39;nonlinear_diffs&#39;: [[d0, ...], [d4, ...], [d7, ...], [d10, ...]],</span>
+<span class="go"> &#39;output_diff&#39;: [[d7, ...], [d12, ...], [d13, ...], [d9, ...]]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">BvCharacteristic</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">RXDiff</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;dv0&quot;</span><span class="p">,</span> <span class="s2">&quot;dv1&quot;</span><span class="p">,</span> <span class="s2">&quot;dv2&quot;</span><span class="p">,</span> <span class="s2">&quot;dv3&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ic</span> <span class="o">=</span> <span class="p">[</span><span class="n">BvComp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">ch</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ic</span> <span class="o">+=</span> <span class="p">[</span><span class="n">BvComp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">ch</span><span class="o">.</span><span class="n">output_diff</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span> <span class="o">=</span> <span class="n">SearchCh</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">allow_zero_input_diff</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">initial_constraints</span><span class="o">=</span><span class="n">ic</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span> <span class="o">=</span> <span class="n">search_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span><span class="o">.</span><span class="n">ch_weight</span>
+<span class="go">0x05</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span><span class="o">.</span><span class="n">der_weights</span>
+<span class="go">[[w0, 0b000001011], [w1, 0b000001011], [w2, 0b000001011], [w3, 0b000001011]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span><span class="o">.</span><span class="n">input_diff</span>  
+<span class="go">[[RXDiff(dv0), RXDiff(0x00000000)], [RXDiff(dv1), RXDiff(0x00000000)],</span>
+<span class="go">[RXDiff(dv2), RXDiff(0x00000000)], [RXDiff(dv3), RXDiff(0x00000000)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span><span class="o">.</span><span class="n">nonlinear_diffs</span>  
+<span class="go">[[RXDiff(d0), RXDiff(0x00000000)], [RXDiff(d4), RXDiff(0x00000000)],</span>
+<span class="go">[RXDiff(d7), RXDiff(0x00000000)], [RXDiff(d10), RXDiff(0x00000000)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span><span class="o">.</span><span class="n">output_diff</span>  
+<span class="go">[[RXDiff(d7), RXDiff(0x00000000)], [RXDiff(d12), RXDiff(0x00000000)],</span>
+<span class="go">[RXDiff(d13), RXDiff(0x00000000)], [RXDiff(d9), RXDiff(0x00000000)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ch_found</span><span class="p">)</span>  
+<span class="go">{&#39;ch_weight&#39;: 5,</span>
+<span class="go"> &#39;der_weights&#39;: [[w0, 1.375], [w1, 1.375], [w2, 1.375], [w3, 1.375]],</span>
+<span class="go"> &#39;exact_weight&#39;: 5.66...,</span>
+<span class="go"> &#39;input_diff&#39;: [[dv0, 0x00000000], [dv1, 0x00000000], [dv2, 0x00000000], [dv3, 0x00000000]],</span>
+<span class="go"> &#39;nonlinear_diffs&#39;: [[d0, 0x00000000], [d4, 0x00000000], [d7, 0x00000000], [d10, 0x00000000]],</span>
+<span class="go"> &#39;output_diff&#39;: [[d7, 0x00000000], [d12, 0x00000000], [d13, 0x00000000], [d9, 0x00000000]]}</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.smt.search.ChFound.get_exact_weight">
+<code class="sig-name descname">get_exact_weight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#ChFound.get_exact_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.ChFound.get_exact_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the exact weight of the characteristic found.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.smt.search.ChFound.check_empirical_weight">
+<code class="sig-name descname">check_empirical_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">verbose_lvl</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#ChFound.check_empirical_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.ChFound.check_empirical_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the exact weight of the model matches its empirical weight.</p>
+<p>If the exact weight doesn’t match, the exception <a class="reference internal" href="#arxpy.smt.search.ExactWeightError" title="arxpy.smt.search.ExactWeightError"><code class="xref any py py-exc docutils literal notranslate"><span class="pre">ExactWeightError</span></code></a> is raised.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">filename</span></code> is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the output will be printed
+to the given file rather than the to stdout.</p>
+<p>The argument <code class="docutils literal notranslate"><span class="pre">verbose_lvl</span></code> can also take the values <code class="docutils literal notranslate"><span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">2</span></code> for a
+more detailed output.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.smt.search.ChFound.vrepr">
+<code class="sig-name descname">vrepr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#ChFound.vrepr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.ChFound.vrepr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a verbose dictionary-like representation of the characteristic.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">BvCharacteristic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.chaskey</span> <span class="kn">import</span> <span class="n">ChaskeyPi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search</span> <span class="kn">import</span> <span class="n">SearchCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">BvCharacteristic</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;dv0&quot;</span><span class="p">,</span> <span class="s2">&quot;dv1&quot;</span><span class="p">,</span> <span class="s2">&quot;dv2&quot;</span><span class="p">,</span> <span class="s2">&quot;dv3&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span> <span class="o">=</span> <span class="n">SearchCh</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span> <span class="o">=</span> <span class="n">search_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ch_found</span><span class="o">.</span><span class="n">vrepr</span><span class="p">())</span>  
+<span class="go">{&#39;ch_weight&#39;: Constant(0b0000000, width=7),</span>
+<span class="go">&#39;exact_weight&#39;: 0,</span>
+<span class="go">&#39;input_diff&#39;: [[XorDiff(Variable(&#39;dv0&#39;, width=32)), XorDiff(Constant(..., width=32))],</span>
+<span class="go">    [XorDiff(Variable(&#39;dv1&#39;, width=32)), XorDiff(Constant(..., width=32))],</span>
+<span class="go">    [XorDiff(Variable(&#39;dv2&#39;, width=32)), XorDiff(Constant(..., width=32))],</span>
+<span class="go">    [XorDiff(Variable(&#39;dv3&#39;, width=32)), XorDiff(Constant(..., width=32))]],</span>
+<span class="go">&#39;output_diff&#39;: [[XorDiff(Variable(&#39;d7&#39;, width=32)), XorDiff(Constant(..., width=32))],</span>
+<span class="go">    [XorDiff(Variable(&#39;d12&#39;, width=32)), XorDiff(Constant(..., width=32))],</span>
+<span class="go">    [XorDiff(Variable(&#39;d13&#39;, width=32)), XorDiff(Constant(..., width=32))],</span>
+<span class="go">    [XorDiff(Variable(&#39;d9&#39;, width=32)), XorDiff(Constant(..., width=32))]],</span>
+<span class="go">&#39;nonlinear_diffs&#39;: [[XorDiff(Variable(&#39;d0&#39;, width=32)), XorDiff(Constant(..., width=32))],</span>
+<span class="go">    [XorDiff(Variable(&#39;d4&#39;, width=32)), XorDiff(Constant(..., width=32))],</span>
+<span class="go">    [XorDiff(Variable(&#39;d7&#39;, width=32)), XorDiff(Constant(..., width=32))],</span>
+<span class="go">    [XorDiff(Variable(&#39;d10&#39;, width=32)), XorDiff(Constant(..., width=32))]],</span>
+<span class="go">&#39;der_weights&#39;: [[Variable(&#39;w0w1w2&#39;, width=7), Constant(0b0000000, width=7)],</span>
+<span class="go">    [Variable(&#39;w3&#39;, width=5), Constant(0b00000, width=5)]]}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.smt.search.SkChFound">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search.</code><code class="sig-name descname">SkChFound</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ch</span></em>, <em class="sig-param"><span class="n">ch_weight</span></em>, <em class="sig-param"><span class="n">der_weights</span></em>, <em class="sig-param"><span class="n">model</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#SkChFound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.SkChFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#arxpy.smt.search.ChFound" title="arxpy.smt.search.ChFound"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.smt.search.ChFound</span></code></a></p>
+<p>Represent (non-symbolic) single-key characteristics found.</p>
+<p>See also <a class="reference internal" href="#arxpy.smt.search.ChFound" title="arxpy.smt.search.ChFound"><code class="xref any py py-class docutils literal notranslate"><span class="pre">ChFound</span></code></a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">SingleKeyCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search</span> <span class="kn">import</span> <span class="n">SearchSkCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives</span> <span class="kn">import</span> <span class="n">speck</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span> <span class="o">=</span> <span class="n">speck</span><span class="o">.</span><span class="n">get_Speck_instance</span><span class="p">(</span><span class="n">speck</span><span class="o">.</span><span class="n">SpeckInstance</span><span class="o">.</span><span class="n">speck_32_64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">SingleKeyCh</span><span class="p">(</span><span class="n">Speck32</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span> <span class="o">=</span> <span class="n">SearchSkCh</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span> <span class="o">=</span> <span class="n">search_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span><span class="o">.</span><span class="n">ch_weight</span>
+<span class="go">0x0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span><span class="o">.</span><span class="n">der_weights</span>
+<span class="go">[[w0, 0x0]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span><span class="o">.</span><span class="n">input_diff</span>  
+<span class="go">[[XorDiff(dp0), XorDiff(...)], [XorDiff(dp1), XorDiff(...)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span><span class="o">.</span><span class="n">nonlinear_diffs</span>  
+<span class="go">[[XorDiff(dx1), XorDiff(...)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span><span class="o">.</span><span class="n">output_diff</span>  
+<span class="go">[[XorDiff(dx2), XorDiff(...)], [XorDiff(dx4), XorDiff(...)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ch_found</span><span class="p">)</span>  
+<span class="go">{&#39;ch_weight&#39;: 0,</span>
+<span class="go"> &#39;der_weights&#39;: [[w0, 0]],</span>
+<span class="go"> &#39;exact_weight&#39;: 0,</span>
+<span class="go"> &#39;input_diff&#39;: [[dp0, ...], [dp1, ...]],</span>
+<span class="go"> &#39;nonlinear_diffs&#39;: [[dx1, ...]],</span>
+<span class="go"> &#39;output_diff&#39;: [[dx2, ...], [dx4, ...]]}</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.smt.search.SkChFound.check_empirical_weight">
+<code class="sig-name descname">check_empirical_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">verbose_lvl</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#SkChFound.check_empirical_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.SkChFound.check_empirical_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the exact weight of the model matches one weight of the empirical weight distribution.</p>
+<p>If the exact weight doesn’t match, the exception <a class="reference internal" href="#arxpy.smt.search.ExactWeightError" title="arxpy.smt.search.ExactWeightError"><code class="xref any py py-exc docutils literal notranslate"><span class="pre">ExactWeightError</span></code></a> is raised.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">filename</span></code> is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the output will be printed
+to the given file rather than the to stdout.</p>
+<p>The argument <code class="docutils literal notranslate"><span class="pre">verbose_lvl</span></code> can also take the values <code class="docutils literal notranslate"><span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">2</span></code> for a
+more detailed output.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.smt.search.RkChFound">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search.</code><code class="sig-name descname">RkChFound</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rkch</span></em>, <em class="sig-param"><span class="n">key_schedule_problem</span></em>, <em class="sig-param"><span class="n">encryption_problem</span></em>, <em class="sig-param"><span class="n">model</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#RkChFound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.RkChFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represent (non-symbolic) related-key characteristics found.</p>
+<dl class="py attribute">
+<dt id="arxpy.smt.search.RkChFound.rkch">
+<code class="sig-name descname">rkch</code><a class="headerlink" href="#arxpy.smt.search.RkChFound.rkch" title="Permalink to this definition">¶</a></dt>
+<dd><p>the associated symbolic <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.RelatedKeyCh" title="arxpy.differential.characteristic.RelatedKeyCh"><code class="xref any py py-class docutils literal notranslate"><span class="pre">RelatedKeyCh</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.RkChFound.key_ch_found">
+<code class="sig-name descname">key_ch_found</code><a class="headerlink" href="#arxpy.smt.search.RkChFound.key_ch_found" title="Permalink to this definition">¶</a></dt>
+<dd><p>a <a class="reference internal" href="#arxpy.smt.search.ChFound" title="arxpy.smt.search.ChFound"><code class="xref any py py-class docutils literal notranslate"><span class="pre">ChFound</span></code></a> denoting the key schedule characteristic found</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search.RkChFound.enc_ch_found">
+<code class="sig-name descname">enc_ch_found</code><a class="headerlink" href="#arxpy.smt.search.RkChFound.enc_ch_found" title="Permalink to this definition">¶</a></dt>
+<dd><p>a <a class="reference internal" href="#arxpy.smt.search.ChFound" title="arxpy.smt.search.ChFound"><code class="xref any py py-class docutils literal notranslate"><span class="pre">ChFound</span></code></a> denoting the encryption characteristic found</p>
+</dd></dl>
+
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">RelatedKeyCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search</span> <span class="kn">import</span> <span class="n">SearchRkCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.lea</span> <span class="kn">import</span> <span class="n">LeaCipher</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LeaCipher</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span> <span class="o">=</span> <span class="n">RelatedKeyCh</span><span class="p">(</span><span class="n">LeaCipher</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span> <span class="o">=</span> <span class="n">SearchRkCh</span><span class="p">(</span><span class="n">rkch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch_found</span> <span class="o">=</span> <span class="n">search_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">solver_name</span><span class="o">=</span><span class="s2">&quot;btor&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch_found</span><span class="o">.</span><span class="n">key_ch_found</span><span class="o">.</span><span class="n">ch_weight</span>
+<span class="go">0b0000000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch_found</span><span class="o">.</span><span class="n">key_ch_found</span><span class="o">.</span><span class="n">input_diff</span>  
+<span class="go">[[XorDiff(dmk0), XorDiff(...)], [XorDiff(dmk1), XorDiff(...)],</span>
+<span class="go">[XorDiff(dmk2), XorDiff(...)], [XorDiff(dmk3), XorDiff(...)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch_found</span><span class="o">.</span><span class="n">key_ch_found</span><span class="o">.</span><span class="n">output_diff</span>  
+<span class="go">[[XorDiff(dk1), XorDiff(...)], [XorDiff(dk3), XorDiff(...)],</span>
+<span class="go">[XorDiff(dk5), XorDiff(...)], [XorDiff(dk3), XorDiff(...)],</span>
+<span class="go">[XorDiff(dk7), XorDiff(...)], [XorDiff(dk3), XorDiff(...)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch_found</span><span class="o">.</span><span class="n">enc_ch_found</span><span class="o">.</span><span class="n">ch_weight</span>
+<span class="go">0b0000000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch_found</span><span class="o">.</span><span class="n">enc_ch_found</span><span class="o">.</span><span class="n">input_diff</span>  
+<span class="go">[[XorDiff(dp0), XorDiff(...)], [XorDiff(dp1), XorDiff(...)],</span>
+<span class="go">[XorDiff(dp2), XorDiff(...)], [XorDiff(dp3), XorDiff(...)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch_found</span><span class="o">.</span><span class="n">enc_ch_found</span><span class="o">.</span><span class="n">output_diff</span>  
+<span class="go">[[XorDiff(dx3), XorDiff(...)], [XorDiff(dx7), XorDiff(...)],</span>
+<span class="go">[XorDiff(dx11), XorDiff(...)], [XorDiff(dp0), XorDiff(...)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">rkch_found</span><span class="p">)</span>  
+<span class="go">{&#39;enc_ch_found&#39;: {&#39;ch_weight&#39;: 0,</span>
+<span class="go">                  &#39;der_weights&#39;: [[w0w1w2, 0]],</span>
+<span class="go">                  &#39;exact_weight&#39;: 0,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dp0, ...], [dp1, ...], [dp2, ...], [dp3, ...]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [[dx2, ...], [dx6, ...], [dx10, ...]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dx3, ...], [dx7, ...], [dx11, ...], [dp0, ...]]},</span>
+<span class="go"> &#39;key_ch_found&#39;: {&#39;ch_weight&#39;: 0,</span>
+<span class="go">                  &#39;der_weights&#39;: [[wk0, ...], [wk1, ...], [wk2, ...], [wk3, ...]],</span>
+<span class="go">                  &#39;exact_weight&#39;: ...,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dmk0, ...], [dmk1, ...], [dmk2, ...], [dmk3, ...]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [[dk0, ...], [dk2, ...], [dk4, ...], [dk6, ...]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dk1, ...], [dk3, ...], [dk5, ...], [dk3, ...], [dk7, ...], [dk3, ...]]}}</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.smt.search.RkChFound.check_empirical_weight">
+<code class="sig-name descname">check_empirical_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">verbose_lvl</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#RkChFound.check_empirical_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.RkChFound.check_empirical_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the exact weight of the model match its empirical weight.</p>
+<p>Check both the exact weight of the key schedule characteristic
+and the encryption characteristic found match their
+empirical weights.</p>
+<p>See also <a class="reference internal" href="#arxpy.smt.search.ChFound.check_empirical_weight" title="arxpy.smt.search.ChFound.check_empirical_weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">ChFound.check_empirical_weight</span></code></a> and <a class="reference internal" href="#arxpy.smt.search.SkChFound.check_empirical_weight" title="arxpy.smt.search.SkChFound.check_empirical_weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">SkChFound.check_empirical_weight</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.smt.search.RkChFound.vrepr">
+<code class="sig-name descname">vrepr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#RkChFound.vrepr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.RkChFound.vrepr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a verbose dictionary-like representation of the characteristic.</p>
+<p>See also <a class="reference internal" href="#arxpy.smt.search.ChFound.vrepr" title="arxpy.smt.search.ChFound.vrepr"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">ChFound.vrepr</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.smt.search.SearchCh">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search.</code><code class="sig-name descname">SearchCh</code><span class="sig-paren">(</span><em class="sig-param">ch</em>, <em class="sig-param">der_mode=&lt;DerMode.Default: 1&gt;</em>, <em class="sig-param">weight_prefix='w'</em>, <em class="sig-param">allow_zero_input_diff=False</em>, <em class="sig-param">initial_constraints=None</em>, <em class="sig-param">env=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#SearchCh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.SearchCh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represent the SMT problem of finding a <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.BvCharacteristic" title="arxpy.differential.characteristic.BvCharacteristic"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvCharacteristic</span></code></a> with conditions on the weight.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ch</strong> (<a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.BvCharacteristic" title="arxpy.differential.characteristic.BvCharacteristic"><em>BvCharacteristic</em></a>) – a symbolic characteristic of a <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.BvFunction" title="arxpy.primitives.primitives.BvFunction"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvFunction</span></code></a></p></li>
+<li><p><strong>der_mode</strong> (<a class="reference internal" href="#arxpy.smt.search.DerMode" title="arxpy.smt.search.DerMode"><em>DerMode</em></a>) – one of the modes available for the derivative weights</p></li>
+<li><p><strong>weight_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – the prefix to label weight variables</p></li>
+<li><p><strong>allow_zero_input_diff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, allow the input difference to be zero</p></li>
+<li><p><strong>initial_constraints</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a>) – a list of constraints (given as <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Term</span></code></a>) to add to the SMT problem</p></li>
+<li><p><strong>env</strong> (<a class="reference external" href="https://pysmt.readthedocs.io/en/latest/api_ref.html#pysmt.environment.Environment" title="(in pySMT v0.7)"><em>pysmt.environment.Environment</em></a>) – if <code class="docutils literal notranslate"><span class="pre">None</span></code>, a new pySMT environment is created</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">BvCharacteristic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.chaskey</span> <span class="kn">import</span> <span class="n">ChaskeyPi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">BvCharacteristic</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;dv0&quot;</span><span class="p">,</span> <span class="s2">&quot;dv1&quot;</span><span class="p">,</span> <span class="s2">&quot;dv2&quot;</span><span class="p">,</span> <span class="s2">&quot;dv3&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span> <span class="o">=</span> <span class="n">SearchCh</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span><span class="o">.</span><span class="n">formula_size</span><span class="p">()</span>
+<span class="go">2804</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span><span class="o">.</span><span class="n">error</span><span class="p">()</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">search_problem</span><span class="o">.</span><span class="n">hrepr</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>
+<span class="go">assert ~(0x00000000000000000000000000000000 == (dv0 :: dv1 :: dv2 :: dv3))</span>
+<span class="go">assert 0x00000000 == ((~(... &lt;&lt; ...) ^ (d0 &lt;&lt; 0x00000001)) &amp; (~(... &lt;&lt; ...) ^ (dv1 &lt;&lt; 0x00000001)) &amp; ((dv0 &lt;&lt; 0x00000001) ^ d0 ^ dv0 ^ dv1))</span>
+<span class="go">assert 0x00000000 == ((~(... &lt;&lt; ...) ^ (d4 &lt;&lt; 0x00000001)) &amp; (~(... &lt;&lt; ...) ^ (dv3 &lt;&lt; 0x00000001)) &amp; ((dv2 &lt;&lt; 0x00000001) ^ d4 ^ dv2 ^ dv3))</span>
+<span class="go">assert 0x00000000 == ((~(... &lt;&lt; ...) ^ (d7 &lt;&lt; 0x00000001)) &amp; (~(... &lt;&lt; ...) ^ ((... ^ ...) &lt;&lt; 0x00000001)) &amp; (((d0 &lt;&lt;&lt; 16) &lt;&lt; 0x00000001) ^ d7 ^ ... ^ ... ^ (... &lt;&lt;&lt; ...)))</span>
+<span class="go">assert 0x00000000 == ((~(... &lt;&lt; ...) ^ (d10 &lt;&lt; 0x00000001)) &amp; (~(... &lt;&lt; ...) ^ (d4 &lt;&lt; 0x00000001)) &amp; (((d0 ^ (... &lt;&lt;&lt; ...)) &lt;&lt; 0x00000001) ^ d10 ^ d4 ^ ... ^ ...))</span>
+<span class="go">assert w0w1w2 == (PopCountSum3(~((d0 ^ ~...) &amp; (dv1 ^ ~...))[30:], ~((d4 ^ ~...) &amp; (dv3 ^ ~...))[30:], ~((d7 ^ ~...) &amp; (~... ^ ... ^ ...))[30:]))</span>
+<span class="go">assert w3 == PopCount(~((d10 ^ ~...) &amp; (d4 ^ ~...))[30:])</span>
+<span class="go">assert w == (w0w1w2 + (0b00 :: w3))</span>
+<span class="go">minimize w</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">ch_weight</span>
+<span class="go">0b0000000</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.smt.search.SearchCh.solve">
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">initial_weight</em>, <em class="sig-param">solver_name='btor'</em>, <em class="sig-param">search_mode=&lt;ChSearchMode.Optimal: 3&gt;</em>, <em class="sig-param">check=False</em>, <em class="sig-param">return_generator=False</em>, <em class="sig-param">verbose_level=0</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#SearchCh.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.SearchCh.solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve the SMT problem associated to the search of a valid <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.BvCharacteristic" title="arxpy.differential.characteristic.BvCharacteristic"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvCharacteristic</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initial_weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the initial weight for starting the iterative search</p></li>
+<li><p><strong>solver_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – the name of the solver (according to pySMT) to be used</p></li>
+<li><p><strong>search_mode</strong> (<a class="reference internal" href="#arxpy.smt.search.ChSearchMode" title="arxpy.smt.search.ChSearchMode"><em>ChSearchMode</em></a>) – one of the search modes available</p></li>
+<li><p><strong>check</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, <a class="reference internal" href="#arxpy.smt.search.ChFound.check_empirical_weight" title="arxpy.smt.search.ChFound.check_empirical_weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">ChFound.check_empirical_weight</span></code></a> will be called
+after a characteristic is found. If it is not valid, the search will continue.</p></li>
+<li><p><strong>return_generator</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, return a Python generator with the
+characteristics found (only valid in AllOptimal)</p></li>
+<li><p><strong>verbose_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – an integer between <code class="docutils literal notranslate"><span class="pre">0</span></code> (no verbose) and <code class="docutils literal notranslate"><span class="pre">3</span></code> (full verbose).</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – if not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the output will be  printed to the given file
+rather than the to stdout.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.smt.search.SearchCh.formula_size">
+<code class="sig-name descname">formula_size</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">measure</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#SearchCh.formula_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.SearchCh.formula_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the size of the underlying SMT problem.</p>
+<p>See <a class="reference external" href="https://pysmt.readthedocs.io/en/latest/api_ref.html#pysmt.oracles.SizeOracle" title="(in pySMT v0.7)"><code class="xref any docutils literal notranslate"><span class="pre">pysmt.oracles.SizeOracle</span></code></a> for choosing the <code class="docutils literal notranslate"><span class="pre">measure</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.smt.search.SearchCh.hrepr">
+<code class="sig-name descname">hrepr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">full_repr</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#SearchCh.hrepr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.SearchCh.hrepr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a human readable representing of the SMT problem.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">full_repr</span></code> is False, the short string representation <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Term.srepr" title="arxpy.bitvector.core.Term.srepr"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">srepr</span></code></a> is used.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.smt.search.SearchCh.error">
+<code class="sig-name descname">error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#SearchCh.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.SearchCh.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an upper bound of the weight error of the SMT problem.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.smt.search.SearchSkCh">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search.</code><code class="sig-name descname">SearchSkCh</code><span class="sig-paren">(</span><em class="sig-param">skch</em>, <em class="sig-param">der_mode=&lt;DerMode.Default: 1&gt;</em>, <em class="sig-param">allow_zero_input_diff=False</em>, <em class="sig-param">initial_constraints=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#SearchSkCh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.SearchSkCh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#arxpy.smt.search.SearchCh" title="arxpy.smt.search.SearchCh"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.smt.search.SearchCh</span></code></a></p>
+<p>Represent the problem of finding a <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.SingleKeyCh" title="arxpy.differential.characteristic.SingleKeyCh"><code class="xref any py py-class docutils literal notranslate"><span class="pre">SingleKeyCh</span></code></a> with conditions on the weight.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>skch</strong> (<a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.SingleKeyCh" title="arxpy.differential.characteristic.SingleKeyCh"><em>SingleKeyCh</em></a>) – a symbolic single-key characteristic of a <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.Cipher" title="arxpy.primitives.primitives.Cipher"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Cipher</span></code></a></p></li>
+<li><p><strong>der_mode</strong> (<a class="reference internal" href="#arxpy.smt.search.DerMode" title="arxpy.smt.search.DerMode"><em>DerMode</em></a>) – one of the modes available for the derivative weights</p></li>
+<li><p><strong>allow_zero_input_diff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, allow the input difference to be zero</p></li>
+</ul>
+</dd>
+</dl>
+<p>See also <a class="reference internal" href="#arxpy.smt.search.SearchCh" title="arxpy.smt.search.SearchCh"><code class="xref any py py-class docutils literal notranslate"><span class="pre">SearchCh</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">SingleKeyCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search</span> <span class="kn">import</span> <span class="n">SearchSkCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives</span> <span class="kn">import</span> <span class="n">speck</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span> <span class="o">=</span> <span class="n">speck</span><span class="o">.</span><span class="n">get_Speck_instance</span><span class="p">(</span><span class="n">speck</span><span class="o">.</span><span class="n">SpeckInstance</span><span class="o">.</span><span class="n">speck_32_64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">SingleKeyCh</span><span class="p">(</span><span class="n">Speck32</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span> <span class="o">=</span> <span class="n">SearchSkCh</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span><span class="o">.</span><span class="n">formula_size</span><span class="p">()</span>
+<span class="go">349</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span><span class="o">.</span><span class="n">error</span><span class="p">()</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">search_problem</span><span class="o">.</span><span class="n">hrepr</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>
+<span class="go">assert ~(0x00000000 == (dp0 :: dp1))</span>
+<span class="go">assert 0x0000 == ((~(... &lt;&lt; ...) ^ (dx1 &lt;&lt; 0x0001)) &amp; (~(... &lt;&lt; ...) ^ ((... &gt;&gt;&gt; ...) &lt;&lt; 0x0001)) &amp; ((dp1 &lt;&lt; 0x0001) ^ dx1 ^ dp1 ^ (... &gt;&gt;&gt; ...)))</span>
+<span class="go">assert w0 == PopCount(~((dx1 ^ ~...) &amp; (~... ^ (... &gt;&gt;&gt; ...)))[14:])</span>
+<span class="go">assert w == w0</span>
+<span class="go">minimize w</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">ch_weight</span>
+<span class="go">0x0</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.smt.search.SearchSkCh.solve">
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">initial_weight</em>, <em class="sig-param">solver_name='btor'</em>, <em class="sig-param">search_mode=&lt;SkChSearchMode.Optimal: 3&gt;</em>, <em class="sig-param">check=False</em>, <em class="sig-param">return_generator=False</em>, <em class="sig-param">verbose_level=0</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#SearchSkCh.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.SearchSkCh.solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve the SMT problem associated  to the search of a valid <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.SingleKeyCh" title="arxpy.differential.characteristic.SingleKeyCh"><code class="xref any py py-class docutils literal notranslate"><span class="pre">SingleKeyCh</span></code></a>.</p>
+<p>See also <a class="reference internal" href="#arxpy.smt.search.SearchCh.solve" title="arxpy.smt.search.SearchCh.solve"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">SearchCh.solve</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.smt.search.SearchRkCh">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search.</code><code class="sig-name descname">SearchRkCh</code><span class="sig-paren">(</span><em class="sig-param">rkch</em>, <em class="sig-param">key_der_mode=&lt;DerMode.Default: 1&gt;</em>, <em class="sig-param">enc_der_mode=&lt;DerMode.Default: 1&gt;</em>, <em class="sig-param">allow_zero_key_input_diff=False</em>, <em class="sig-param">allow_zero_enc_input_diff=True</em>, <em class="sig-param">initial_key_constraints=None</em>, <em class="sig-param">initial_enc_constraints=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#SearchRkCh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.SearchRkCh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represent the problem of finding an <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.RelatedKeyCh" title="arxpy.differential.characteristic.RelatedKeyCh"><code class="xref any py py-class docutils literal notranslate"><span class="pre">RelatedKeyCh</span></code></a> with conditions on the weight.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rkch</strong> (<a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.RelatedKeyCh" title="arxpy.differential.characteristic.RelatedKeyCh"><em>RelatedKeyCh</em></a>) – a symbolic related-key characteristic of a <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.Cipher" title="arxpy.primitives.primitives.Cipher"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Cipher</span></code></a></p></li>
+<li><p><strong>key_der_mode</strong> (<a class="reference internal" href="#arxpy.smt.search.DerMode" title="arxpy.smt.search.DerMode"><em>DerMode</em></a>) – the derivative mode for the key schedule characteristic</p></li>
+<li><p><strong>enc_der_mode</strong> (<a class="reference internal" href="#arxpy.smt.search.DerMode" title="arxpy.smt.search.DerMode"><em>DerMode</em></a>) – the derivative mode for the encryption characteristic</p></li>
+<li><p><strong>allow_zero_key_input_diff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, allow the input difference
+of the key schedule to be zero</p></li>
+<li><p><strong>allow_zero_enc_input_diff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, allow the input difference
+of the encryption to be zero</p></li>
+</ul>
+</dd>
+</dl>
+<p>See also <a class="reference internal" href="#arxpy.smt.search.SearchCh" title="arxpy.smt.search.SearchCh"><code class="xref any py py-class docutils literal notranslate"><span class="pre">SearchCh</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">RelatedKeyCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search</span> <span class="kn">import</span> <span class="n">SearchRkCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.lea</span> <span class="kn">import</span> <span class="n">LeaCipher</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LeaCipher</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span> <span class="o">=</span> <span class="n">RelatedKeyCh</span><span class="p">(</span><span class="n">LeaCipher</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span> <span class="o">=</span> <span class="n">SearchRkCh</span><span class="p">(</span><span class="n">rkch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span><span class="o">.</span><span class="n">formula_size</span><span class="p">()</span>
+<span class="go">50495</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span><span class="o">.</span><span class="n">key_schedule_problem</span><span class="o">.</span><span class="n">error</span><span class="p">(),</span> <span class="n">search_problem</span><span class="o">.</span><span class="n">encryption_problem</span><span class="o">.</span><span class="n">error</span><span class="p">()</span>
+<span class="go">(4.199250014423123, 0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">search_problem</span><span class="o">.</span><span class="n">hrepr</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>
+<span class="go">assert ~(0x00000000000000000000000000000000 == (dmk0 :: dmk1 :: dmk2 :: dmk3))</span>
+<span class="go">assert 0x00000000 == (((... &lt;&lt; ...) &amp; (... &lt;&lt; ...) &amp; ~(... ^ ...) &amp; (~(... &lt;&lt; ...) | (~... ^ ... ^ ...))) | (~(... &lt;&lt; ...) &amp; ~(... &lt;&lt; ...) &amp; (dk0 ^ dmk0)))</span>
+<span class="go">assert wk0_tmp_0lz == LeadingZeros(~((~... &amp; ~...) &lt;&lt; 0x00000001))</span>
+<span class="go">assert wk0_tmp_1rev == Reverse((~dk0 &amp; ~dmk0) &lt;&lt; 0x00000001)</span>
+<span class="go">assert wk0_tmp_2rev == Reverse(~(... &gt;&gt; ...) &amp; ((... &amp; ...) &lt;&lt; 0x00000001) &amp; (~(... ^ ...) &gt;&gt; 0x00000001))</span>
+<span class="go">assert wk0_tmp_3rev == Reverse(wk0_tmp_2rev ^ wk0_tmp_1rev ^ (wk0_tmp_1rev + wk0_tmp_2rev))</span>
+<span class="go">assert wk0_tmp_4rev == Reverse((((... &amp; ...) + (... &amp; ...)) &amp; ~(... | ...)) | ((... &amp; ... &amp; (... &gt;&gt; ...)) - ((... + ...) &amp; (... | ...))))</span>
+<span class="go">assert wk0 == (((PopCountDiff((... &amp; ...) | (... &lt;&lt; ...), (... &amp; ...) ^ ... ^ ...)) :: 0b000) - (0b00 :: ((0b0 :: PopCount(...)) + (PopCount(...) :: 0b0))))</span>
+<span class="go">assert 0x00000000 == (((... &lt;&lt; ...) &amp; (... &lt;&lt; ...) &amp; ~(... ^ ...) &amp; (~(... &lt;&lt; ...) | (~... ^ ... ^ ...))) | (~(... &lt;&lt; ...) &amp; ~(... &lt;&lt; ...) &amp; (dk2 ^ dmk1)))</span>
+<span class="go">assert wk1_tmp_0lz == LeadingZeros(~((~... &amp; ~...) &lt;&lt; 0x00000001))</span>
+<span class="go">assert wk1_tmp_1rev == Reverse((~dk2 &amp; ~dmk1) &lt;&lt; 0x00000001)</span>
+<span class="go">assert wk1_tmp_2rev == Reverse(~(... &gt;&gt; ...) &amp; ((... &amp; ...) &lt;&lt; 0x00000001) &amp; (~(... ^ ...) &gt;&gt; 0x00000001))</span>
+<span class="go">assert wk1_tmp_3rev == Reverse(wk1_tmp_2rev ^ wk1_tmp_1rev ^ (wk1_tmp_1rev + wk1_tmp_2rev))</span>
+<span class="go">assert wk1_tmp_4rev == Reverse((((... &amp; ...) + (... &amp; ...)) &amp; ~(... | ...)) | ((... &amp; ... &amp; (... &gt;&gt; ...)) - ((... + ...) &amp; (... | ...))))</span>
+<span class="go">assert wk1 == (((PopCountDiff((... &amp; ...) | (... &lt;&lt; ...), (... &amp; ...) ^ ... ^ ...)) :: 0b000) - (0b00 :: ((0b0 :: PopCount(...)) + (PopCount(...) :: 0b0))))</span>
+<span class="go">assert 0x00000000 == (((... &lt;&lt; ...) &amp; (... &lt;&lt; ...) &amp; ~(... ^ ...) &amp; (~(... &lt;&lt; ...) | (~... ^ ... ^ ...))) | (~(... &lt;&lt; ...) &amp; ~(... &lt;&lt; ...) &amp; (dk4 ^ dmk2)))</span>
+<span class="go">assert wk2_tmp_0lz == LeadingZeros(~((~... &amp; ~...) &lt;&lt; 0x00000001))</span>
+<span class="go">assert wk2_tmp_1rev == Reverse((~dk4 &amp; ~dmk2) &lt;&lt; 0x00000001)</span>
+<span class="go">assert wk2_tmp_2rev == Reverse(~(... &gt;&gt; ...) &amp; ((... &amp; ...) &lt;&lt; 0x00000001) &amp; (~(... ^ ...) &gt;&gt; 0x00000001))</span>
+<span class="go">assert wk2_tmp_3rev == Reverse(wk2_tmp_2rev ^ wk2_tmp_1rev ^ (wk2_tmp_1rev + wk2_tmp_2rev))</span>
+<span class="go">assert wk2_tmp_4rev == Reverse((((... &amp; ...) + (... &amp; ...)) &amp; ~(... | ...)) | ((... &amp; ... &amp; (... &gt;&gt; ...)) - ((... + ...) &amp; (... | ...))))</span>
+<span class="go">assert wk2 == (((PopCountDiff((... &amp; ...) | (... &lt;&lt; ...), (... &amp; ...) ^ ... ^ ...)) :: 0b000) - (0b00 :: ((0b0 :: PopCount(...)) + (PopCount(...) :: 0b0))))</span>
+<span class="go">assert (0b0000000000000000000000000000000 == ((... &amp; ... &amp; ~... &amp; (~... | (... ^ ...))) | (~... &amp; ~... &amp; ((dk6[:1]) ^ (dmk3[:1]))))) &amp; ((dk6[0]) == (dmk3[0]))</span>
+<span class="go">assert wk3_tmp_0lz == LeadingZeros(~((~... &amp; ~...) &lt;&lt; 0b0000000000000000000000000000001))</span>
+<span class="go">assert wk3_tmp_1rev == Reverse((~(dk6[:1]) &amp; ~(dmk3[:1])) &lt;&lt; 0b0000000000000000000000000000001)</span>
+<span class="go">assert wk3_tmp_2rev == Reverse(~(... &gt;&gt; ...) &amp; ((... &amp; ...) &lt;&lt; 0b0000000000000000000000000000001) &amp; (~(... ^ ...) &gt;&gt; 0b0000000000000000000000000000001))</span>
+<span class="go">assert wk3_tmp_3rev == Reverse(wk3_tmp_2rev ^ wk3_tmp_1rev ^ (wk3_tmp_1rev + wk3_tmp_2rev))</span>
+<span class="go">assert wk3_tmp_4rev == Reverse((((... &amp; ...) + (... &amp; ...)) &amp; ~(... | ...)) | ((... &amp; ... &amp; (... &gt;&gt; ...)) - ((... + ...) &amp; (... | ...))))</span>
+<span class="go">assert wk3 == (((PopCountDiff((... &amp; ...) | (... &lt;&lt; ...), (... &amp; ...) ^ ... ^ ...)) :: 0b000) - (0b00 :: ((0b0 :: PopCount(...)) + (PopCount(...) :: 0b0))))</span>
+<span class="go">assert wk == (((0b0 :: wk0) + (0b0 :: wk1) + (0b0 :: wk2) + (0b00 :: wk3))[:3])</span>
+<span class="go">minimize wk</span>
+<span class="go">assert 0x00000000 == ((~(... &lt;&lt; ...) ^ (dx2 &lt;&lt; 0x00000001)) &amp; (~(... &lt;&lt; ...) ^ ((... ^ ...) &lt;&lt; 0x00000001)) &amp; (((dp0 ^ (... &lt;&lt;&lt; ...)) &lt;&lt; 0x00000001) ^ dx2 ^ dp0 ^ (... &lt;&lt;&lt; ...) ^ dp1 ^ (... &lt;&lt;&lt; ...)))</span>
+<span class="go">assert 0x00000000 == ((~(... &lt;&lt; ...) ^ (dx6 &lt;&lt; 0x00000001)) &amp; (~(... &lt;&lt; ...) ^ ((... ^ ...) &lt;&lt; 0x00000001)) &amp; (((dp1 ^ (... &lt;&lt;&lt; ...)) &lt;&lt; 0x00000001) ^ dx6 ^ dp1 ^ (... &lt;&lt;&lt; ...) ^ dp2 ^ (... &lt;&lt;&lt; ...)))</span>
+<span class="go">assert 0x00000000 == ((~(... &lt;&lt; ...) ^ (dx10 &lt;&lt; 0x00000001)) &amp; (~(... &lt;&lt; ...) ^ ((... ^ ...) &lt;&lt; 0x00000001)) &amp; (((dp2 ^ (... &lt;&lt;&lt; ...)) &lt;&lt; 0x00000001) ^ dx10 ^ dp2 ^ (... &lt;&lt;&lt; ...) ^ dp3 ^ (... &lt;&lt;&lt; ...)))</span>
+<span class="go">assert w0w1w2 == (PopCountSum3(~((dx10 ^ ~...) &amp; (~... ^ ... ^ ...))[30:], ~((dx2 ^ ~...) &amp; (~... ^ ... ^ ...))[30:], ~((dx6 ^ ~...) &amp; (~... ^ ... ^ ...))[30:]))</span>
+<span class="go">assert w == w0w1w2</span>
+<span class="go">minimize w</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch_found</span> <span class="o">=</span> <span class="n">search_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">solver_name</span><span class="o">=</span><span class="s2">&quot;btor&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch_found</span><span class="o">.</span><span class="n">key_ch_found</span><span class="o">.</span><span class="n">ch_weight</span><span class="p">,</span> <span class="n">rkch_found</span><span class="o">.</span><span class="n">enc_ch_found</span><span class="o">.</span><span class="n">ch_weight</span>
+<span class="go">(0b0000000, 0b0000000)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.smt.search.SearchRkCh.formula_size">
+<code class="sig-name descname">formula_size</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">measure</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#SearchRkCh.formula_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.SearchRkCh.formula_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the size of the underlying SMT problem.</p>
+<p>See  also <a class="reference internal" href="#arxpy.smt.search.SearchCh.formula_size" title="arxpy.smt.search.SearchCh.formula_size"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">SearchCh.formula_size</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.smt.search.SearchRkCh.hrepr">
+<code class="sig-name descname">hrepr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">full_repr</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#SearchRkCh.hrepr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.SearchRkCh.hrepr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a human readable representing of the SMT problem.</p>
+<p>See  also <a class="reference internal" href="#arxpy.smt.search.SearchCh.hrepr" title="arxpy.smt.search.SearchCh.hrepr"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">SearchCh.hrepr</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.smt.search.SearchRkCh.solve">
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">initial_ew</em>, <em class="sig-param">initial_kw</em>, <em class="sig-param">solver_name='btor'</em>, <em class="sig-param">search_mode=&lt;RkChSearchMode.OptimalMinSum: 3&gt;</em>, <em class="sig-param">check=False</em>, <em class="sig-param">verbose_level=0</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#SearchRkCh.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.SearchRkCh.solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve the SMT problem associated to the search a valid <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.RelatedKeyCh" title="arxpy.differential.characteristic.RelatedKeyCh"><code class="xref any py py-class docutils literal notranslate"><span class="pre">RelatedKeyCh</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initial_ew</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the initial encryption weight for starting the iterative search</p></li>
+<li><p><strong>initial_kw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the initial key schedule weight for starting the iterative search</p></li>
+<li><p><strong>solver_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – the name of the solver (according to pySMT) to be used</p></li>
+<li><p><strong>search_mode</strong> (<a class="reference internal" href="#arxpy.smt.search.RkChSearchMode" title="arxpy.smt.search.RkChSearchMode"><em>RkChSearchMode</em></a>) – one of the search modes available</p></li>
+<li><p><strong>check</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, <a class="reference internal" href="#arxpy.smt.search.RkChFound.check_empirical_weight" title="arxpy.smt.search.RkChFound.check_empirical_weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">RkChFound.check_empirical_weight</span></code></a> will be called
+after a characteristic is found. If it is not valid, the search will continue.</p></li>
+<li><p><strong>verbose_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – an integer between <code class="docutils literal notranslate"><span class="pre">0</span></code> (no verbose) and <code class="docutils literal notranslate"><span class="pre">3</span></code> (full verbose).</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – if not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the output will be  printed to the given file
+rather than the to stdout.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="arxpy.smt.search.round_based_search_SkCh">
+<code class="sig-prename descclassname">arxpy.smt.search.</code><code class="sig-name descname">round_based_search_SkCh</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cipher</span></em>, <em class="sig-param"><span class="n">diff_type</span></em>, <em class="sig-param"><span class="n">initial_weight</span></em>, <em class="sig-param"><span class="n">solver_name</span></em>, <em class="sig-param"><span class="n">start_round</span></em>, <em class="sig-param"><span class="n">end_round</span></em>, <em class="sig-param"><span class="n">der_mode</span></em>, <em class="sig-param"><span class="n">search_mode</span></em>, <em class="sig-param"><span class="n">check</span></em>, <em class="sig-param"><span class="n">verbose_level</span></em>, <em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#round_based_search_SkCh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.round_based_search_SkCh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find valid single-key characteristics over consecutive rounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cipher</strong> (<a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.Cipher" title="arxpy.primitives.primitives.Cipher"><em>Cipher</em></a>) – an (iterated) cipher</p></li>
+<li><p><strong>diff_type</strong> (<a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><em>Difference</em></a>) – a type of difference</p></li>
+<li><p><strong>initial_weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the initial weight for starting the iterative search</p></li>
+<li><p><strong>solver_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – the name of the solver (according to pySMT) to be used</p></li>
+<li><p><strong>start_round</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the minimum number of rounds to consider</p></li>
+<li><p><strong>end_round</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the maximum number of rounds to consider</p></li>
+<li><p><strong>der_mode</strong> (<a class="reference internal" href="#arxpy.smt.search.DerMode" title="arxpy.smt.search.DerMode"><em>DerMode</em></a>) – one of the modes available for the derivative weights</p></li>
+<li><p><strong>search_mode</strong> (<a class="reference internal" href="#arxpy.smt.search.SkChSearchMode" title="arxpy.smt.search.SkChSearchMode"><em>SkChSearchMode</em></a>) – one of the search modes available</p></li>
+<li><p><strong>check</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, <a class="reference internal" href="#arxpy.smt.search.SkChFound.check_empirical_weight" title="arxpy.smt.search.SkChFound.check_empirical_weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">SkChFound.check_empirical_weight</span></code></a> will be called
+after a characteristic is found. If it is not valid, the search will continue.</p></li>
+<li><p><strong>verbose_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – an integer between <code class="docutils literal notranslate"><span class="pre">0</span></code> (no verbose) and <code class="docutils literal notranslate"><span class="pre">3</span></code> (full verbose).</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – if not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the output will be  printed to the given file
+rather than the to stdout.</p></li>
+</ul>
+</dd>
+</dl>
+<p>See also <a class="reference internal" href="#arxpy.smt.search.SearchSkCh.solve" title="arxpy.smt.search.SearchSkCh.solve"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">SearchSkCh.solve</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search</span> <span class="kn">import</span> <span class="n">SkChSearchMode</span><span class="p">,</span> <span class="n">DerMode</span><span class="p">,</span> <span class="n">round_based_search_SkCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives</span> <span class="kn">import</span> <span class="n">speck</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span> <span class="o">=</span> <span class="n">speck</span><span class="o">.</span><span class="n">get_Speck_instance</span><span class="p">(</span><span class="n">speck</span><span class="o">.</span><span class="n">SpeckInstance</span><span class="o">.</span><span class="n">speck_32_64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round_based_search_SkCh</span><span class="p">(</span><span class="n">Speck32</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;btor&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="n">DerMode</span><span class="o">.</span><span class="n">Default</span><span class="p">,</span> <span class="n">SkChSearchMode</span><span class="o">.</span><span class="n">Optimal</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>  
+<span class="go">Num rounds: 1</span>
+<span class="go">Best characteristic found:</span>
+<span class="go">{&#39;ch_weight&#39;: 0,</span>
+<span class="go"> &#39;der_weights&#39;: [[w0, 0]],</span>
+<span class="go"> &#39;emp_weight&#39;: Counter({0: 256}),</span>
+<span class="go"> &#39;exact_weight&#39;: 0,</span>
+<span class="go"> &#39;input_diff&#39;: [[dp0, ...], [dp1, ...]],</span>
+<span class="go"> &#39;nonlinear_diffs&#39;: [[dx1, ...]],</span>
+<span class="go"> &#39;output_diff&#39;: [[dx2, ...], [dx4, ...]]}</span>
+
+<span class="go">Num rounds: 2</span>
+<span class="go">Best characteristic found:</span>
+<span class="go">{&#39;ch_weight&#39;: 1,</span>
+<span class="go"> &#39;der_weights&#39;: [[w0w1, 1]],</span>
+<span class="go"> &#39;emp_weight&#39;: ...,</span>
+<span class="go"> &#39;exact_weight&#39;: 1,</span>
+<span class="go"> &#39;input_diff&#39;: [[dp0, ...], [dp1, ...]],</span>
+<span class="go"> &#39;nonlinear_diffs&#39;: [[dx1, ...], [dx6, ...]],</span>
+<span class="go"> &#39;output_diff&#39;: [[dx7, ...], [dx9, ...]]}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="arxpy.smt.search.round_based_search_RkCh">
+<code class="sig-prename descclassname">arxpy.smt.search.</code><code class="sig-name descname">round_based_search_RkCh</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cipher</span></em>, <em class="sig-param"><span class="n">diff_type</span></em>, <em class="sig-param"><span class="n">initial_ew</span></em>, <em class="sig-param"><span class="n">initial_kw</span></em>, <em class="sig-param"><span class="n">solver_name</span></em>, <em class="sig-param"><span class="n">start_round</span></em>, <em class="sig-param"><span class="n">end_round</span></em>, <em class="sig-param"><span class="n">key_der_mode</span></em>, <em class="sig-param"><span class="n">enc_der_mode</span></em>, <em class="sig-param"><span class="n">allow_zero_enc_input_diff</span></em>, <em class="sig-param"><span class="n">search_mode</span></em>, <em class="sig-param"><span class="n">check</span></em>, <em class="sig-param"><span class="n">verbose_level</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">allow_zero_key_input_diff</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search.html#round_based_search_RkCh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search.round_based_search_RkCh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find valid related-key characteristics over consecutive rounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cipher</strong> (<a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.Cipher" title="arxpy.primitives.primitives.Cipher"><em>Cipher</em></a>) – an (iterated) cipher</p></li>
+<li><p><strong>diff_type</strong> (<a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><em>Difference</em></a>) – a type of difference</p></li>
+<li><p><strong>initial_ew</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the initial encryption weight for starting the iterative search</p></li>
+<li><p><strong>initial_kw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the initial key schedule weight for starting the iterative search</p></li>
+<li><p><strong>solver_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – the name of the solver (according to pySMT) to be used</p></li>
+<li><p><strong>start_round</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the minimum number of rounds to consider</p></li>
+<li><p><strong>end_round</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the maximum number of rounds to consider</p></li>
+<li><p><strong>key_der_mode</strong> (<a class="reference internal" href="#arxpy.smt.search.DerMode" title="arxpy.smt.search.DerMode"><em>DerMode</em></a>) – the derivative mode for the key schedule characteristic</p></li>
+<li><p><strong>enc_der_mode</strong> (<a class="reference internal" href="#arxpy.smt.search.DerMode" title="arxpy.smt.search.DerMode"><em>DerMode</em></a>) – the derivative mode for the encryption characteristic</p></li>
+<li><p><strong>allow_zero_enc_input_diff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, allow the input difference
+of the encryption to be zero</p></li>
+<li><p><strong>search_mode</strong> (<a class="reference internal" href="#arxpy.smt.search.RkChSearchMode" title="arxpy.smt.search.RkChSearchMode"><em>RkChSearchMode</em></a>) – one of the search modes available</p></li>
+<li><p><strong>check</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, <a class="reference internal" href="#arxpy.smt.search.RkChFound.check_empirical_weight" title="arxpy.smt.search.RkChFound.check_empirical_weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">RkChFound.check_empirical_weight</span></code></a> will be called
+after a characteristic is found. If it is not valid, the search will continue.</p></li>
+<li><p><strong>verbose_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – an integer between <code class="docutils literal notranslate"><span class="pre">0</span></code> (no verbose) and <code class="docutils literal notranslate"><span class="pre">3</span></code> (full verbose).</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – if not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the output will be  printed to the given file
+rather than the to stdout.</p></li>
+<li><p><strong>allow_zero_key_input_diff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, allow the input difference
+of the key schedule to be zero.</p></li>
+</ul>
+</dd>
+</dl>
+<p>See also <a class="reference internal" href="#arxpy.smt.search.SearchRkCh.solve" title="arxpy.smt.search.SearchRkCh.solve"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">SearchRkCh.solve</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="n">RXDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search</span> <span class="kn">import</span> <span class="n">RkChSearchMode</span><span class="p">,</span> <span class="n">DerMode</span><span class="p">,</span> <span class="n">round_based_search_RkCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives</span> <span class="kn">import</span> <span class="n">speck</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span> <span class="o">=</span> <span class="n">speck</span><span class="o">.</span><span class="n">get_Speck_instance</span><span class="p">(</span><span class="n">speck</span><span class="o">.</span><span class="n">SpeckInstance</span><span class="o">.</span><span class="n">speck_32_64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round_based_search_RkCh</span><span class="p">(</span><span class="n">Speck32</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;btor&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">DerMode</span><span class="o">.</span><span class="n">Default</span><span class="p">,</span> <span class="n">DerMode</span><span class="o">.</span><span class="n">Default</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="n">RkChSearchMode</span><span class="o">.</span><span class="n">OptimalMinSum</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>  
+<span class="go">Num rounds: 4</span>
+<span class="go">Best related-key characteristic found:</span>
+<span class="go">{&#39;enc_ch_found&#39;: {&#39;ch_weight&#39;: 0,</span>
+<span class="go">                  &#39;der_weights&#39;: [[w0w1w2, 0], [w3, 0]],</span>
+<span class="go">                  &#39;emp_weight&#39;: Counter({0: 256}),</span>
+<span class="go">                  &#39;exact_weight&#39;: 0,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dp0, ...], [dp1, ...]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [[dx1, ...], [dx6, ...], [dx11, ...], [dx16, ...]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dx17, ...], [dx19, ...]]},</span>
+<span class="go"> &#39;key_ch_found&#39;: {&#39;ch_weight&#39;: 0,</span>
+<span class="go">                  &#39;der_weights&#39;: [[wk0wk1wk2, 0]],</span>
+<span class="go">                  &#39;emp_weight&#39;: 0.0,</span>
+<span class="go">                  &#39;exact_weight&#39;: 0,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dmk0, ...], [dmk1, ...], [dmk2, ...], [dmk3, ...]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [[dk1, ...], [dk5, ...], [dk10, ...]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dmk3, ...], [dk3, ...], [dk8, ...], [dk13, ...]]}}</span>
+
+<span class="go">Num rounds: 5</span>
+<span class="go">Best related-key characteristic found:</span>
+<span class="go">{&#39;enc_ch_found&#39;: {&#39;ch_weight&#39;: 1,</span>
+<span class="go">                  &#39;der_weights&#39;: [[w0w1w2, 0], [w3w4, 1]],</span>
+<span class="go">                  &#39;emp_weight&#39;: ...,</span>
+<span class="go">                  &#39;exact_weight&#39;: 1,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dp0, ...], [dp1, ...]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [[dx1, ...], [dx6, ...], [dx11, ...], [dx16, ...], [dx21, ...]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dx22, ...], [dx24, ...]]},</span>
+<span class="go"> &#39;key_ch_found&#39;: {&#39;ch_weight&#39;: 0,</span>
+<span class="go">                  &#39;der_weights&#39;: [[wk0wk1wk2, 0], [wk3, 0]],</span>
+<span class="go">                  &#39;emp_weight&#39;: 0.0,</span>
+<span class="go">                  &#39;exact_weight&#39;: 0,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dmk0, ...], [dmk1, ...], [dmk2, ...], [dmk3, ...]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [[dk1, ...], [dk5, ...], [dk10, ...], [dk15, ...]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dmk3, ...], [dk3, ...], [dk8, ...], [dk13, ...], [dk18, ...]]}}</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round_based_search_RkCh</span><span class="p">(</span><span class="n">Speck32</span><span class="p">,</span> <span class="n">RXDiff</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;btor&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">DerMode</span><span class="o">.</span><span class="n">Default</span><span class="p">,</span> <span class="n">DerMode</span><span class="o">.</span><span class="n">Default</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="n">RkChSearchMode</span><span class="o">.</span><span class="n">FirstMinSumValid</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>  
+<span class="go">Num rounds: 2</span>
+<span class="go">Best related-key characteristic found:</span>
+<span class="go">{&#39;enc_ch_found&#39;: {&#39;ch_weight&#39;: 2,</span>
+<span class="go">                  &#39;der_weights&#39;: [[w0, ...], [w1, ...]],</span>
+<span class="go">                  &#39;emp_weight&#39;: ...,</span>
+<span class="go">                  &#39;exact_weight&#39;: 2.829986944784033,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dp0, ...], [dp1, ...]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [[dx1, ...], [dx6, ...]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dx7, ...], [dx9, ...]]},</span>
+<span class="go"> &#39;key_ch_found&#39;: {&#39;ch_weight&#39;: 1,</span>
+<span class="go">                  &#39;der_weights&#39;: [[wk0, ...]],</span>
+<span class="go">                  &#39;emp_weight&#39;: ...,</span>
+<span class="go">                  &#39;exact_weight&#39;: 1.4149934723920166,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dmk0, ...], [dmk1, ...]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [[dk1, ...]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dmk1, ...], [dk3, ...]]}}</span>
+
+<span class="go">Num rounds: 3</span>
+<span class="go">Best related-key characteristic found:</span>
+<span class="go">{&#39;enc_ch_found&#39;: {&#39;ch_weight&#39;: 4,</span>
+<span class="go">                  &#39;der_weights&#39;: [[w0, ...], [w1, ...], [w2, ...]],</span>
+<span class="go">                  &#39;emp_weight&#39;: ...,</span>
+<span class="go">                  &#39;exact_weight&#39;: 4.24498041717605,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dp0, ...], [dp1, ...]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [[dx1, ...], [dx6, ...], [dx11, ...]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dx12, ...], [dx14, ...]]},</span>
+<span class="go"> &#39;key_ch_found&#39;: {&#39;ch_weight&#39;: 2,</span>
+<span class="go">                  &#39;der_weights&#39;: [[wk0, ...], [wk1, ...]],</span>
+<span class="go">                  &#39;emp_weight&#39;: ...,</span>
+<span class="go">                  &#39;exact_weight&#39;: 2.829986944784033,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dmk0, ...], [dmk1, ...], [dmk2, ...]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [[dk1, ...], [dk5, ...]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dmk2, ...], [dk3, ...], [dk8, ...]]}}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="arxpy.smt.types.html" class="btn btn-neutral float-right" title="arxpy.smt.types module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="arxpy.smt.html" class="btn btn-neutral float-left" title="arxpy.smt package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

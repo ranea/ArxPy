@@ -1,0 +1,6 @@
+arxpy.primitives.xtea module
+============================
+
+.. automodule:: arxpy.primitives.xtea
+   :members:
+   :show-inheritance:

@@ -1,0 +1,345 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.primitives.picipher &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html#subpackages">Subpackages</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>arxpy.primitives.picipher</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for arxpy.primitives.picipher</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Permutation :math:`\pi` of :math:`\pi`-Cipher (16-bit version).&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector.operation</span> <span class="kn">import</span> <span class="n">RotateLeft</span> <span class="k">as</span> <span class="n">ROL</span>
+
+<span class="kn">from</span> <span class="nn">arxpy.primitives.primitives</span> <span class="kn">import</span> <span class="n">BvFunction</span>
+
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># small version with N = 2</span>
+
+<span class="n">PI_MU_CONST_0</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0xF0E8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+<span class="n">PI_MU_CONST_1</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0xE4E2</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+<span class="n">PI_MU_CONST_2</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0xE1D8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+<span class="n">PI_MU_CONST_3</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0xD4D2</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+
+<span class="n">PI_MU_ROT_CONST_0</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">PI_MU_ROT_CONST_1</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">PI_MU_ROT_CONST_2</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="n">PI_MU_ROT_CONST_3</span> <span class="o">=</span> <span class="mi">11</span>
+
+<span class="n">PI_NY_CONST_0</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0xD1CC</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+<span class="n">PI_NY_CONST_1</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0xCAC9</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+<span class="n">PI_NY_CONST_2</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0xC6C5</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+<span class="n">PI_NY_CONST_3</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0xC3B8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+
+<span class="n">PI_NY_ROT_CONST_0</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">PI_NY_ROT_CONST_1</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">PI_NY_ROT_CONST_2</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">PI_NY_ROT_CONST_3</span> <span class="o">=</span> <span class="mi">13</span>
+
+<span class="n">PI_CONST</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="mh">0xB4B2</span><span class="p">,</span> <span class="mh">0xB1AC</span><span class="p">,</span> <span class="mh">0xAAA9</span><span class="p">,</span> <span class="mh">0xA6A5</span><span class="p">],</span>
+    <span class="p">[</span><span class="mh">0xA39C</span><span class="p">,</span> <span class="mh">0x9A99</span><span class="p">,</span> <span class="mh">0x9695</span><span class="p">,</span> <span class="mh">0x938E</span><span class="p">],</span>
+    <span class="p">[</span><span class="mh">0x8D8B</span><span class="p">,</span> <span class="mh">0x8778</span><span class="p">,</span> <span class="mh">0x7472</span><span class="p">,</span> <span class="mh">0x716C</span><span class="p">],</span>
+    <span class="p">[</span><span class="mh">0x6A69</span><span class="p">,</span> <span class="mh">0x6665</span><span class="p">,</span> <span class="mh">0x635C</span><span class="p">,</span> <span class="mh">0x5A59</span><span class="p">],</span>
+    <span class="p">[</span><span class="mh">0x5655</span><span class="p">,</span> <span class="mh">0x534E</span><span class="p">,</span> <span class="mh">0x4D4B</span><span class="p">,</span> <span class="mh">0x473C</span><span class="p">],</span>
+    <span class="p">[</span><span class="mh">0x3A39</span><span class="p">,</span> <span class="mh">0x3635</span><span class="p">,</span> <span class="mh">0x332E</span><span class="p">,</span> <span class="mh">0x2D2B</span><span class="p">],</span>
+    <span class="c1"># 0x271E, 0x1D1B, 0x170F, 0xF0E8,</span>
+    <span class="c1"># 0xE4E2, 0xE1D8, 0xD4D2, 0xD1CC,</span>
+<span class="p">]</span>
+<span class="n">PI_CONST</span> <span class="o">=</span> <span class="p">[[</span><span class="n">Constant</span><span class="p">(</span><span class="n">x_i</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span> <span class="k">for</span> <span class="n">x_i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">PI_CONST</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="PiPermutation"><a class="viewcode-back" href="../../../arxpy.primitives.picipher.html#arxpy.primitives.picipher.PiPermutation">[docs]</a><span class="k">class</span> <span class="nc">PiPermutation</span><span class="p">(</span><span class="n">BvFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Encryption function.&quot;&quot;&quot;</span>
+
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">2</span>
+    <span class="n">input_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">16</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)]</span>
+    <span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">16</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)]</span>
+
+<div class="viewcode-block" id="PiPermutation.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.picipher.html#arxpy.primitives.picipher.PiPermutation.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span></div>
+
+    <span class="c1"># noinspection PyTypeChecker</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">mul</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+
+        <span class="c1"># mu</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">)]</span>
+        <span class="c1"># order?</span>
+        <span class="n">aux01</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">aux23</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ROL</span><span class="p">(</span><span class="n">aux01</span> <span class="o">+</span> <span class="p">(</span><span class="n">PI_MU_CONST_0</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">PI_MU_ROT_CONST_0</span><span class="p">)</span>
+        <span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ROL</span><span class="p">(</span><span class="n">aux01</span> <span class="o">+</span> <span class="p">(</span><span class="n">PI_MU_CONST_1</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span> <span class="n">PI_MU_ROT_CONST_1</span><span class="p">)</span>
+        <span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">ROL</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">PI_MU_CONST_2</span><span class="p">)</span> <span class="o">+</span> <span class="n">aux23</span><span class="p">,</span> <span class="n">PI_MU_ROT_CONST_2</span><span class="p">)</span>
+        <span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">ROL</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">PI_MU_CONST_3</span><span class="p">)</span> <span class="o">+</span> <span class="n">aux23</span><span class="p">,</span> <span class="n">PI_MU_ROT_CONST_3</span><span class="p">)</span>
+        <span class="n">T</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">^</span> <span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">^</span> <span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">T</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">^</span> <span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">^</span> <span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">T</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">^</span> <span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">^</span> <span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">T</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">^</span> <span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">^</span> <span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+        <span class="c1"># ny</span>
+        <span class="n">aux01</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">aux23</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">y</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ROL</span><span class="p">((</span><span class="n">PI_NY_CONST_0</span> <span class="o">+</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">aux23</span><span class="p">,</span> <span class="n">PI_NY_ROT_CONST_0</span><span class="p">)</span>
+        <span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ROL</span><span class="p">((</span><span class="n">PI_NY_CONST_1</span> <span class="o">+</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">aux23</span><span class="p">,</span> <span class="n">PI_NY_ROT_CONST_1</span><span class="p">)</span>
+        <span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">ROL</span><span class="p">(</span><span class="n">aux01</span> <span class="o">+</span> <span class="p">(</span><span class="n">PI_NY_CONST_2</span> <span class="o">+</span> <span class="n">y</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">PI_NY_ROT_CONST_2</span><span class="p">)</span>
+        <span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">ROL</span><span class="p">(</span><span class="n">aux01</span> <span class="o">+</span> <span class="p">(</span><span class="n">PI_NY_CONST_3</span> <span class="o">+</span> <span class="n">y</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span> <span class="n">PI_NY_ROT_CONST_3</span><span class="p">)</span>
+        <span class="n">T</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">^</span> <span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">^</span> <span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">T</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">^</span> <span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">^</span> <span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">T</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">^</span> <span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">^</span> <span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">T</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">^</span> <span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">^</span> <span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="c1"># sigma</span>
+        <span class="n">z3</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="n">T</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>
+        <span class="n">z0</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="n">T</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span>
+        <span class="n">z1</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="n">T</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span>
+        <span class="n">z2</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">+</span> <span class="n">T</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">z0</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">z3</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">e1</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+        <span class="n">j</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">j</span><span class="p">[:</span><span class="mi">4</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">N</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+                <span class="n">j</span><span class="p">[</span><span class="mi">4</span><span class="o">*</span><span class="n">i</span><span class="p">:</span><span class="mi">4</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">j</span><span class="p">[</span><span class="mi">4</span><span class="o">*</span><span class="n">i</span><span class="o">-</span><span class="mi">4</span><span class="p">:</span><span class="mi">4</span><span class="o">*</span><span class="n">i</span><span class="p">],</span> <span class="n">j</span><span class="p">[</span><span class="mi">4</span><span class="o">*</span><span class="n">i</span><span class="p">:</span><span class="mi">4</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">j</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">e2</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="n">i</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">:]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">:],</span> <span class="n">c</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">N</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">i</span><span class="p">[</span><span class="mi">4</span><span class="o">*</span><span class="n">j</span><span class="p">:</span><span class="mi">4</span><span class="o">*</span><span class="n">j</span><span class="o">+</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">4</span><span class="o">*</span><span class="n">j</span><span class="p">:</span><span class="mi">4</span><span class="o">*</span><span class="n">j</span><span class="o">+</span><span class="mi">4</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">4</span><span class="o">*</span><span class="n">j</span><span class="o">+</span><span class="mi">4</span><span class="p">:</span><span class="mi">4</span><span class="o">*</span><span class="n">j</span><span class="o">+</span><span class="mi">8</span><span class="p">])</span>
+                <span class="c1"># i[-4*j-4:-4*j]= cls.mul(i[-4*j-4:-4*j], i[-4*j:-4*j+4])</span>
+        <span class="k">return</span> <span class="n">i</span>
+
+<div class="viewcode-block" id="PiPermutation.eval"><a class="viewcode-back" href="../../../arxpy.primitives.picipher.html#arxpy.primitives.picipher.PiPermutation.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>  <span class="c1"># p0, p1, ...</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">//</span> <span class="mi">2</span>  <span class="c1"># due to duplicating the number of rounds</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">e1</span><span class="p">(</span><span class="n">PI_CONST</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">],</span> <span class="n">x</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">e2</span><span class="p">(</span><span class="n">PI_CONST</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">old_rounds</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">pt</span> <span class="o">=</span> <span class="p">[</span><span class="n">Constant</span><span class="p">(</span><span class="mh">0x00000000</span><span class="p">,</span> <span class="mi">16</span><span class="p">)]</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">ct</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0xe9f5</span><span class="p">,</span> <span class="mh">0xcfab</span><span class="p">,</span> <span class="mh">0x5198</span><span class="p">,</span> <span class="mh">0x9eec</span><span class="p">,</span>
+              <span class="mh">0xcb81</span><span class="p">,</span> <span class="mh">0x7fb0</span><span class="p">,</span> <span class="mh">0xd47a</span><span class="p">,</span> <span class="mh">0x45b7</span><span class="p">,</span>
+              <span class="mh">0xa5b5</span><span class="p">,</span> <span class="mh">0xd8da</span><span class="p">,</span> <span class="mh">0x2cc5</span><span class="p">,</span> <span class="mh">0x0aa1</span><span class="p">,</span>
+              <span class="mh">0x7bc9</span><span class="p">,</span> <span class="mh">0x97f0</span><span class="p">,</span> <span class="mh">0xc515</span><span class="p">,</span> <span class="mh">0x7224</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">pt</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">ct</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">pt</span><span class="p">))</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">pt</span> <span class="o">=</span> <span class="p">[</span><span class="n">Constant</span><span class="p">(</span><span class="mh">0x00000000</span><span class="p">,</span> <span class="mi">16</span><span class="p">)]</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">ct</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0x4d2f</span><span class="p">,</span> <span class="mh">0x383a</span><span class="p">,</span> <span class="mh">0xa84d</span><span class="p">,</span> <span class="mh">0xe12c</span><span class="p">,</span>
+              <span class="mh">0xee36</span><span class="p">,</span> <span class="mh">0x2b82</span><span class="p">,</span> <span class="mh">0xb624</span><span class="p">,</span> <span class="mh">0x1e15</span><span class="p">,</span>
+              <span class="mh">0x39f9</span><span class="p">,</span> <span class="mh">0x2ded</span><span class="p">,</span> <span class="mh">0x54c3</span><span class="p">,</span> <span class="mh">0x15c9</span><span class="p">,</span>
+              <span class="mh">0x58fe</span><span class="p">,</span> <span class="mh">0xbff0</span><span class="p">,</span> <span class="mh">0x44ad</span><span class="p">,</span> <span class="mh">0x2b57</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">pt</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">ct</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">pt</span><span class="p">))</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+        <span class="n">pt</span> <span class="o">=</span> <span class="p">[</span><span class="n">Constant</span><span class="p">(</span><span class="mh">0x00000000</span><span class="p">,</span> <span class="mi">16</span><span class="p">)]</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">ct</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0x0274</span><span class="p">,</span> <span class="mh">0x2a3d</span><span class="p">,</span> <span class="mh">0x9d5e</span><span class="p">,</span> <span class="mh">0x0319</span><span class="p">,</span>
+              <span class="mh">0x32b4</span><span class="p">,</span> <span class="mh">0x2751</span><span class="p">,</span> <span class="mh">0x745b</span><span class="p">,</span> <span class="mh">0xa328</span><span class="p">,</span>
+              <span class="mh">0xd2d4</span><span class="p">,</span> <span class="mh">0x1ae9</span><span class="p">,</span> <span class="mh">0x8e70</span><span class="p">,</span> <span class="mh">0x0fe6</span><span class="p">,</span>
+              <span class="mh">0x9506</span><span class="p">,</span> <span class="mh">0xe58d</span><span class="p">,</span> <span class="mh">0x996b</span><span class="p">,</span> <span class="mh">0x6075</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">pt</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">ct</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">pt</span><span class="p">))</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="n">old_rounds</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

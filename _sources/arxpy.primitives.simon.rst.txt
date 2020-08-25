@@ -1,0 +1,6 @@
+arxpy.primitives.simon module
+=============================
+
+.. automodule:: arxpy.primitives.simon
+   :members:
+   :show-inheritance:

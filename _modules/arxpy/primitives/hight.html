@@ -1,0 +1,353 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.primitives.hight &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html#subpackages">Subpackages</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>arxpy.primitives.hight</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for arxpy.primitives.hight</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Hight cipher.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector.operation</span> <span class="kn">import</span> <span class="n">RotateLeft</span> <span class="k">as</span> <span class="n">ROL</span>
+
+<span class="kn">from</span> <span class="nn">arxpy.primitives.primitives</span> <span class="kn">import</span> <span class="n">KeySchedule</span><span class="p">,</span> <span class="n">Encryption</span><span class="p">,</span> <span class="n">Cipher</span>
+
+
+<div class="viewcode-block" id="HightKeySchedule"><a class="viewcode-back" href="../../../arxpy.primitives.hight.html#arxpy.primitives.hight.HightKeySchedule">[docs]</a><span class="k">class</span> <span class="nc">HightKeySchedule</span><span class="p">(</span><span class="n">KeySchedule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Key schedule function.&quot;&quot;&quot;</span>
+
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="n">input_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">8</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="p">)]</span>
+    <span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">8</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">32</span><span class="p">)]</span>
+
+<div class="viewcode-block" id="HightKeySchedule.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.hight.html#arxpy.primitives.hight.HightKeySchedule.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">new_rounds</span> <span class="o">&gt;=</span> <span class="mi">2</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">8</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="HightKeySchedule.eval"><a class="viewcode-back" href="../../../arxpy.primitives.hight.html#arxpy.primitives.hight.HightKeySchedule.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">mk</span><span class="p">):</span>
+        <span class="n">mk</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">mk</span><span class="p">))</span>  <span class="c1"># mk[i] = mki</span>
+
+        <span class="n">wk</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">wk</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mk</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">12</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">wk</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mk</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">4</span><span class="p">]</span>
+
+        <span class="n">d</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="mh">0x5a</span><span class="p">,</span> <span class="mh">0x6d</span><span class="p">,</span> <span class="mh">0x36</span><span class="p">,</span> <span class="mh">0x1b</span><span class="p">,</span> <span class="mh">0x0d</span><span class="p">,</span> <span class="mh">0x06</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x41</span><span class="p">,</span>
+            <span class="mh">0x60</span><span class="p">,</span> <span class="mh">0x30</span><span class="p">,</span> <span class="mh">0x18</span><span class="p">,</span> <span class="mh">0x4c</span><span class="p">,</span> <span class="mh">0x66</span><span class="p">,</span> <span class="mh">0x33</span><span class="p">,</span> <span class="mh">0x59</span><span class="p">,</span> <span class="mh">0x2c</span><span class="p">,</span>
+            <span class="mh">0x56</span><span class="p">,</span> <span class="mh">0x2b</span><span class="p">,</span> <span class="mh">0x15</span><span class="p">,</span> <span class="mh">0x4a</span><span class="p">,</span> <span class="mh">0x65</span><span class="p">,</span> <span class="mh">0x72</span><span class="p">,</span> <span class="mh">0x39</span><span class="p">,</span> <span class="mh">0x1c</span><span class="p">,</span>
+            <span class="mh">0x4e</span><span class="p">,</span> <span class="mh">0x67</span><span class="p">,</span> <span class="mh">0x73</span><span class="p">,</span> <span class="mh">0x79</span><span class="p">,</span> <span class="mh">0x3c</span><span class="p">,</span> <span class="mh">0x5e</span><span class="p">,</span> <span class="mh">0x6f</span><span class="p">,</span> <span class="mh">0x37</span><span class="p">,</span>
+            <span class="mh">0x5b</span><span class="p">,</span> <span class="mh">0x2d</span><span class="p">,</span> <span class="mh">0x16</span><span class="p">,</span> <span class="mh">0x0b</span><span class="p">,</span> <span class="mh">0x05</span><span class="p">,</span> <span class="mh">0x42</span><span class="p">,</span> <span class="mh">0x21</span><span class="p">,</span> <span class="mh">0x50</span><span class="p">,</span>
+            <span class="mh">0x28</span><span class="p">,</span> <span class="mh">0x54</span><span class="p">,</span> <span class="mh">0x2a</span><span class="p">,</span> <span class="mh">0x55</span><span class="p">,</span> <span class="mh">0x6a</span><span class="p">,</span> <span class="mh">0x75</span><span class="p">,</span> <span class="mh">0x7a</span><span class="p">,</span> <span class="mh">0x7d</span><span class="p">,</span>
+            <span class="mh">0x3e</span><span class="p">,</span> <span class="mh">0x5f</span><span class="p">,</span> <span class="mh">0x2f</span><span class="p">,</span> <span class="mh">0x17</span><span class="p">,</span> <span class="mh">0x4b</span><span class="p">,</span> <span class="mh">0x25</span><span class="p">,</span> <span class="mh">0x52</span><span class="p">,</span> <span class="mh">0x29</span><span class="p">,</span>
+            <span class="mh">0x14</span><span class="p">,</span> <span class="mh">0x0a</span><span class="p">,</span> <span class="mh">0x45</span><span class="p">,</span> <span class="mh">0x62</span><span class="p">,</span> <span class="mh">0x31</span><span class="p">,</span> <span class="mh">0x58</span><span class="p">,</span> <span class="mh">0x6c</span><span class="p">,</span> <span class="mh">0x76</span><span class="p">,</span>
+            <span class="mh">0x3b</span><span class="p">,</span> <span class="mh">0x1d</span><span class="p">,</span> <span class="mh">0x0e</span><span class="p">,</span> <span class="mh">0x47</span><span class="p">,</span> <span class="mh">0x63</span><span class="p">,</span> <span class="mh">0x71</span><span class="p">,</span> <span class="mh">0x78</span><span class="p">,</span> <span class="mh">0x7c</span><span class="p">,</span>
+            <span class="mh">0x7e</span><span class="p">,</span> <span class="mh">0x7f</span><span class="p">,</span> <span class="mh">0x3f</span><span class="p">,</span> <span class="mh">0x1f</span><span class="p">,</span> <span class="mh">0x0f</span><span class="p">,</span> <span class="mh">0x07</span><span class="p">,</span> <span class="mh">0x43</span><span class="p">,</span> <span class="mh">0x61</span><span class="p">,</span>
+            <span class="mh">0x70</span><span class="p">,</span> <span class="mh">0x38</span><span class="p">,</span> <span class="mh">0x5c</span><span class="p">,</span> <span class="mh">0x6e</span><span class="p">,</span> <span class="mh">0x77</span><span class="p">,</span> <span class="mh">0x7b</span><span class="p">,</span> <span class="mh">0x3d</span><span class="p">,</span> <span class="mh">0x1e</span><span class="p">,</span>
+            <span class="mh">0x4f</span><span class="p">,</span> <span class="mh">0x27</span><span class="p">,</span> <span class="mh">0x53</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">,</span> <span class="mh">0x34</span><span class="p">,</span> <span class="mh">0x1a</span><span class="p">,</span> <span class="mh">0x4d</span><span class="p">,</span> <span class="mh">0x26</span><span class="p">,</span>
+            <span class="mh">0x13</span><span class="p">,</span> <span class="mh">0x49</span><span class="p">,</span> <span class="mh">0x24</span><span class="p">,</span> <span class="mh">0x12</span><span class="p">,</span> <span class="mh">0x09</span><span class="p">,</span> <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span>
+            <span class="mh">0x40</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">,</span> <span class="mh">0x10</span><span class="p">,</span> <span class="mh">0x08</span><span class="p">,</span> <span class="mh">0x44</span><span class="p">,</span> <span class="mh">0x22</span><span class="p">,</span> <span class="mh">0x11</span><span class="p">,</span> <span class="mh">0x48</span><span class="p">,</span>
+            <span class="mh">0x64</span><span class="p">,</span> <span class="mh">0x32</span><span class="p">,</span> <span class="mh">0x19</span><span class="p">,</span> <span class="mh">0x0c</span><span class="p">,</span> <span class="mh">0x46</span><span class="p">,</span> <span class="mh">0x23</span><span class="p">,</span> <span class="mh">0x51</span><span class="p">,</span> <span class="mh">0x68</span><span class="p">,</span>
+            <span class="mh">0x74</span><span class="p">,</span> <span class="mh">0x3a</span><span class="p">,</span> <span class="mh">0x5d</span><span class="p">,</span> <span class="mh">0x2e</span><span class="p">,</span> <span class="mh">0x57</span><span class="p">,</span> <span class="mh">0x6b</span><span class="p">,</span> <span class="mh">0x35</span><span class="p">,</span> <span class="mh">0x5a</span>
+        <span class="p">]</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">[</span><span class="n">Constant</span><span class="p">(</span><span class="n">d_i</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="k">for</span> <span class="n">d_i</span> <span class="ow">in</span> <span class="n">d</span><span class="p">]</span>
+        <span class="n">sk</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+                <span class="k">if</span> <span class="mi">16</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="o">*</span><span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">sk</span><span class="p">[</span><span class="mi">16</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">mk</span><span class="p">[(</span><span class="n">j</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="mi">8</span><span class="p">]</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="mi">16</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+                <span class="k">if</span> <span class="mi">16</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">8</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="o">*</span><span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">sk</span><span class="p">[</span><span class="mi">16</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">mk</span><span class="p">[((</span><span class="n">j</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="mi">8</span><span class="p">]</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="mi">16</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">8</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">wk</span> <span class="o">+</span> <span class="n">sk</span></div></div>
+
+
+<div class="viewcode-block" id="HightEncryption"><a class="viewcode-back" href="../../../arxpy.primitives.hight.html#arxpy.primitives.hight.HightEncryption">[docs]</a><span class="k">class</span> <span class="nc">HightEncryption</span><span class="p">(</span><span class="n">Encryption</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Encryption function.&quot;&quot;&quot;</span>
+
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="n">input_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">8</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)]</span>
+    <span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">8</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)]</span>
+    <span class="n">round_keys</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="HightEncryption.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.hight.html#arxpy.primitives.hight.HightEncryption.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span></div>
+
+<div class="viewcode-block" id="HightEncryption.eval"><a class="viewcode-back" href="../../../arxpy.primitives.hight.html#arxpy.primitives.hight.HightEncryption.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">p</span><span class="p">):</span>  <span class="c1"># p7,...,p0</span>
+        <span class="n">wk</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">round_keys</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span>
+        <span class="n">sk</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">round_keys</span><span class="p">[</span><span class="mi">8</span><span class="p">:]</span>
+
+        <span class="c1"># initial transformation</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">wk</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">^=</span> <span class="n">wk</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">+=</span> <span class="n">wk</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">^=</span> <span class="n">wk</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">f0</span><span class="p">(</span><span class="n">bv</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">ROL</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">^</span> <span class="n">ROL</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">^</span> <span class="n">ROL</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">f1</span><span class="p">(</span><span class="n">bv</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">ROL</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">^</span> <span class="n">ROL</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">^</span> <span class="n">ROL</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">^</span> <span class="p">(</span><span class="n">f0</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span> <span class="o">+</span> <span class="n">sk</span><span class="p">[</span><span class="mi">4</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">y</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">f1</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">^</span> <span class="n">sk</span><span class="p">[</span><span class="mi">4</span> <span class="o">*</span> <span class="n">i</span><span class="p">])</span>
+            <span class="n">y</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">y</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">^</span> <span class="p">(</span><span class="n">f0</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="n">sk</span><span class="p">[</span><span class="mi">4</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">y</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+            <span class="n">y</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">f1</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span> <span class="o">^</span> <span class="n">sk</span><span class="p">[</span><span class="mi">4</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">])</span>
+            <span class="n">y</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+
+            <span class="n">x</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:]</span>
+
+        <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">f1</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">^</span> <span class="n">sk</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">^</span> <span class="p">(</span><span class="n">f0</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="n">sk</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">f1</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span> <span class="o">^</span> <span class="n">sk</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+        <span class="n">y</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">^</span> <span class="p">(</span><span class="n">f0</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span> <span class="o">+</span> <span class="n">sk</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:]</span>
+
+        <span class="c1"># final transformation</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:]</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">wk</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+            <span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">^</span> <span class="n">wk</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+            <span class="n">c</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="n">wk</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+            <span class="n">c</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">^</span> <span class="n">wk</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">c</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="HightCipher"><a class="viewcode-back" href="../../../arxpy.primitives.hight.html#arxpy.primitives.hight.HightCipher">[docs]</a><span class="k">class</span> <span class="nc">HightCipher</span><span class="p">(</span><span class="n">Cipher</span><span class="p">):</span>
+    <span class="n">key_schedule</span> <span class="o">=</span> <span class="n">HightKeySchedule</span>
+    <span class="n">encryption</span> <span class="o">=</span> <span class="n">HightEncryption</span>
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">32</span>
+
+<div class="viewcode-block" id="HightCipher.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.hight.html#arxpy.primitives.hight.HightCipher.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">key_schedule</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="n">new_rounds</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">encryption</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="n">new_rounds</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HightCipher.test"><a class="viewcode-back" href="../../../arxpy.primitives.hight.html#arxpy.primitives.hight.HightCipher.test">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test Hight with official test vectors.&quot;&quot;&quot;</span>
+        <span class="c1"># https://tools.ietf.org/html/draft-kisa-hight-00#section-5</span>
+        <span class="n">old_rounds</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+
+        <span class="n">plaintext</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">)</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x11</span><span class="p">,</span> <span class="mh">0x22</span><span class="p">,</span> <span class="mh">0x33</span><span class="p">,</span> <span class="mh">0x44</span><span class="p">,</span> <span class="mh">0x55</span><span class="p">,</span> <span class="mh">0x66</span><span class="p">,</span> <span class="mh">0x77</span><span class="p">,</span>
+               <span class="mh">0x88</span><span class="p">,</span> <span class="mh">0x99</span><span class="p">,</span> <span class="mh">0xaa</span><span class="p">,</span> <span class="mh">0xbb</span><span class="p">,</span> <span class="mh">0xcc</span><span class="p">,</span> <span class="mh">0xdd</span><span class="p">,</span> <span class="mh">0xee</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">cls</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mh">0x00</span><span class="p">,</span> <span class="mh">0xf4</span><span class="p">,</span> <span class="mh">0x18</span><span class="p">,</span> <span class="mh">0xae</span><span class="p">,</span> <span class="mh">0xd9</span><span class="p">,</span> <span class="mh">0x4f</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0xf2</span><span class="p">)</span>
+
+        <span class="n">plaintext</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x11</span><span class="p">,</span> <span class="mh">0x22</span><span class="p">,</span> <span class="mh">0x33</span><span class="p">,</span> <span class="mh">0x44</span><span class="p">,</span> <span class="mh">0x55</span><span class="p">,</span> <span class="mh">0x66</span><span class="p">,</span> <span class="mh">0x77</span><span class="p">)</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0xff</span><span class="p">,</span> <span class="mh">0xee</span><span class="p">,</span> <span class="mh">0xdd</span><span class="p">,</span> <span class="mh">0xcc</span><span class="p">,</span> <span class="mh">0xbb</span><span class="p">,</span> <span class="mh">0xaa</span><span class="p">,</span> <span class="mh">0x99</span><span class="p">,</span> <span class="mh">0x88</span><span class="p">,</span> <span class="mh">0x77</span><span class="p">,</span> <span class="mh">0x66</span><span class="p">,</span> <span class="mh">0x55</span><span class="p">,</span> <span class="mh">0x44</span><span class="p">,</span> <span class="mh">0x33</span><span class="p">,</span> <span class="mh">0x22</span><span class="p">,</span> <span class="mh">0x11</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">cls</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mh">0x23</span><span class="p">,</span> <span class="mh">0xce</span><span class="p">,</span> <span class="mh">0x9f</span><span class="p">,</span> <span class="mh">0x72</span><span class="p">,</span> <span class="mh">0xe5</span><span class="p">,</span> <span class="mh">0x43</span><span class="p">,</span> <span class="mh">0xe6</span><span class="p">,</span> <span class="mh">0xd8</span><span class="p">)</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="n">old_rounds</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

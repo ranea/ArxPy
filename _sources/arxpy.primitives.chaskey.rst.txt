@@ -1,0 +1,6 @@
+arxpy.primitives.chaskey module
+===============================
+
+.. automodule:: arxpy.primitives.chaskey
+   :members:
+   :show-inheritance:

@@ -1,0 +1,6 @@
+arxpy.primitives.hight module
+=============================
+
+.. automodule:: arxpy.primitives.hight
+   :members:
+   :show-inheritance:

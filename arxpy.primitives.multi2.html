@@ -1,0 +1,405 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.primitives.multi2 module &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="arxpy.primitives.picipher module" href="arxpy.primitives.picipher.html" />
+    <link rel="prev" title="arxpy.primitives.lea module" href="arxpy.primitives.lea.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="arxpy.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arxpy.bitvector.html">arxpy.bitvector package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.differential.html">arxpy.differential package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="arxpy.primitives.html">arxpy.primitives package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="arxpy.primitives.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.cham.html">arxpy.primitives.cham module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.chaskey.html">arxpy.primitives.chaskey module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.feal.html">arxpy.primitives.feal module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.hight.html">arxpy.primitives.hight module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.lea.html">arxpy.primitives.lea module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">arxpy.primitives.multi2 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.picipher.html">arxpy.primitives.picipher module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.primitives.html">arxpy.primitives.primitives module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.shacal1.html">arxpy.primitives.shacal1 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.shacal2.html">arxpy.primitives.shacal2 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.simeck.html">arxpy.primitives.simeck module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.simon.html">arxpy.primitives.simon module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.speck.html">arxpy.primitives.speck module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.tea.html">arxpy.primitives.tea module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.threefish.html">arxpy.primitives.threefish module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.xtea.html">arxpy.primitives.xtea module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.smt.html">arxpy.smt package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="arxpy.html">ArxPy 0.2</a> &raquo;</li>
+        
+          <li><a href="arxpy.primitives.html">arxpy.primitives package</a> &raquo;</li>
+        
+      <li>arxpy.primitives.multi2 module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/arxpy.primitives.multi2.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-arxpy.primitives.multi2">
+<span id="arxpy-primitives-multi2-module"></span><h1>arxpy.primitives.multi2 module<a class="headerlink" href="#module-arxpy.primitives.multi2" title="Permalink to this headline">¶</a></h1>
+<p>MULTI2 cipher.</p>
+<p>Source: Cryptanalysis of the ISDB Scrambling Algorithm (MULTI2)</p>
+<dl class="py class">
+<dt id="arxpy.primitives.multi2.BvOr">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.primitives.multi2.</code><code class="sig-name descname">BvOr</code><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#BvOr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.BvOr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.Operation" title="arxpy.bitvector.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.operation.Operation</span></code></a></p>
+<p>The OR function.</p>
+<dl class="py method">
+<dt id="arxpy.primitives.multi2.BvOr.output_width">
+<em class="property">classmethod </em><code class="sig-name descname">output_width</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#BvOr.output_width"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.BvOr.output_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the bit-width of the resulting bit-vector.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.multi2.BvOr.eval">
+<em class="property">classmethod </em><code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#BvOr.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.BvOr.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operator with given operands.</p>
+<p>This is an internal method. To evaluate a bit-vector operation,
+use the operator <code class="docutils literal notranslate"><span class="pre">()</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.primitives.multi2.XDOr">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.primitives.multi2.</code><code class="sig-name descname">XDOr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#XDOr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.XDOr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="arxpy.differential.derivative.html#arxpy.differential.derivative.Derivative" title="arxpy.differential.derivative.Derivative"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.differential.derivative.Derivative</span></code></a></p>
+<p>Represent the derivative of the function If w.r.t XOR differences.</p>
+<dl class="py attribute">
+<dt id="arxpy.primitives.multi2.XDOr.diff_type">
+<code class="sig-name descname">diff_type</code><a class="headerlink" href="#arxpy.primitives.multi2.XDOr.diff_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.XorDiff" title="arxpy.differential.difference.XorDiff"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.differential.difference.XorDiff</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.primitives.multi2.XDOr.op">
+<code class="sig-name descname">op</code><a class="headerlink" href="#arxpy.primitives.multi2.XDOr.op" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#arxpy.primitives.multi2.BvOr" title="arxpy.primitives.multi2.BvOr"><code class="xref py py-class docutils literal notranslate"><span class="pre">BvOr</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.multi2.XDOr.is_possible">
+<code class="sig-name descname">is_possible</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#XDOr.is_possible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.XDOr.is_possible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the given output <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Difference</span></code></a> is possible.</p>
+<p>An output difference <span class="math notranslate nohighlight">\(\beta\)</span> is possible if exists
+<span class="math notranslate nohighlight">\(x\)</span> such that <span class="math notranslate nohighlight">\(f_{\alpha} (x) = \beta\)</span>.</p>
+<p>If the output difference is a constant value, this method returns
+the <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Constant" title="arxpy.bitvector.core.Constant"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Constant</span></code></a> <code class="docutils literal notranslate"><span class="pre">0b1</span></code> or <code class="docutils literal notranslate"><span class="pre">0b0</span></code> depending on whether the output
+difference in possible. If the output difference is symbolic,
+this method returns a bit-vector <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Term</span></code></a> that evaluates to <code class="docutils literal notranslate"><span class="pre">0b1</span></code>
+or <code class="docutils literal notranslate"><span class="pre">0b0</span></code> depending on whether the symbolic output difference is
+replaced by a valid output difference.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.multi2.XDOr.has_probability_one">
+<code class="sig-name descname">has_probability_one</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#XDOr.has_probability_one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.XDOr.has_probability_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the input difference propagates to the given output difference
+with probability one.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.multi2.XDOr.weight">
+<code class="sig-name descname">weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#XDOr.weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.XDOr.weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the weight of a possible output <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Difference</span></code></a>.</p>
+<p>Let <span class="math notranslate nohighlight">\(\beta\)</span> be the given output difference. The <em>probability of the differential</em>
+<span class="math notranslate nohighlight">\(p = Pr(\alpha \xrightarrow{f} \beta)\)</span> is defined as the <em>proportion</em> of
+<span class="math notranslate nohighlight">\(f_{\alpha}\)</span>-preimages of <span class="math notranslate nohighlight">\(\beta\)</span>, that is,
+<span class="math notranslate nohighlight">\(p \ = \ \# \{ x \ : \ f_{\alpha} (x) = \beta \} / 2^{n}\)</span>,
+where <span class="math notranslate nohighlight">\(n\)</span> is the bit-width of <span class="math notranslate nohighlight">\(x\)</span>.</p>
+<p>By default, the weight is defined as the closest integer of <span class="math notranslate nohighlight">\(- \log_2(p)\)</span>,
+but some derivatives may consider other definitions of weight.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.multi2.XDOr.max_weight">
+<code class="sig-name descname">max_weight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#XDOr.max_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.XDOr.max_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the maximum value the weight can achieve.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.multi2.XDOr.error">
+<code class="sig-name descname">error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#XDOr.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.XDOr.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the maximum difference between the weight and the exact weight.</p>
+<p>This method returns an upper bound (in absolute value) of the maximum difference
+(over all input and output difference) between the weight and the exact weight.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.multi2.XDOr.exact_weight">
+<code class="sig-name descname">exact_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#XDOr.exact_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.XDOr.exact_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the weight without rounding to the closest integer.</p>
+<p>It is assumed the exact weight is always smaller than the weight.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.multi2.XDOr.num_frac_bits">
+<code class="sig-name descname">num_frac_bits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#XDOr.num_frac_bits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.XDOr.num_frac_bits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of fractional bits in the weight.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.primitives.multi2.Multi2KeySchedule">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.primitives.multi2.</code><code class="sig-name descname">Multi2KeySchedule</code><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#Multi2KeySchedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.Multi2KeySchedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.KeySchedule" title="arxpy.primitives.primitives.KeySchedule"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.primitives.primitives.KeySchedule</span></code></a></p>
+<p>Key schedule function.</p>
+<dl class="py method">
+<dt id="arxpy.primitives.multi2.Multi2KeySchedule.set_rounds">
+<em class="property">classmethod </em><code class="sig-name descname">set_rounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_rounds</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#Multi2KeySchedule.set_rounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.Multi2KeySchedule.set_rounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the number of rounds and adjust the input/output widths.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.multi2.Multi2KeySchedule.eval">
+<em class="property">classmethod </em><code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d1</span></em>, <em class="sig-param"><span class="n">d2</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">system_key</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#Multi2KeySchedule.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.Multi2KeySchedule.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the function (internal method).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.primitives.multi2.Multi2Encryption">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.primitives.multi2.</code><code class="sig-name descname">Multi2Encryption</code><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#Multi2Encryption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.Multi2Encryption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.Encryption" title="arxpy.primitives.primitives.Encryption"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.primitives.primitives.Encryption</span></code></a></p>
+<p>Encryption function.</p>
+<dl class="py method">
+<dt id="arxpy.primitives.multi2.Multi2Encryption.set_rounds">
+<em class="property">classmethod </em><code class="sig-name descname">set_rounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_rounds</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#Multi2Encryption.set_rounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.Multi2Encryption.set_rounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the number of rounds and adjust the input/output widths.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.multi2.Multi2Encryption.eval">
+<em class="property">classmethod </em><code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">L</span></em>, <em class="sig-param"><span class="n">R</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#Multi2Encryption.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.Multi2Encryption.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the function (internal method).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.primitives.multi2.Multi2Cipher">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.primitives.multi2.</code><code class="sig-name descname">Multi2Cipher</code><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#Multi2Cipher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.Multi2Cipher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.Cipher" title="arxpy.primitives.primitives.Cipher"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.primitives.primitives.Cipher</span></code></a></p>
+<dl class="py attribute">
+<dt id="arxpy.primitives.multi2.Multi2Cipher.key_schedule">
+<code class="sig-name descname">key_schedule</code><a class="headerlink" href="#arxpy.primitives.multi2.Multi2Cipher.key_schedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#arxpy.primitives.multi2.Multi2KeySchedule" title="arxpy.primitives.multi2.Multi2KeySchedule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Multi2KeySchedule</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.primitives.multi2.Multi2Cipher.encryption">
+<code class="sig-name descname">encryption</code><a class="headerlink" href="#arxpy.primitives.multi2.Multi2Cipher.encryption" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#arxpy.primitives.multi2.Multi2Encryption" title="arxpy.primitives.multi2.Multi2Encryption"><code class="xref py py-class docutils literal notranslate"><span class="pre">Multi2Encryption</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.multi2.Multi2Cipher.set_rounds">
+<em class="property">classmethod </em><code class="sig-name descname">set_rounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_rounds</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/multi2.html#Multi2Cipher.set_rounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.multi2.Multi2Cipher.set_rounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the number of rounds and adjust the input/output widths.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="arxpy.primitives.picipher.html" class="btn btn-neutral float-right" title="arxpy.primitives.picipher module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="arxpy.primitives.lea.html" class="btn btn-neutral float-left" title="arxpy.primitives.lea module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

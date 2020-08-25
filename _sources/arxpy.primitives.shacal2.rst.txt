@@ -1,0 +1,6 @@
+arxpy.primitives.shacal2 module
+===============================
+
+.. automodule:: arxpy.primitives.shacal2
+   :members:
+   :show-inheritance:

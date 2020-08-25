@@ -1,0 +1,6 @@
+arxpy.primitives.threefish module
+=================================
+
+.. automodule:: arxpy.primitives.threefish
+   :members:
+   :show-inheritance:

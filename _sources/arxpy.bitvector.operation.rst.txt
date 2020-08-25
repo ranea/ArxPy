@@ -1,0 +1,6 @@
+arxpy.bitvector.operation module
+================================
+
+.. automodule:: arxpy.bitvector.operation
+   :members:
+   :show-inheritance:

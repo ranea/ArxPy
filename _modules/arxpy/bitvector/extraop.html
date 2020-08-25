@@ -1,0 +1,719 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.bitvector.extraop &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html#subpackages">Subpackages</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>arxpy.bitvector.extraop</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for arxpy.bitvector.extraop</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Provide additional bit-vector operators.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+
+<span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">core</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">operation</span>
+
+
+<div class="viewcode-block" id="repeat_pattern"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.repeat_pattern">[docs]</a><span class="k">def</span> <span class="nf">repeat_pattern</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Repeat the pattern until obtain a bit-vector of given width.&quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">width</span> <span class="o">%</span> <span class="n">pattern</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">operation</span><span class="o">.</span><span class="n">Repeat</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">width</span> <span class="o">//</span> <span class="n">pattern</span><span class="o">.</span><span class="n">width</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="pattern01"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.pattern01">[docs]</a><span class="k">def</span> <span class="nf">pattern01</span><span class="p">(</span><span class="n">width</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Obtain the pattern 0...01...1 with given 0-width.&quot;&quot;&quot;</span>
+    <span class="n">zeroes</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">operation</span><span class="o">.</span><span class="n">Concat</span><span class="p">(</span><span class="n">zeroes</span><span class="p">,</span> <span class="o">~</span><span class="n">zeroes</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PopCount"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.PopCount">[docs]</a><span class="k">class</span> <span class="nc">PopCount</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">Operation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Count the number of 1&#39;s in the bit-vector.</span>
+
+<span class="sd">    This operation is also known as the hamming weight of a bit-vector.</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.core import Constant, Variable</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.extraop import PopCount</span>
+<span class="sd">        &gt;&gt;&gt; PopCount(Constant(0b1010, 4))</span>
+<span class="sd">        0b010</span>
+<span class="sd">        &gt;&gt;&gt; PopCount(Constant(0b101, 3))</span>
+<span class="sd">        0b10</span>
+<span class="sd">        &gt;&gt;&gt; PopCount(Variable(&quot;x&quot;, 4))  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        ((0x3 &amp; ((x - (0x5 &amp; (x &gt;&gt; 0x1))) &gt;&gt; 0x2)) + (0x3 &amp; (x - (0x5 &amp; (x &gt;&gt; 0x1)))))[2:]</span>
+<span class="sd">        &gt;&gt;&gt; PopCount(Variable(&quot;x&quot;, 3))  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        (0b0 :: (x[0])) + (0b0 :: (x[1])) + (0b0 :: (x[2]))</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">arity</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">is_symmetric</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="PopCount.output_width"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.PopCount.output_width">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">output_width</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="PopCount.eval"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.PopCount.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">bv</span><span class="p">):</span>
+        <span class="c1"># Source: Hacker&#39;s Delight</span>
+
+        <span class="k">if</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">output_width</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">bv</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">w</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">)])</span>
+
+        <span class="c1"># extend the bv until power of 2 length</span>
+        <span class="n">original_width</span> <span class="o">=</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">bv</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">width_log2</span> <span class="o">=</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="n">m_ctes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width_log2</span><span class="p">):</span>
+            <span class="n">m_ctes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">repeat_pattern</span><span class="p">(</span><span class="n">pattern01</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">),</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">&gt;</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">m_ctes</span><span class="p">):</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="p">(</span><span class="n">bv</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">bv</span><span class="p">[</span><span class="n">original_width</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:]</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">m_ctes</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="n">bv</span> <span class="o">-</span> <span class="p">((</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="p">(</span><span class="n">bv</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>  <span class="c1"># generic case</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="p">(</span><span class="n">bv</span> <span class="o">+</span> <span class="p">(</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">)))</span> <span class="o">&amp;</span> <span class="n">m</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="n">bv</span> <span class="o">+</span> <span class="p">(</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="n">bv</span> <span class="o">+</span> <span class="p">(</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">bv</span><span class="p">[</span><span class="n">original_width</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:]</span></div></div>
+
+
+<div class="viewcode-block" id="Reverse"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.Reverse">[docs]</a><span class="k">class</span> <span class="nc">Reverse</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">Operation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Reverse the bit-vector.</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.core import Constant, Variable</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.extraop import PopCount</span>
+<span class="sd">        &gt;&gt;&gt; Reverse(Constant(0b1010, 4))</span>
+<span class="sd">        0x5</span>
+<span class="sd">        &gt;&gt;&gt; Reverse(Constant(0b001, 3))</span>
+<span class="sd">        0b100</span>
+<span class="sd">        &gt;&gt;&gt; Reverse(Variable(&quot;x&quot;, 4))  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        (0x3 &amp; (((0x5 &amp; (x &gt;&gt; 0x1)) | ((0x5 &amp; x) &lt;&lt; 0x1)) &gt;&gt; 0x2)) |</span>
+<span class="sd">        ((0x3 &amp; ((0x5 &amp; (x &gt;&gt; 0x1)) | ((0x5 &amp; x) &lt;&lt; 0x1))) &lt;&lt; 0x2)</span>
+<span class="sd">        &gt;&gt;&gt; Reverse(Variable(&quot;x&quot;, 3))  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        (x[0]) :: (x[1]) :: (x[2])</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">arity</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">is_symmetric</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="Reverse.output_width"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.Reverse.output_width">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">output_width</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span></div>
+
+<div class="viewcode-block" id="Reverse.eval"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.Reverse.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">bv</span><span class="p">):</span>
+        <span class="c1"># Source: Hacker&#39;s Delight</span>
+
+        <span class="k">if</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">bv</span>
+        <span class="k">elif</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">operation</span><span class="o">.</span><span class="n">RotateLeft</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">operation</span><span class="o">.</span><span class="n">Concat</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">Concat</span><span class="p">(</span><span class="n">bv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bv</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">bv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="n">original_width</span> <span class="o">=</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">bv</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">width_log2</span> <span class="o">=</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="n">m_ctes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width_log2</span><span class="p">):</span>
+            <span class="n">m_ctes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">repeat_pattern</span><span class="p">(</span><span class="n">pattern01</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">),</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">&gt;</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">m_ctes</span><span class="p">)):</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="p">((</span><span class="n">bv</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">|</span> <span class="p">((</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">bv</span><span class="p">[:</span><span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">original_width</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">m_ctes</span><span class="p">))[:</span><span class="mi">3</span><span class="p">]:</span>
+            <span class="n">bv</span> <span class="o">=</span> <span class="p">((</span><span class="n">bv</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">|</span> <span class="p">((</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>  <span class="c1"># generic case</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">m_ctes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">bv</span> <span class="o">=</span> <span class="p">((</span><span class="n">bv</span> <span class="o">&amp;</span> <span class="n">m_ctes</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">&lt;&lt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">|</span> <span class="p">((</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m_ctes</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">m_ctes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">rol</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">RotateLeft</span>
+            <span class="n">ror</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">RotateRight</span>
+            <span class="n">bv</span> <span class="o">=</span> <span class="n">ror</span><span class="p">(</span><span class="n">bv</span> <span class="o">&amp;</span> <span class="n">m_ctes</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">rol</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">m_ctes</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">bv</span><span class="p">[:</span><span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">original_width</span><span class="p">]</span></div></div>
+
+
+<div class="viewcode-block" id="PopCountSum2"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.PopCountSum2">[docs]</a><span class="k">class</span> <span class="nc">PopCountSum2</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">Operation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Count the number of 1&#39;s of two bit-vectors.</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.core import Constant, Variable</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.extraop import PopCountSum2</span>
+<span class="sd">        &gt;&gt;&gt; PopCountSum2(Constant(0b000, 3), Constant(0b001, 3))</span>
+<span class="sd">        0b001</span>
+<span class="sd">        &gt;&gt;&gt; PopCountSum2(~Constant(0, 15), ~Constant(0, 15))</span>
+<span class="sd">        0b11110</span>
+<span class="sd">        &gt;&gt;&gt; PopCountSum2(Variable(&quot;x&quot;, 4), Variable(&quot;y&quot;, 4))  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        (0x3 &amp; ((x - (0x5 &amp; (x &gt;&gt; 0x1))) &gt;&gt; 0x2)) + (0x3 &amp; (x - (0x5 &amp; (x &gt;&gt; 0x1)))) +</span>
+<span class="sd">        (0x3 &amp; ((y - (0x5 &amp; (y &gt;&gt; 0x1))) &gt;&gt; 0x2)) + (0x3 &amp; (y - (0x5 &amp; (y &gt;&gt; 0x1))))</span>
+<span class="sd">        &gt;&gt;&gt; PopCountSum2(Variable(&quot;x&quot;, 3), Variable(&quot;y&quot;, 3))  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        (0b0 :: ((0b0 :: (x[0])) + (0b0 :: (x[1])) + (0b0 :: (x[2])))) +</span>
+<span class="sd">        (0b0 :: ((0b0 :: (y[0])) + (0b0 :: (y[1])) + (0b0 :: (y[2]))))</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">arity</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">is_symmetric</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">is_simple</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="PopCountSum2.condition"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.PopCountSum2.condition">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">condition</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="n">y</span><span class="o">.</span><span class="n">width</span></div>
+
+<div class="viewcode-block" id="PopCountSum2.output_width"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.PopCountSum2.output_width">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">output_width</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PopCount</span><span class="o">.</span><span class="n">output_width</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="n">y</span><span class="o">.</span><span class="n">width</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="PopCountSum2.eval"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.PopCountSum2.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="c1"># Source: Hacker&#39;s Delight</span>
+
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="c1"># the HW of a 1-bit/2-bit vector requires 1-bit/2-bit (HW(0b1)=0b1, HW(0b11)=0b10)</span>
+            <span class="c1"># thus, the sum of two HW of these sizes require an extra bit</span>
+            <span class="c1"># the HW of a 3-bit vector requires 2-bit (Hw(0b111)=0b11)</span>
+            <span class="c1"># and the sum of two HW of 3-bit also require an extra bit</span>
+            <span class="k">return</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">PopCount</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">PopCount</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">&gt;</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">output_width</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">PopCount</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">width</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">PopCount</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">width</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+
+        <span class="n">orig_x</span><span class="p">,</span> <span class="n">orig_y</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">width</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">width_log2</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="n">m_ctes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width_log2</span><span class="p">):</span>
+            <span class="n">m_ctes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">repeat_pattern</span><span class="p">(</span><span class="n">pattern01</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+
+        <span class="n">bv</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">m_ctes</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="p">((</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="p">((</span><span class="n">y</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>  <span class="c1"># generic case</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">y</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="p">(</span><span class="n">bv</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="n">bv</span> <span class="o">+</span> <span class="p">(</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="n">bv</span> <span class="o">+</span> <span class="p">(</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">bv</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">output_width</span><span class="p">(</span><span class="n">orig_x</span><span class="p">,</span> <span class="n">orig_y</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:]</span></div></div>
+
+
+<div class="viewcode-block" id="PopCountSum3"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.PopCountSum3">[docs]</a><span class="k">class</span> <span class="nc">PopCountSum3</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">Operation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Count the number of 1&#39;s of three bit-vectors.</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.core import Constant, Variable</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.extraop import PopCountSum3</span>
+<span class="sd">        &gt;&gt;&gt; PopCountSum3(Constant(0b000, 3), Constant(0b001, 3), Constant(0b011, 3))</span>
+<span class="sd">        0x3</span>
+<span class="sd">        &gt;&gt;&gt; PopCountSum3(Variable(&quot;x&quot;, 4), Variable(&quot;y&quot;, 4), Variable(&quot;z&quot;, 4))  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        (0x3 &amp; ((x - (0x5 &amp; (x &gt;&gt; 0x1))) &gt;&gt; 0x2)) + (0x3 &amp; (x - (0x5 &amp; (x &gt;&gt; 0x1)))) +</span>
+<span class="sd">        (0x3 &amp; ((y - (0x5 &amp; (y &gt;&gt; 0x1))) &gt;&gt; 0x2)) + (0x3 &amp; (y - (0x5 &amp; (y &gt;&gt; 0x1)))) +</span>
+<span class="sd">        (0x3 &amp; ((z - (0x5 &amp; (z &gt;&gt; 0x1))) &gt;&gt; 0x2)) + (0x3 &amp; (z - (0x5 &amp; (z &gt;&gt; 0x1))))</span>
+<span class="sd">        &gt;&gt;&gt; PopCountSum3(Variable(&quot;x&quot;, 3), Variable(&quot;y&quot;, 3), Constant(0, 3))  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        (0b00 :: ((0b0 :: (x[0])) + (0b0 :: (x[1])) + (0b0 :: (x[2])))) +</span>
+<span class="sd">        (0b00 :: ((0b0 :: (y[0])) + (0b0 :: (y[1])) + (0b0 :: (y[2]))))</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">arity</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">is_symmetric</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">is_simple</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="PopCountSum3.condition"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.PopCountSum3.condition">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">condition</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="n">y</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="n">z</span><span class="o">.</span><span class="n">width</span></div>
+
+<div class="viewcode-block" id="PopCountSum3.output_width"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.PopCountSum3.output_width">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">output_width</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">offset</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="k">return</span> <span class="n">PopCount</span><span class="o">.</span><span class="n">output_width</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">offset</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="n">y</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="n">z</span><span class="o">.</span><span class="n">width</span><span class="p">)</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="PopCountSum3.eval"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.PopCountSum3.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+        <span class="c1"># Source: Hacker&#39;s Delight</span>
+
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="c1"># the HW of a 1-bit/2-bit vector requires 1-bit/2-bit (HW(0b1)=0b1, HW(0b11)=0b10)</span>
+            <span class="c1"># thus, the sum of three HW of these sizes require an extra bit (3*0b1=0b11, 3*0b10=0b110)</span>
+            <span class="c1"># the HW of a 3-bit vector requires 2-bit (Hw(0b111)=0b11)</span>
+            <span class="c1"># but the sum of three HW of 3-bit require two extra bit (3*0b11 = 0b1001)</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">offset</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">PopCount</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">offset</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">PopCount</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">offset</span><span class="p">)</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">PopCount</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="n">offset</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span>
+        <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">&gt;</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">output_width</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">PopCount</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">width</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">PopCount</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">width</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">PopCount</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">width</span> <span class="o">-</span> <span class="n">z</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span>
+
+        <span class="n">orig_x</span><span class="p">,</span> <span class="n">orig_y</span><span class="p">,</span> <span class="n">orig_z</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">width</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">width</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">width_log2</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="n">m_ctes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width_log2</span><span class="p">):</span>
+            <span class="n">m_ctes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">repeat_pattern</span><span class="p">(</span><span class="n">pattern01</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+
+        <span class="n">bv</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">m_ctes</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="p">((</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="p">((</span><span class="n">y</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+                <span class="n">z</span> <span class="o">=</span> <span class="n">z</span> <span class="o">-</span> <span class="p">((</span><span class="n">z</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>  <span class="c1"># generic case</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">y</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+                <span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">z</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">z</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">z</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="p">(</span><span class="n">bv</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="n">bv</span> <span class="o">+</span> <span class="p">(</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="n">bv</span> <span class="o">+</span> <span class="p">(</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">bv</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">output_width</span><span class="p">(</span><span class="n">orig_x</span><span class="p">,</span> <span class="n">orig_y</span><span class="p">,</span> <span class="n">orig_z</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:]</span></div></div>
+
+
+<div class="viewcode-block" id="PopCountDiff"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.PopCountDiff">[docs]</a><span class="k">class</span> <span class="nc">PopCountDiff</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">Operation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the difference of the hamming weight of two words</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.core import Constant, Variable</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.extraop import PopCountDiff</span>
+<span class="sd">        &gt;&gt;&gt; PopCountDiff(Constant(0b011, 3), Constant(0b100, 3))</span>
+<span class="sd">        0b01</span>
+<span class="sd">        &gt;&gt;&gt; PopCountDiff(Variable(&quot;x&quot;, 4), Variable(&quot;y&quot;, 4))  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        (((0x3 &amp; ((x - (0x5 &amp; (x &gt;&gt; 0x1))) &gt;&gt; 0x2)) + (0x3 &amp; (x - (0x5 &amp; (x &gt;&gt; 0x1)))) +</span>
+<span class="sd">        (0x3 &amp; ((~y - (0x5 &amp; (~y &gt;&gt; 0x1))) &gt;&gt; 0x2)) + (0x3 &amp; (~y - (0x5 &amp; (~y &gt;&gt; 0x1))))) - 0x4)[2:]</span>
+<span class="sd">        &gt;&gt;&gt; PopCountDiff(Variable(&quot;x&quot;, 3), Variable(&quot;y&quot;, 3))  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        ((0b0 :: (x[0])) + (0b0 :: (x[1])) + (0b0 :: (x[2]))) -</span>
+<span class="sd">        ((0b0 :: (y[0])) + (0b0 :: (y[1])) + (0b0 :: (y[2])))</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">arity</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">is_symmetric</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">is_simple</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="PopCountDiff.condition"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.PopCountDiff.condition">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">condition</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="n">y</span><span class="o">.</span><span class="n">width</span></div>
+
+<div class="viewcode-block" id="PopCountDiff.output_width"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.PopCountDiff.output_width">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">output_width</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="PopCountDiff.eval"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.PopCountDiff.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="c1"># Source: Hacker&#39;s Delight</span>
+
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PopCount</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">PopCount</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">&gt;</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PopCount</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">PopCount</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="n">orig_x</span><span class="p">,</span> <span class="n">orig_y</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">width</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">width_log2</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="n">m_ctes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width_log2</span><span class="p">):</span>
+            <span class="n">m_ctes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">repeat_pattern</span><span class="p">(</span><span class="n">pattern01</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+
+        <span class="n">bv</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">m_ctes</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="p">((</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="o">~</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="p">(((</span><span class="o">~</span><span class="n">y</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>  <span class="c1"># generic case</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">y</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="p">(</span><span class="n">bv</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span> <span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="n">bv</span> <span class="o">+</span> <span class="p">(</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">bv</span> <span class="o">=</span> <span class="n">bv</span> <span class="o">+</span> <span class="p">(</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">bv</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">width</span><span class="p">)[</span><span class="bp">cls</span><span class="o">.</span><span class="n">output_width</span><span class="p">(</span><span class="n">orig_x</span><span class="p">,</span> <span class="n">orig_y</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:]</span></div></div>
+
+
+<div class="viewcode-block" id="LeadingZeros"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.LeadingZeros">[docs]</a><span class="k">class</span> <span class="nc">LeadingZeros</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">Operation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a bit-vector with the leading zeros set to one and the rest to zero.</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.core import Constant, Variable</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.extraop import PopCount</span>
+<span class="sd">        &gt;&gt;&gt; LeadingZeros(Constant(0b11111, 5))</span>
+<span class="sd">        0b00000</span>
+<span class="sd">        &gt;&gt;&gt; LeadingZeros(Constant(0b001, 3))</span>
+<span class="sd">        0b110</span>
+<span class="sd">        &gt;&gt;&gt; LeadingZeros(Variable(&quot;x&quot;, 4))  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        ~(((x | (x &gt;&gt; 0x1)) &gt;&gt; 0x2) | x | (x &gt;&gt; 0x1))</span>
+<span class="sd">        &gt;&gt;&gt; LeadingZeros(Variable(&quot;x&quot;, 3))  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        ~((((((0b0 :: x) &gt;&gt; 0x1) | (0b0 :: x)) &gt;&gt; 0x2) | ((0b0 :: x) &gt;&gt; 0x1) | (0b0 :: x))[2:])</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">arity</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">is_symmetric</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="LeadingZeros.output_width"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.LeadingZeros.output_width">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">output_width</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span></div>
+
+<div class="viewcode-block" id="LeadingZeros.eval"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.LeadingZeros.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">bv</span><span class="p">):</span>
+        <span class="c1"># Source: Hacker&#39;s Delight</span>
+
+        <span class="k">if</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">~</span><span class="n">bv</span>
+
+        <span class="n">original_width</span> <span class="o">=</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">bv</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">width_log2</span> <span class="o">=</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width_log2</span><span class="p">):</span>
+            <span class="n">bv</span> <span class="o">=</span> <span class="n">bv</span> <span class="o">|</span> <span class="p">(</span><span class="n">bv</span> <span class="o">&gt;&gt;</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+        <span class="k">return</span> <span class="o">~</span><span class="n">bv</span><span class="p">[</span><span class="n">original_width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:]</span></div></div>
+
+
+<div class="viewcode-block" id="PartialOperation"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.PartialOperation">[docs]</a><span class="k">class</span> <span class="nc">PartialOperation</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">Operation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent the bit-vector operations with fixed arguments.&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<span class="c1"># temporary hack to create singletons</span>
+<div class="viewcode-block" id="make_partial_operation"><a class="viewcode-back" href="../../../arxpy.bitvector.extraop.html#arxpy.bitvector.extraop.make_partial_operation">[docs]</a><span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">make_partial_operation</span><span class="p">(</span><span class="n">bv_op</span><span class="p">,</span> <span class="n">fixed_args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return a new operation based on the given one but with fixed arguments.</span>
+
+<span class="sd">    The argument ``fixed_args`` is a `tuple` with the same length as the</span>
+<span class="sd">    number of operands of the given function, containing ``None`` or `Constant` elements.</span>
+<span class="sd">    If ``fixed_args[i]`` is ``None``, the i-th operand is not fixed;</span>
+<span class="sd">    otherwise, the i-th operand is replaced with ``fixed_args[i]``.</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.core import Constant, Variable</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.operation import BvAdd</span>
+<span class="sd">        &gt;&gt;&gt; BvCteAdd = make_partial_operation(BvAdd, tuple([None, Constant(1, 4)]))</span>
+<span class="sd">        &gt;&gt;&gt; BvCteAdd(Variable(&quot;a&quot;, 4))</span>
+<span class="sd">        BvAdd(·, 0x1)(a)</span>
+<span class="sd">        &gt;&gt;&gt; BvCteAdd(Constant(1, 4))</span>
+<span class="sd">        0x2</span>
+<span class="sd">        &gt;&gt;&gt; assert BvCteAdd == make_partial_operation(BvAdd, tuple([None, Constant(1, 4)]))</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fixed_args</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">fixed_args</span><span class="p">)</span> <span class="o">==</span> <span class="nb">sum</span><span class="p">(</span><span class="n">bv_op</span><span class="o">.</span><span class="n">arity</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">any</span><span class="p">(</span><span class="n">arg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">fixed_args</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bv_op</span><span class="p">,</span> <span class="n">fixed_args</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">any</span><span class="p">(</span><span class="n">arg</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">fixed_args</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bv_op</span><span class="p">,</span> <span class="n">fixed_args</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">bv_op</span><span class="p">,</span> <span class="s2">&quot;operand_types&quot;</span><span class="p">):</span>
+        <span class="n">operand_types</span> <span class="o">=</span> <span class="n">bv_op</span><span class="o">.</span><span class="n">operand_types</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">operand_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">core</span><span class="o">.</span><span class="n">Term</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fixed_args</span><span class="p">))]</span>
+
+    <span class="n">num_terms_fixed</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">num_scalars_fixed</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">free_operand_types</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">fixed_args_str</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">arg</span><span class="p">,</span> <span class="n">type_arg</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fixed_args</span><span class="p">,</span> <span class="n">operand_types</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">arg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">free_operand_types</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">type_arg</span><span class="p">)</span>
+            <span class="n">fixed_args_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;·&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">type_arg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">type_arg</span> <span class="o">==</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="n">num_scalars_fixed</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Term</span><span class="p">):</span>
+            <span class="n">num_terms_fixed</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="kc">False</span>
+        <span class="n">fixed_args_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span>
+
+    <span class="n">_fixed_args</span> <span class="o">=</span> <span class="n">fixed_args</span>
+
+    <span class="c1"># subclassing operation may introduce side effects (but disable simplifications)</span>
+    <span class="k">class</span> <span class="nc">MyPartialOperation</span><span class="p">(</span><span class="n">PartialOperation</span><span class="p">):</span>
+        <span class="n">arity</span> <span class="o">=</span> <span class="p">[</span><span class="n">bv_op</span><span class="o">.</span><span class="n">arity</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">num_terms_fixed</span><span class="p">,</span> <span class="n">bv_op</span><span class="o">.</span><span class="n">arity</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">num_scalars_fixed</span><span class="p">]</span>
+        <span class="n">is_symmetric</span> <span class="o">=</span> <span class="n">bv_op</span><span class="o">.</span><span class="n">is_symmetric</span>
+        <span class="n">is_simple</span> <span class="o">=</span> <span class="n">bv_op</span><span class="o">.</span><span class="n">is_simple</span> <span class="ow">and</span> <span class="nb">sum</span><span class="p">(</span><span class="n">arity</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
+        <span class="n">operand_types</span> <span class="o">=</span> <span class="n">free_operand_types</span>
+        <span class="n">alt_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bv_op</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fixed_args_str</span><span class="p">))</span>
+
+        <span class="n">base_op</span> <span class="o">=</span> <span class="n">bv_op</span>
+        <span class="n">fixed_args</span> <span class="o">=</span> <span class="n">_fixed_args</span>
+
+        <span class="nd">@classmethod</span>
+        <span class="k">def</span> <span class="nf">_get_full_args</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+            <span class="n">full_args</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">fixed_arg</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">fixed_args</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">fixed_arg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">full_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+                    <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">full_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fixed_arg</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">full_args</span>
+
+        <span class="nd">@classmethod</span>
+        <span class="k">def</span> <span class="nf">condition</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">base_op</span><span class="o">.</span><span class="n">condition</span><span class="p">(</span><span class="o">*</span><span class="bp">cls</span><span class="o">.</span><span class="n">_get_full_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">))</span>
+
+        <span class="nd">@classmethod</span>
+        <span class="k">def</span> <span class="nf">output_width</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">base_op</span><span class="o">.</span><span class="n">output_width</span><span class="p">(</span><span class="o">*</span><span class="bp">cls</span><span class="o">.</span><span class="n">_get_full_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">))</span>
+
+        <span class="nd">@classmethod</span>
+        <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">base_op</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="o">*</span><span class="bp">cls</span><span class="o">.</span><span class="n">_get_full_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">))</span>
+
+    <span class="n">MyPartialOperation</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bv_op</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fixed_args_str</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">MyPartialOperation</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

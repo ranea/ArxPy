@@ -1,0 +1,403 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.primitives.simon module &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="arxpy.primitives.speck module" href="arxpy.primitives.speck.html" />
+    <link rel="prev" title="arxpy.primitives.simeck module" href="arxpy.primitives.simeck.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="arxpy.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arxpy.bitvector.html">arxpy.bitvector package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.differential.html">arxpy.differential package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="arxpy.primitives.html">arxpy.primitives package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="arxpy.primitives.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.cham.html">arxpy.primitives.cham module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.chaskey.html">arxpy.primitives.chaskey module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.feal.html">arxpy.primitives.feal module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.hight.html">arxpy.primitives.hight module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.lea.html">arxpy.primitives.lea module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.multi2.html">arxpy.primitives.multi2 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.picipher.html">arxpy.primitives.picipher module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.primitives.html">arxpy.primitives.primitives module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.shacal1.html">arxpy.primitives.shacal1 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.shacal2.html">arxpy.primitives.shacal2 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.simeck.html">arxpy.primitives.simeck module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">arxpy.primitives.simon module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.speck.html">arxpy.primitives.speck module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.tea.html">arxpy.primitives.tea module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.threefish.html">arxpy.primitives.threefish module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.xtea.html">arxpy.primitives.xtea module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.smt.html">arxpy.smt package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="arxpy.html">ArxPy 0.2</a> &raquo;</li>
+        
+          <li><a href="arxpy.primitives.html">arxpy.primitives package</a> &raquo;</li>
+        
+      <li>arxpy.primitives.simon module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/arxpy.primitives.simon.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-arxpy.primitives.simon">
+<span id="arxpy-primitives-simon-module"></span><h1>arxpy.primitives.simon module<a class="headerlink" href="#module-arxpy.primitives.simon" title="Permalink to this headline">¶</a></h1>
+<p>Simon family of block ciphers.</p>
+<dl class="py class">
+<dt id="arxpy.primitives.simon.SimonRF">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.primitives.simon.</code><code class="sig-name descname">SimonRF</code><a class="reference internal" href="_modules/arxpy/primitives/simon.html#SimonRF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.simon.SimonRF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.Operation" title="arxpy.bitvector.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.operation.Operation</span></code></a></p>
+<p>The non-linear part of the round function of Simon.</p>
+<p>This corresponds to ((x &lt;&lt;&lt; a) &amp; (x &lt;&lt;&lt; b)) ^ (x &lt;&lt;&lt; c),
+where (a, b, c) = (8, 1, 2).</p>
+<dl class="py method">
+<dt id="arxpy.primitives.simon.SimonRF.output_width">
+<em class="property">classmethod </em><code class="sig-name descname">output_width</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/simon.html#SimonRF.output_width"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.simon.SimonRF.output_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the bit-width of the resulting bit-vector.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.simon.SimonRF.eval">
+<em class="property">classmethod </em><code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/simon.html#SimonRF.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.simon.SimonRF.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operator with given operands.</p>
+<p>This is an internal method. To evaluate a bit-vector operation,
+use the operator <code class="docutils literal notranslate"><span class="pre">()</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.primitives.simon.XDSimonRF">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.primitives.simon.</code><code class="sig-name descname">XDSimonRF</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/simon.html#XDSimonRF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.simon.XDSimonRF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="arxpy.differential.derivative.html#arxpy.differential.derivative.Derivative" title="arxpy.differential.derivative.Derivative"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.differential.derivative.Derivative</span></code></a></p>
+<p>Represent the derivative of SimonRF w.r.t XOR differences.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDSimonRF</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># f(x + alpha) - f(x)</span>
+<span class="go">XorDiff(0x0000)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">max_weight</span><span class="p">(),</span> <span class="n">f</span><span class="o">.</span><span class="n">error</span><span class="p">(),</span> <span class="n">f</span><span class="o">.</span><span class="n">num_frac_bits</span><span class="p">()</span>
+<span class="go">(15, 0, 0)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt id="arxpy.primitives.simon.XDSimonRF.diff_type">
+<code class="sig-name descname">diff_type</code><a class="headerlink" href="#arxpy.primitives.simon.XDSimonRF.diff_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.XorDiff" title="arxpy.differential.difference.XorDiff"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.differential.difference.XorDiff</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.primitives.simon.XDSimonRF.op">
+<code class="sig-name descname">op</code><a class="headerlink" href="#arxpy.primitives.simon.XDSimonRF.op" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#arxpy.primitives.simon.SimonRF" title="arxpy.primitives.simon.SimonRF"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimonRF</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.simon.XDSimonRF.is_possible">
+<code class="sig-name descname">is_possible</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/simon.html#XDSimonRF.is_possible"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.simon.XDSimonRF.is_possible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the given output <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.XorDiff" title="arxpy.differential.difference.XorDiff"><code class="xref any py py-class docutils literal notranslate"><span class="pre">XorDiff</span></code></a> is possible.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.context</span> <span class="kn">import</span> <span class="n">NotEvaluation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.printing</span> <span class="kn">import</span> <span class="n">BvWrapPrinter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDSimonRF</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">is_possible</span><span class="p">(</span><span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">)))</span>
+<span class="go">0b1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDSimonRF</span><span class="p">(</span><span class="n">XorDiff</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">NotEvaluation</span><span class="p">([</span><span class="n">PopCount</span><span class="p">]):</span>
+<span class="gp">... </span>    <span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">is_possible</span><span class="p">(</span><span class="n">XorDiff</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">BvWrapPrinter</span><span class="p">()</span><span class="o">.</span><span class="n">doprint</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+<span class="go">Ite(0xffff == u,</span>
+<span class="go">    0b0 == (PopCount(v ^ (u &lt;&lt;&lt; 2))[0]),</span>
+<span class="go">    ==(0x0000,</span>
+<span class="go">       |(~(u &lt;&lt;&lt; 8) &amp; (u &lt;&lt;&lt; 1) &amp; (u &lt;&lt;&lt; 15) &amp; (v ^ (u &lt;&lt;&lt; 2) ^ ((v ^ (u &lt;&lt;&lt; 2)) &lt;&lt;&lt; 7)),</span>
+<span class="go">         ~((u &lt;&lt;&lt; 1) | (u &lt;&lt;&lt; 8)) &amp; (v ^ (u &lt;&lt;&lt; 2))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">xreplace</span><span class="p">({</span><span class="n">u</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="n">v</span><span class="p">:</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">)})</span>
+<span class="go">0b1</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="arxpy.differential.derivative.html#arxpy.differential.derivative.Derivative.is_possible" title="arxpy.differential.derivative.Derivative.is_possible"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Derivative.is_possible</span></code></a> for more information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.simon.XDSimonRF.has_probability_one">
+<code class="sig-name descname">has_probability_one</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/simon.html#XDSimonRF.has_probability_one"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.simon.XDSimonRF.has_probability_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the input diff propagates to the output diff with probability one.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDSimonRF</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">has_probability_one</span><span class="p">(</span><span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">)))</span>
+<span class="go">0b1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.simon.XDSimonRF.weight">
+<code class="sig-name descname">weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/simon.html#XDSimonRF.weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.simon.XDSimonRF.weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the weight of a possible output <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.XorDiff" title="arxpy.differential.difference.XorDiff"><code class="xref any py py-class docutils literal notranslate"><span class="pre">XorDiff</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.context</span> <span class="kn">import</span> <span class="n">NotEvaluation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.printing</span> <span class="kn">import</span> <span class="n">BvWrapPrinter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.extraop</span> <span class="kn">import</span> <span class="n">PopCount</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDSimonRF</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">weight</span><span class="p">(</span><span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">)))</span>
+<span class="go">0b00000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">alpha</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">XDSimonRF</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">beta</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">NotEvaluation</span><span class="p">([</span><span class="n">PopCount</span><span class="p">]):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">BvWrapPrinter</span><span class="p">()</span><span class="o">.</span><span class="n">doprint</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">weight</span><span class="p">(</span><span class="n">beta</span><span class="p">)))</span>
+<span class="go">Ite(0xffff == u,</span>
+<span class="go">    0b01111,</span>
+<span class="go">    PopCount((~(u &lt;&lt;&lt; 8) &amp; (u &lt;&lt;&lt; 1) &amp; (u &lt;&lt;&lt; 15)) ^ ((u &lt;&lt;&lt; 1) | (u &lt;&lt;&lt; 8)))</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="arxpy.differential.derivative.html#arxpy.differential.derivative.Derivative.weight" title="arxpy.differential.derivative.Derivative.weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">Derivative.weight</span></code></a> for more information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.simon.XDSimonRF.max_weight">
+<code class="sig-name descname">max_weight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/simon.html#XDSimonRF.max_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.simon.XDSimonRF.max_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the maximum value the weight can achieve.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.simon.XDSimonRF.exact_weight">
+<code class="sig-name descname">exact_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_diff</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/simon.html#XDSimonRF.exact_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.simon.XDSimonRF.exact_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the weight without rounding to the closest integer.</p>
+<p>It is assumed the exact weight is always smaller than the weight.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.simon.XDSimonRF.num_frac_bits">
+<code class="sig-name descname">num_frac_bits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/simon.html#XDSimonRF.num_frac_bits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.simon.XDSimonRF.num_frac_bits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of fractional bits in the weight.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.simon.XDSimonRF.error">
+<code class="sig-name descname">error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/simon.html#XDSimonRF.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.simon.XDSimonRF.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the maximum difference between the weight and the exact weight.</p>
+<p>This method returns an upper bound (in absolute value) of the maximum difference
+(over all input and output difference) between the weight and the exact weight.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.primitives.simon.SimonInstance">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.primitives.simon.</code><code class="sig-name descname">SimonInstance</code><a class="reference internal" href="_modules/arxpy/primitives/simon.html#SimonInstance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.simon.SimonInstance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>An enumeration.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="arxpy.primitives.simon.get_Simon_instance">
+<code class="sig-prename descclassname">arxpy.primitives.simon.</code><code class="sig-name descname">get_Simon_instance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">simon_instance</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/simon.html#get_Simon_instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.simon.get_Simon_instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an instance of the Simon family.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="arxpy.primitives.speck.html" class="btn btn-neutral float-right" title="arxpy.primitives.speck module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="arxpy.primitives.simeck.html" class="btn btn-neutral float-left" title="arxpy.primitives.simeck module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

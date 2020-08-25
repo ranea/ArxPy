@@ -1,0 +1,461 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ArxPy 0.2 &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="arxpy.bitvector package" href="arxpy.bitvector.html" />
+    <link rel="prev" title="Welcome to ArxPy’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ArxPy 0.2</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.bitvector.html">arxpy.bitvector package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.differential.html">arxpy.differential package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.primitives.html">arxpy.primitives package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.smt.html">arxpy.smt package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>ArxPy 0.2</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/arxpy.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="arxpy-0-2">
+<h1>ArxPy 0.2<a class="headerlink" href="#arxpy-0-2" title="Permalink to this headline">¶</a></h1>
+<p>ArxPy is a python3 library to find XOR differential characteristics and
+rotational-XOR characteristics in ARX primitives (e.g., block ciphers)
+using SMT solvers.</p>
+<p>ArxPy is based on the following papers:</p>
+<ul class="simple">
+<li><p>Towards Finding Optimal Differential Characteristics for ARX: Application to Salsa20</p></li>
+<li><p>Observations on the SIMON Block Cipher Family</p></li>
+<li><p>Rotational-XOR Cryptanalysis of Reduced-round SPECK</p></li>
+<li><p>A Bit-Vector Differential Model for the Modular Addition by a Constant</p></li>
+</ul>
+<p>ArxPy provides a complete documentation in <a class="reference external" href="https://ranea.github.io/ArxPy/">https://ranea.github.io/ArxPy/</a>.
+and an extensive suite of tests.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>First, the ARX cipher needs to be implemented following ArxPy interface.
+There are several ARX ciphers implemented already (see the folder <code class="docutils literal notranslate"><span class="pre">arxpy/primitives</span></code>).
+To implemented a new cipher, the easiest way is to take a similar cipher
+already implemented as a template and modify the python code directly.</p>
+<p>Searching the optimal XOR differential characteristic can be done easily with
+the function <code class="docutils literal notranslate"><span class="pre">round_based_search_SkCh()</span></code>. For example, searching for the best
+2-round and 3-round differential characteristics of <code class="docutils literal notranslate"><span class="pre">Speck_32_64</span></code> can be done as follows</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search</span> <span class="kn">import</span> <span class="n">SkChSearchMode</span><span class="p">,</span> <span class="n">DerMode</span><span class="p">,</span> <span class="n">round_based_search_SkCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives</span> <span class="kn">import</span> <span class="n">speck</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cipher</span> <span class="o">=</span> <span class="n">speck</span><span class="o">.</span><span class="n">get_Speck_instance</span><span class="p">(</span><span class="n">speck</span><span class="o">.</span><span class="n">SpeckInstance</span><span class="o">.</span><span class="n">speck_32_64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">start_rounds</span><span class="p">,</span> <span class="n">end_rounds</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round_based_search_SkCh</span><span class="p">(</span><span class="n">cipher</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;btor&quot;</span><span class="p">,</span> <span class="n">start_rounds</span><span class="p">,</span> <span class="n">end_rounds</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="n">DerMode</span><span class="o">.</span><span class="n">Default</span><span class="p">,</span> <span class="n">SkChSearchMode</span><span class="o">.</span><span class="n">Optimal</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="go">Num rounds: 4</span>
+<span class="go">Best characteristic found:</span>
+<span class="go">{&#39;ch_weight&#39;: 5,</span>
+<span class="go"> &#39;der_weights&#39;: [[w0w1w2, 3], [w3, 2]],</span>
+<span class="go"> &#39;emp_weight&#39;: Counter({5: 163, 4: 74, 6: 17, 7: 2}),</span>
+<span class="go"> &#39;exact_weight&#39;: 5,</span>
+<span class="go"> &#39;input_diff&#39;: [[dp0, 0x2800], [dp1, 0x0010]],</span>
+<span class="go"> &#39;nonlinear_diffs&#39;: [[dx1, 0x0040], [dx6, 0x8000], [dx11, 0x8100], [dx16, 0x8000]],</span>
+<span class="go"> &#39;output_diff&#39;: [[dx17, 0x8000], [dx19, 0x840a]]}</span>
+
+<span class="go">Num rounds: 5</span>
+<span class="go">Best characteristic found:</span>
+<span class="go">{&#39;ch_weight&#39;: 9,</span>
+<span class="go"> &#39;der_weights&#39;: [[w0w1w2, 6], [w3w4, 3]],</span>
+<span class="go"> &#39;emp_weight&#39;: Counter({9: 154, 8: 81, 10: 19, 11: 2}),</span>
+<span class="go"> &#39;exact_weight&#39;: 9,</span>
+<span class="go"> &#39;input_diff&#39;: [[dp0, 0x0211], [dp1, 0x0a04]],</span>
+<span class="go"> &#39;nonlinear_diffs&#39;: [[dx1, 0x2800], [dx6, 0x0040], [dx11, 0x8000], [dx16, 0x8100], [dx21, 0x8000]],</span>
+<span class="go"> &#39;output_diff&#39;: [[dx22, 0x8000], [dx24, 0x840a]]}</span>
+</pre></div>
+</div>
+<p>Apart from the cipher and the number of rounds to search, the function
+<code class="docutils literal notranslate"><span class="pre">round_based_search_SkCh()</span></code> has several parameters to adapt the search as needed.
+This function stores each characteristic found as a <code class="docutils literal notranslate"><span class="pre">ChFound</span></code> object.
+The explanation of these paremeters and the attributes of <code class="docutils literal notranslate"><span class="pre">ChFound</span></code> objects
+can be found in the documentation.
+Every function and class in ArxPy is documented with a description of
+the object and with doctests!</p>
+<p>If the argument <code class="docutils literal notranslate"><span class="pre">check</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code> in <code class="docutils literal notranslate"><span class="pre">round_based_search_SkCh()</span></code>, the
+weight of each characteristic found is checked by computing the empirical
+weight (by sampling many plaintexts and keys and computing the
+differential probability manually). This is useful since for
+ARX ciphers the theoretical weight and the actual weight might differ
+in some cases.</p>
+<p>Searching the optimal related-key XOR differential characteristic can be done
+in a similar way with the function <code class="docutils literal notranslate"><span class="pre">round_based_search_RkCh()</span></code>. For example,
+searching for the best 4-round and 5-round related-key characteristics of
+<code class="docutils literal notranslate"><span class="pre">XTEA</span></code> can be done as follows (this can take some minutes)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search</span> <span class="kn">import</span> <span class="n">RkChSearchMode</span><span class="p">,</span> <span class="n">DerMode</span><span class="p">,</span> <span class="n">round_based_search_RkCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.xtea</span> <span class="kn">import</span> <span class="n">XteaCipher</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cipher</span> <span class="o">=</span> <span class="n">XteaCipher</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round_based_search_RkCh</span><span class="p">(</span><span class="n">cipher</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;btor&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">DerMode</span><span class="o">.</span><span class="n">Default</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="n">DerMode</span><span class="o">.</span><span class="n">Default</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">RkChSearchMode</span><span class="o">.</span><span class="n">OptimalMinSum</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="go">Num rounds: 4</span>
+<span class="go">Best related-key characteristic found:</span>
+<span class="go">{&#39;enc_ch_found&#39;: {&#39;ch_weight&#39;: 0,</span>
+<span class="go">                  &#39;der_weights&#39;: [[w0w1w2, 0], [w3w4w5, 0], [w6w7, 0]],</span>
+<span class="go">                  &#39;emp_weight&#39;: Counter({0: 256}),</span>
+<span class="go">                  &#39;exact_weight&#39;: 0,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dp0, 0x80000000], [dp1, 0x00000000]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [[dx3, 0x00000000], [dx5, 0x00000000], [dx9, 0x00000000], [dx11, 0x00000000], [dx15, 0x00000000], [dx17, 0x00000000], [dx21, 0x00000000], [dx23, 0x80000000]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dx17, 0x00000000], [dx23, 0x80000000]]},</span>
+<span class="go"> &#39;key_ch_found&#39;: {&#39;ch_weight&#39;: 0,</span>
+<span class="go">                  &#39;der_weights&#39;: [[wk0, 0.0], [wk1, 0.0], [wk2, 0.0]],</span>
+<span class="go">                  &#39;emp_weight&#39;: 0.0,</span>
+<span class="go">                  &#39;exact_weight&#39;: 0,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dmk0, 0x80000000], [dmk1, 0x00000000], [dmk2, 0x80000000], [dmk3, 0x00000000]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [[dk0, 0x00000000], [dk1, 0x00000000], [dk2, 0x80000000]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dmk0, 0x80000000], [dk0, 0x00000000], [dk1, 0x00000000], [dk2, 0x80000000]]}}</span>
+
+<span class="go">Num rounds: 5</span>
+<span class="go">Best related-key characteristic found:</span>
+<span class="go">{&#39;enc_ch_found&#39;: {&#39;ch_weight&#39;: 0,</span>
+<span class="go">                  &#39;der_weights&#39;: [[w0w1w2, 0], [w3w4w5, 0], [w6w7w8, 0], [w9, 0]],</span>
+<span class="go">                  &#39;emp_weight&#39;: Counter({0: 256}),</span>
+<span class="go">                  &#39;exact_weight&#39;: 0,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dp0, 0x80000000], [dp1, 0x00000000]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [[dx3, 0x00000000], [dx5, 0x00000000], [dx9, 0x00000000], [dx11, 0x00000000], [dx15, 0x00000000], [dx17, 0x00000000], [dx21, 0x00000000], [dx23, 0x00000000], [dx27, 0x00000000], [dx29, 0x00000000]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dx23, 0x00000000], [dx29, 0x00000000]]},</span>
+<span class="go"> &#39;key_ch_found&#39;: {&#39;ch_weight&#39;: 0,</span>
+<span class="go">                  &#39;der_weights&#39;: [[wk0, 0.0], [wk1, 0.0], [wk2, 0.0]],</span>
+<span class="go">                  &#39;emp_weight&#39;: 0.0,</span>
+<span class="go">                  &#39;exact_weight&#39;: 0,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dmk0, 0x80000000], [dmk1, 0x00000000], [dmk2, 0x00000000], [dmk3, 0x00000000]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [[dk0, 0x00000000], [dk1, 0x00000000], [dk2, 0x00000000]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dmk0, 0x80000000], [dk0, 0x00000000], [dk1, 0x00000000], [dk2, 0x00000000], [dk2, 0x00000000]]}}</span>
+</pre></div>
+</div>
+<p>A related-key characteristic is split into two characteristics, one
+describing the propagation of differences through the key schedule
+(<code class="docutils literal notranslate"><span class="pre">key_ch_found</span></code>) and another one describing the propagation of
+differences through the encryption function (<code class="docutils literal notranslate"><span class="pre">enc_ch_found</span></code>).</p>
+<p>To search for rotational-XOR characteristics, the same functions
+<code class="docutils literal notranslate"><span class="pre">round_based_search_SkCh()</span></code> and <code class="docutils literal notranslate"><span class="pre">round_based_search_RkCh()</span></code> can be used
+but using <code class="docutils literal notranslate"><span class="pre">RXDiff</span></code> as the <code class="docutils literal notranslate"><span class="pre">difference_type</span></code> argument. For example,
+searching for 4-round and 5-round rotational-XOR differential characteristics
+of <code class="docutils literal notranslate"><span class="pre">Cham_64_128</span></code> can be done in the following way</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">RXDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search</span> <span class="kn">import</span> <span class="n">RkChSearchMode</span><span class="p">,</span> <span class="n">DerMode</span><span class="p">,</span> <span class="n">round_based_search_RkCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives</span> <span class="kn">import</span> <span class="n">cham</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cipher</span> <span class="o">=</span> <span class="n">cham</span><span class="o">.</span><span class="n">get_Cham_instance</span><span class="p">(</span><span class="n">cham</span><span class="o">.</span><span class="n">ChamInstance</span><span class="o">.</span><span class="n">cham_64_128</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">round_based_search_RkCh</span><span class="p">(</span><span class="n">cipher</span><span class="p">,</span> <span class="n">RXDiff</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;btor&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">DerMode</span><span class="o">.</span><span class="n">Default</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="n">DerMode</span><span class="o">.</span><span class="n">Default</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">RkChSearchMode</span><span class="o">.</span><span class="n">FirstMinSumValid</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="go">Num rounds: 4</span>
+<span class="go">Best related-key characteristic found:</span>
+<span class="go">{&#39;enc_ch_found&#39;: {&#39;ch_weight&#39;: 5,</span>
+<span class="go">                  &#39;der_weights&#39;: [[w0, 1.375], [w1, 1.375], [w2, 1.375], [w3, 1.375]],</span>
+<span class="go">                  &#39;emp_weight&#39;: Counter({6: 256}),</span>
+<span class="go">                  &#39;exact_weight&#39;: 5.659973889568066,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dp0, 0x8000], [dp1, 0x0002], [dp2, 0x8006], [dp3, 0x0004]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [[dx2, 0x0001], [dx7, 0x8000], [dx12, 0x8000], [dx17, 0x8000]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dx3, 0x0100], [dx8, 0x0001], [dx13, 0x0080], [dx18, 0x0001]]},</span>
+<span class="go"> &#39;key_ch_found&#39;: {&#39;ch_weight&#39;: 0,</span>
+<span class="go">                  &#39;der_weights&#39;: [],</span>
+<span class="go">                  &#39;emp_weight&#39;: 0.0,</span>
+<span class="go">                  &#39;exact_weight&#39;: 0,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dmk0, 0x6123], [dmk1, 0x0281], [dmk2, 0xc246], [dmk3, 0x6020], [dmk4, 0x8000], [dmk5, 0x8000], [dmk6, 0x8000], [dmk7, 0x8000]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dk3, 0x8004], [dk7, 0x8681], [dk11, 0x0009], [dk15, 0x8000]]}}</span>
+
+<span class="go">Num rounds: 5</span>
+<span class="go">Best related-key characteristic found:</span>
+<span class="go">{&#39;enc_ch_found&#39;: {&#39;ch_weight&#39;: 8,</span>
+<span class="go">                  &#39;der_weights&#39;: [[w0, 3.375], [w1, 1.375], [w2, 1.375], [w3, 1.375], [w4, 1.375]],</span>
+<span class="go">                  &#39;emp_weight&#39;: Counter({8: 256}),</span>
+<span class="go">                  &#39;exact_weight&#39;: 9.074967361960082,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dp0, 0x0000], [dp1, 0x0002], [dp2, 0x8007], [dp3, 0x0005]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [[dx2, 0x0c00], [dx7, 0x0001], [dx12, 0x0000], [dx17, 0x0000], [dx22, 0x0000]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dx8, 0x0002], [dx13, 0x0000], [dx18, 0x0000], [dx23, 0x0000]]},</span>
+<span class="go"> &#39;key_ch_found&#39;: {&#39;ch_weight&#39;: 0,</span>
+<span class="go">                  &#39;der_weights&#39;: [],</span>
+<span class="go">                  &#39;emp_weight&#39;: 0.0,</span>
+<span class="go">                  &#39;exact_weight&#39;: 0,</span>
+<span class="go">                  &#39;input_diff&#39;: [[dmk0, 0x0202], [dmk1, 0x2261], [dmk2, 0x22e7], [dmk3, 0x0503], [dmk4, 0x0103], [dmk5, 0x8000], [dmk6, 0x8000], [dmk7, 0x8000]],</span>
+<span class="go">                  &#39;nonlinear_diffs&#39;: [],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dk3, 0x0404], [dk7, 0x0781], [dk11, 0x800b], [dk15, 0x0c00], [dk19, 0x0004]]}}</span>
+</pre></div>
+</div>
+<p>While there is no tutorial to learn how to use ArxPy yet,
+the doctests and doctstrings from <code class="docutils literal notranslate"><span class="pre">arxpy/smt/search.py</span></code> provides
+plenty of information and examples of searching characteristics.</p>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>ArxPy requires python3 (&gt;= 3.7) and the following python libraries:</p>
+<ul class="simple">
+<li><p>cython</p></li>
+<li><p>sympy</p></li>
+<li><p>bidict</p></li>
+<li><p>cffi</p></li>
+<li><p>pySMT</p></li>
+</ul>
+<p>These libraries can be easily installed with pip:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">cython</span> <span class="n">sympy</span> <span class="n">bidict</span> <span class="n">cffi</span> <span class="n">pysmt</span>
+</pre></div>
+</div>
+<p>ArxPy also requires an SMT solver supporting the bit-vector theory,
+installed through <a class="reference external" href="https://pysmt.readthedocs.io/en/latest/getting_started.html#getting-started">pySMT</a>.
+We recommend boolector.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pysmt</span><span class="o">-</span><span class="n">install</span> <span class="o">--</span><span class="n">btor</span>
+</pre></div>
+</div>
+<p>Optionally, hypothesis and yices can be installed to run the tests,
+and sphinx and sphinx-rtd-theme to build the documentation.</p>
+</div>
+</div>
+<div class="section" id="subpackages">
+<h1>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="arxpy.bitvector.html">arxpy.bitvector package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.bitvector.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.bitvector.context.html">arxpy.bitvector.context module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.bitvector.core.html">arxpy.bitvector.core module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.bitvector.extraop.html">arxpy.bitvector.extraop module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.bitvector.operation.html">arxpy.bitvector.operation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.bitvector.printing.html">arxpy.bitvector.printing module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="arxpy.differential.html">arxpy.differential package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.differential.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.differential.characteristic.html">arxpy.differential.characteristic module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.differential.derivative.html">arxpy.differential.derivative module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.differential.difference.html">arxpy.differential.difference module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="arxpy.primitives.html">arxpy.primitives package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.primitives.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.primitives.cham.html">arxpy.primitives.cham module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.primitives.chaskey.html">arxpy.primitives.chaskey module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.primitives.feal.html">arxpy.primitives.feal module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.primitives.hight.html">arxpy.primitives.hight module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.primitives.lea.html">arxpy.primitives.lea module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.primitives.multi2.html">arxpy.primitives.multi2 module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.primitives.picipher.html">arxpy.primitives.picipher module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.primitives.primitives.html">arxpy.primitives.primitives module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.primitives.shacal1.html">arxpy.primitives.shacal1 module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.primitives.shacal2.html">arxpy.primitives.shacal2 module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.primitives.simeck.html">arxpy.primitives.simeck module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.primitives.simon.html">arxpy.primitives.simon module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.primitives.speck.html">arxpy.primitives.speck module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.primitives.tea.html">arxpy.primitives.tea module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.primitives.threefish.html">arxpy.primitives.threefish module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.primitives.xtea.html">arxpy.primitives.xtea module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="arxpy.smt.html">arxpy.smt package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.smt.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.smt.search.html">arxpy.smt.search module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.smt.types.html">arxpy.smt.types module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.smt.verification.html">arxpy.smt.verification module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="arxpy.bitvector.html" class="btn btn-neutral float-right" title="arxpy.bitvector package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to ArxPy’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

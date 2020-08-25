@@ -1,0 +1,6 @@
+arxpy.primitives.feal module
+============================
+
+.. automodule:: arxpy.primitives.feal
+   :members:
+   :show-inheritance:

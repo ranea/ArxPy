@@ -1,0 +1,6 @@
+arxpy.primitives.multi2 module
+==============================
+
+.. automodule:: arxpy.primitives.multi2
+   :members:
+   :show-inheritance:

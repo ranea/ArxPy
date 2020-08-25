@@ -1,0 +1,13 @@
+.. include:: ../README.rst
+
+===========
+Subpackages
+===========
+
+.. toctree::
+   :maxdepth: 4
+
+   arxpy.bitvector
+   arxpy.differential
+   arxpy.primitives
+   arxpy.smt

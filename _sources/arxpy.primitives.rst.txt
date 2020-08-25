@@ -1,0 +1,29 @@
+arxpy.primitives package
+========================
+
+.. automodule:: arxpy.primitives
+   :members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   arxpy.primitives.cham
+   arxpy.primitives.chaskey
+   arxpy.primitives.feal
+   arxpy.primitives.hight
+   arxpy.primitives.lea
+   arxpy.primitives.multi2
+   arxpy.primitives.picipher
+   arxpy.primitives.primitives
+   arxpy.primitives.shacal1
+   arxpy.primitives.shacal2
+   arxpy.primitives.simeck
+   arxpy.primitives.simon
+   arxpy.primitives.speck
+   arxpy.primitives.tea
+   arxpy.primitives.threefish
+   arxpy.primitives.xtea

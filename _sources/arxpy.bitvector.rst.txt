@@ -1,0 +1,18 @@
+arxpy.bitvector package
+=======================
+
+.. automodule:: arxpy.bitvector
+   :members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   arxpy.bitvector.context
+   arxpy.bitvector.core
+   arxpy.bitvector.extraop
+   arxpy.bitvector.operation
+   arxpy.bitvector.printing

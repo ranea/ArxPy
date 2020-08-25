@@ -1,0 +1,16 @@
+arxpy.differential package
+==========================
+
+.. automodule:: arxpy.differential
+   :members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   arxpy.differential.characteristic
+   arxpy.differential.derivative
+   arxpy.differential.difference

@@ -1,0 +1,6 @@
+arxpy.bitvector.core module
+===========================
+
+.. automodule:: arxpy.bitvector.core
+   :members:
+   :show-inheritance:

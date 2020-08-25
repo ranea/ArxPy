@@ -1,0 +1,6 @@
+arxpy.primitives.simeck module
+==============================
+
+.. automodule:: arxpy.primitives.simeck
+   :members:
+   :show-inheritance:

@@ -1,0 +1,865 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.differential.characteristic &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html#subpackages">Subpackages</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>arxpy.differential.characteristic</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for arxpy.differential.characteristic</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Manage characteristics.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">enum</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">pprint</span>
+
+<span class="kn">from</span> <span class="nn">arxpy</span> <span class="kn">import</span> <span class="n">primitives</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">core</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">context</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">operation</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">extraop</span>
+<span class="kn">from</span> <span class="nn">arxpy.differential</span> <span class="kn">import</span> <span class="n">difference</span>
+<span class="kn">from</span> <span class="nn">arxpy.differential</span> <span class="kn">import</span> <span class="n">derivative</span>
+<span class="kn">from</span> <span class="nn">arxpy.primitives</span> <span class="kn">import</span> <span class="n">primitives</span>
+
+
+<div class="viewcode-block" id="ChSignatureType"><a class="viewcode-back" href="../../../arxpy.differential.characteristic.html#arxpy.differential.characteristic.ChSignatureType">[docs]</a><span class="k">class</span> <span class="nc">ChSignatureType</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent the different types of signatures available for a characteristic.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        Full: the signature includes the input and all output differences of each</span>
+<span class="sd">            non-linear operation.</span>
+<span class="sd">        InputOutput: the signature only includes the input and output differences</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Full</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span>
+    <span class="n">InputOutput</span> <span class="o">=</span> <span class="n">enum</span><span class="o">.</span><span class="n">auto</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BvCharacteristic"><a class="viewcode-back" href="../../../arxpy.differential.characteristic.html#arxpy.differential.characteristic.BvCharacteristic">[docs]</a><span class="k">class</span> <span class="nc">BvCharacteristic</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent characteristics of bit-vector functions.</span>
+
+<span class="sd">    Given a bit-vector function `BvFunction` :math:`f`,</span>
+<span class="sd">    a characteristic is a trail of differences obtained by</span>
+<span class="sd">    propagating an input difference over :math:`f`.</span>
+
+<span class="sd">    In particular, a characteristic is composed of the</span>
+<span class="sd">    input difference and the output difference of each</span>
+<span class="sd">    non-linear operation.</span>
+
+<span class="sd">    This class manages symbolic characteristics,</span>
+<span class="sd">    where the input difference is given symbolically</span>
+<span class="sd">    and the intermediate differences are `Term`</span>
+<span class="sd">    that depend on the input difference.</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.core import Variable</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.differential.difference import XorDiff, RXDiff</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.differential.characteristic import BvCharacteristic</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.primitives.primitives import BvFunction</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.primitives.chaskey import ChaskeyPi</span>
+<span class="sd">        &gt;&gt;&gt; issubclass(ChaskeyPi, BvFunction)</span>
+<span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; ChaskeyPi.set_rounds(1)</span>
+<span class="sd">        &gt;&gt;&gt; ch = BvCharacteristic(ChaskeyPi, XorDiff, [&quot;dv0&quot;, &quot;dv1&quot;, &quot;dv2&quot;, &quot;dv3&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; ch.ssa  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        {&#39;input_vars&#39;: (dv0, dv1, dv2, dv3),</span>
+<span class="sd">        &#39;output_vars&#39;: (d7, d12, d13, d9),</span>
+<span class="sd">        &#39;assignments&#39;: ((d0, dv0 + dv1), (d1, dv1 &lt;&lt;&lt; 5), (d2, d0 ^ d1), (d3, d0 &lt;&lt;&lt; 16), (d4, dv2 + dv3),</span>
+<span class="sd">        (d5, dv3 &lt;&lt;&lt; 8), (d6, d4 ^ d5), (d7, d3 + d6), (d8, d6 &lt;&lt;&lt; 13), (d9, d7 ^ d8), (d10, d2 + d4),</span>
+<span class="sd">        (d11, d2 &lt;&lt;&lt; 7), (d12, d10 ^ d11), (d13, d10 &lt;&lt;&lt; 16))}</span>
+<span class="sd">        &gt;&gt;&gt; ch.input_diff</span>
+<span class="sd">        (XorDiff(dv0), XorDiff(dv1), XorDiff(dv2), XorDiff(dv3))</span>
+<span class="sd">        &gt;&gt;&gt; ch.nonlinear_diffs # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        OrderedDict([(XorDiff(d0), XDA(XorDiff(dv0), XorDiff(dv1))),</span>
+<span class="sd">        (XorDiff(d4), XDA(XorDiff(dv2), XorDiff(dv3))),</span>
+<span class="sd">        (XorDiff(d7), XDA(XorDiff(d0 &lt;&lt;&lt; 16), XorDiff(d4 ^ (dv3 &lt;&lt;&lt; 8)))),</span>
+<span class="sd">        (XorDiff(d10), XDA(XorDiff(d0 ^ (dv1 &lt;&lt;&lt; 5)), XorDiff(d4)))])</span>
+<span class="sd">        &gt;&gt;&gt; ch.output_diff # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        [[XorDiff(d7), XorDiff(d7)],</span>
+<span class="sd">        [XorDiff(d12), XorDiff(d10 ^ ((d0 ^ (dv1 &lt;&lt;&lt; 5)) &lt;&lt;&lt; 7))],</span>
+<span class="sd">        [XorDiff(d13), XorDiff(d10 &lt;&lt;&lt; 16)],</span>
+<span class="sd">        [XorDiff(d9), XorDiff(d7 ^ ((d4 ^ (dv3 &lt;&lt;&lt; 8)) &lt;&lt;&lt; 13))]]</span>
+<span class="sd">        &gt;&gt;&gt; ch = BvCharacteristic(ChaskeyPi, RXDiff, [&quot;dv0&quot;, &quot;dv1&quot;, &quot;dv2&quot;, &quot;dv3&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; ch.input_diff</span>
+<span class="sd">        (RXDiff(dv0), RXDiff(dv1), RXDiff(dv2), RXDiff(dv3))</span>
+<span class="sd">        &gt;&gt;&gt; ch.nonlinear_diffs # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        OrderedDict([(RXDiff(d0), RXDA(RXDiff(dv0), RXDiff(dv1))),</span>
+<span class="sd">        (RXDiff(d4), RXDA(RXDiff(dv2), RXDiff(dv3))),</span>
+<span class="sd">        (RXDiff(d7), RXDA(RXDiff(d0 &lt;&lt;&lt; 16), RXDiff(d4 ^ (dv3 &lt;&lt;&lt; 8)))),</span>
+<span class="sd">        (RXDiff(d10), RXDA(RXDiff(d0 ^ (dv1 &lt;&lt;&lt; 5)), RXDiff(d4)))])</span>
+<span class="sd">        &gt;&gt;&gt; ch.output_diff # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        [[RXDiff(d7), RXDiff(d7)],</span>
+<span class="sd">        [RXDiff(d12), RXDiff(d10 ^ ((d0 ^ (dv1 &lt;&lt;&lt; 5)) &lt;&lt;&lt; 7))],</span>
+<span class="sd">        [RXDiff(d13), RXDiff(d10 &lt;&lt;&lt; 16)],</span>
+<span class="sd">        [RXDiff(d9), RXDiff(d7 ^ ((d4 ^ (dv3 &lt;&lt;&lt; 8)) &lt;&lt;&lt; 13))]]</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        func: the `BvFunction`</span>
+<span class="sd">        diff_type: the `Difference` of the characteristic</span>
+<span class="sd">        input_diff: a list containing the input symbolic differences</span>
+<span class="sd">        nonlinear_diffs: an `collections.OrderedDict` mapping non-linear symbolic differences</span>
+<span class="sd">            to their corresponding `Derivative`</span>
+<span class="sd">        output_diff: a list, where the i-th element is a pair containing</span>
+<span class="sd">            the i-th output symbolic difference and its value</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">diff_type</span><span class="p">,</span> <span class="n">input_diff_names</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="n">initial_var2diff</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">primitives</span><span class="o">.</span><span class="n">BvFunction</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">diff_type</span><span class="p">,</span> <span class="n">difference</span><span class="o">.</span><span class="n">Difference</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_diff_names</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">input_widths</span><span class="p">)</span>
+        <span class="n">input_diff</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">width</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">input_diff_names</span><span class="p">,</span> <span class="n">func</span><span class="o">.</span><span class="n">input_widths</span><span class="p">):</span>
+            <span class="n">input_diff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff_type</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">width</span><span class="p">)))</span>
+        <span class="n">input_diff</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diff_type</span> <span class="o">=</span> <span class="n">diff_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span> <span class="o">=</span> <span class="n">input_diff</span>
+
+        <span class="c1"># Propagate the input difference through the function</span>
+
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+        <span class="n">ssa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">ssa</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">id_prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ssa</span> <span class="o">=</span> <span class="n">ssa</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_input_diff_names</span> <span class="o">=</span> <span class="n">input_diff_names</span>
+
+        <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;constant outputs (independent of the inputs) are not supported&quot;</span><span class="p">)</span>
+
+        <span class="n">var2diff</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Variable to Difference</span>
+        <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">diff</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;input_vars&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">):</span>
+            <span class="n">var2diff</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff</span>
+
+        <span class="k">if</span> <span class="n">initial_var2diff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">initial_var2diff</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">var</span><span class="p">)</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;the input differences cannot be replaced by initial_var2diff&quot;</span><span class="p">)</span>
+            <span class="n">var2diff</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">initial_var2diff</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nonlinear_diffs</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">expr</span> <span class="ow">in</span> <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">]:</span>
+            <span class="n">expr_args</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">expr</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                    <span class="n">expr_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>  <span class="c1"># &#39;int&#39; object has no attribute &#39;xreplace&#39;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">expr_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">xreplace</span><span class="p">(</span><span class="n">var2diff</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">diff_type</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">expr_args</span><span class="p">):</span>
+                <span class="c1"># symbolic computations with the key</span>
+                <span class="n">var2diff</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">expr</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">diff_type</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">expr_args</span><span class="p">):</span>
+                <span class="n">der</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diff_type</span><span class="o">.</span><span class="n">derivative</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">expr</span><span class="p">),</span> <span class="n">expr_args</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">def</span> <span class="nf">contains_key_var</span><span class="p">(</span><span class="n">term</span><span class="p">):</span>
+                    <span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">basic</span>
+                    <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">basic</span><span class="o">.</span><span class="n">preorder_traversal</span><span class="p">(</span><span class="n">term</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">func</span><span class="o">.</span><span class="n">round_keys</span><span class="p">:</span>
+                            <span class="k">return</span> <span class="kc">True</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="kc">False</span>
+
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvAdd</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s1">&#39;round_keys&#39;</span><span class="p">)</span> <span class="ow">and</span> \
+                        <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Variable</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">func</span><span class="o">.</span><span class="n">round_keys</span><span class="p">)</span> <span class="ow">and</span> \
+                        <span class="nb">any</span><span class="p">(</span><span class="n">contains_key_var</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">expr_args</span><span class="p">):</span>
+                    <span class="c1"># temporary solution to Derivative(BvAddCte_k(x)) != Derivative(x + k)</span>
+                    <span class="c1"># with x a Diff and k a key variable</span>
+                    <span class="n">keyed_indices</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">expr_args</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">contains_key_var</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+                            <span class="n">keyed_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keyed_indices</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">expr_args</span><span class="p">[</span><span class="n">keyed_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">func</span><span class="o">.</span><span class="n">round_keys</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;invalid expression: op=</span><span class="si">{}</span><span class="s2">, args=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="nb">type</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">expr_args</span><span class="p">))</span>
+                    <span class="c1"># expr_args[keyed_indices[0]] replaced to the zero diff</span>
+                    <span class="n">zero_diff</span> <span class="o">=</span> <span class="n">diff_type</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">expr_args</span><span class="p">[</span><span class="n">keyed_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+                    <span class="n">der</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diff_type</span><span class="o">.</span><span class="n">derivative</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">expr</span><span class="p">),</span> <span class="p">[</span><span class="n">expr_args</span><span class="p">[(</span><span class="n">keyed_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="p">],</span> <span class="n">zero_diff</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="s2">&quot;xor_derivative&quot;</span><span class="p">):</span>
+                    <span class="c1"># temporary solution to operations containing a custom derivative</span>
+                    <span class="n">input_diff_expr</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">expr_args</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">diff_type</span><span class="p">):</span>
+                            <span class="n">input_diff_expr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Term</span><span class="p">)</span>  <span class="c1"># int arguments currently not supported</span>
+                            <span class="n">input_diff_expr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff_type</span><span class="o">.</span><span class="n">from_pair</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">arg</span><span class="p">))</span>
+                    <span class="n">der</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diff_type</span><span class="o">.</span><span class="n">derivative</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">expr</span><span class="p">),</span> <span class="n">input_diff_expr</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fixed_args</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">expr_args</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">diff_type</span><span class="p">):</span>
+                            <span class="n">fixed_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">fixed_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+                    <span class="n">new_op</span> <span class="o">=</span> <span class="n">extraop</span><span class="o">.</span><span class="n">make_partial_operation</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">expr</span><span class="p">),</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">fixed_args</span><span class="p">))</span>
+                    <span class="n">der</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diff_type</span><span class="o">.</span><span class="n">derivative</span><span class="p">(</span><span class="n">new_op</span><span class="p">,</span> <span class="p">[</span><span class="n">arg</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">expr_args</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">diff_type</span><span class="p">)])</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">der</span><span class="p">,</span> <span class="n">derivative</span><span class="o">.</span><span class="n">Derivative</span><span class="p">):</span>
+                <span class="n">diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diff_type</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+                <span class="n">var2diff</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">nonlinear_diffs</span><span class="p">[</span><span class="n">diff</span><span class="p">]</span> <span class="o">=</span> <span class="n">der</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">var2diff</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">der</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_var2diff</span> <span class="o">=</span> <span class="n">var2diff</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_diff</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">output_diff</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">diff_type</span><span class="p">(</span><span class="n">var</span><span class="p">),</span> <span class="n">var2diff</span><span class="p">[</span><span class="n">var</span><span class="p">]])</span>
+
+<div class="viewcode-block" id="BvCharacteristic.empirical_weight"><a class="viewcode-back" href="../../../arxpy.differential.characteristic.html#arxpy.differential.characteristic.BvCharacteristic.empirical_weight">[docs]</a>    <span class="k">def</span> <span class="nf">empirical_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_diff</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">,</span> <span class="n">pair_samples</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the empirical weight of a given differential.</span>
+
+<span class="sd">        Given a differential (a pair of input and output differences),</span>
+<span class="sd">        the differential probability is the fraction of input pairs</span>
+<span class="sd">        with the given input difference leading to output pairs</span>
+<span class="sd">        with the given output difference.</span>
+
+<span class="sd">        This method returns an approximation of the weight of the</span>
+<span class="sd">        differential probability by sampling a given number</span>
+<span class="sd">        of input pairs.</span>
+
+<span class="sd">        If no correct output pairs are found, `math.inf` is returned.</span>
+
+<span class="sd">            &gt;&gt;&gt; from arxpy.bitvector.core import Constant</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.differential.difference import XorDiff, RXDiff</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.differential.characteristic import BvCharacteristic</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.primitives.chaskey import ChaskeyPi</span>
+<span class="sd">            &gt;&gt;&gt; ChaskeyPi.set_rounds(1)</span>
+<span class="sd">            &gt;&gt;&gt; ch = BvCharacteristic(ChaskeyPi, XorDiff, [&quot;dv&quot; + str(i) for i in range(4)])</span>
+<span class="sd">            &gt;&gt;&gt; zero, one = XorDiff(Constant(0, 32)), XorDiff(Constant(1, 32))</span>
+<span class="sd">            &gt;&gt;&gt; ch.empirical_weight([zero, zero, zero, zero], [zero, zero, zero, zero], 100)</span>
+<span class="sd">            0.0</span>
+<span class="sd">            &gt;&gt;&gt; ch.empirical_weight([zero, zero, zero, zero], [one, one, one, one], 100)</span>
+<span class="sd">            inf</span>
+<span class="sd">            &gt;&gt;&gt; ch = BvCharacteristic(ChaskeyPi, RXDiff, [&quot;dv&quot; + str(i) for i in range(4)])</span>
+<span class="sd">            &gt;&gt;&gt; zero, one = RXDiff(Constant(0, 32)), RXDiff(Constant(1, 32))</span>
+<span class="sd">            &gt;&gt;&gt; 4 - 1 &lt;= ch.empirical_weight([zero]*4, [zero]*4, 3 * 2**6) &lt;= 8</span>
+<span class="sd">            True</span>
+<span class="sd">            &gt;&gt;&gt; ch.empirical_weight([zero]*4, [one]*4, 3 * 2**6)</span>
+<span class="sd">            inf</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_diff</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output_diff</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">difference</span><span class="o">.</span><span class="n">Difference</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">difference</span><span class="o">.</span><span class="n">Difference</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">output_diff</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">output_diff</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_diff</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_diff</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;input_vars&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_diff</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">context</span><span class="o">.</span><span class="n">Simplification</span><span class="p">(</span><span class="kc">False</span><span class="p">):</span>
+            <span class="n">input_widths</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="o">.</span><span class="n">width</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">pair_samples</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="o">**</span><span class="nb">sum</span><span class="p">(</span><span class="n">input_widths</span><span class="p">):</span>
+                <span class="n">iterators</span> <span class="o">=</span> <span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">input_widths</span><span class="p">]</span>
+                <span class="n">list_pairs</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">iterators</span><span class="p">):</span>
+                    <span class="n">pt</span> <span class="o">=</span> <span class="p">[</span><span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="n">x_i</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">x_i</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">input_widths</span><span class="p">)]</span>
+                    <span class="n">other_pt</span> <span class="o">=</span> <span class="p">[</span><span class="n">diff</span><span class="o">.</span><span class="n">get_pair_element</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">diff</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)]</span>
+                    <span class="n">list_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">pt</span><span class="p">,</span> <span class="n">other_pt</span><span class="p">])</span>
+                <span class="n">pair_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_pairs</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="n">pair_samples</span> <span class="o">==</span> <span class="mi">2</span><span class="o">**</span><span class="nb">sum</span><span class="p">(</span><span class="n">input_widths</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">list_pairs</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pair_samples</span><span class="p">):</span>
+                    <span class="n">pt</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">other_pt</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">diff</span> <span class="ow">in</span> <span class="n">input_diff</span><span class="p">:</span>
+                        <span class="n">random_int</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">diff</span><span class="o">.</span><span class="n">val</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+                        <span class="n">random_bv</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="n">random_int</span><span class="p">,</span> <span class="n">diff</span><span class="o">.</span><span class="n">val</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+                        <span class="n">pt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random_bv</span><span class="p">)</span>
+                        <span class="n">other_pt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff</span><span class="o">.</span><span class="n">get_pair_element</span><span class="p">(</span><span class="n">random_bv</span><span class="p">))</span>
+                    <span class="n">list_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">pt</span><span class="p">,</span> <span class="n">other_pt</span><span class="p">])</span>
+
+            <span class="n">correct_pairs</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">for</span> <span class="n">index_input</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pair_samples</span><span class="p">):</span>
+                <span class="n">pt</span><span class="p">,</span> <span class="n">other_pt</span> <span class="o">=</span> <span class="n">list_pairs</span><span class="p">[</span><span class="n">index_input</span><span class="p">]</span>
+                <span class="n">ct</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">pt</span><span class="p">)</span>
+                <span class="n">other_ct</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">other_pt</span><span class="p">)</span>
+
+                <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ct</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">other_ct</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">other_ct</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">diff</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">output_diff</span><span class="p">):</span>
+                    <span class="c1"># noinspection PyUnresolvedReferences</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">diff_type</span><span class="o">.</span><span class="n">from_pair</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">other_ct</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">!=</span> <span class="n">diff</span><span class="p">:</span>
+                        <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">correct_pairs</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">correct_pairs</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">weight</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">weight</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">correct_pairs</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">pair_samples</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">weight</span></div>
+
+    <span class="k">def</span> <span class="nf">_empirical_weight_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cipher</span><span class="p">,</span> <span class="n">input_diff</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">,</span> <span class="n">pair_samples</span><span class="p">,</span> <span class="n">key_samples</span><span class="p">,</span>
+                                       <span class="n">precision</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_output_diff</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># this function is not part of SingleKeyCh since it must be accessible</span>
+        <span class="c1"># for the encryption characteristic of RelatedKeyCh (which is a</span>
+        <span class="c1"># plain BvCharacteristic)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_diff</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output_diff</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">difference</span><span class="o">.</span><span class="n">Difference</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">difference</span><span class="o">.</span><span class="n">Difference</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">output_diff</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">output_diff</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_diff</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_diff</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;input_vars&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_diff</span><span class="p">)</span>
+
+        <span class="n">old_round_keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">round_keys</span>
+
+        <span class="n">empirical_weights</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">rk_output_diff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">class</span> <span class="nc">RelatedFunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">):</span>
+                <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">RelatedFunc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span>
+
+        <span class="k">with</span> <span class="n">context</span><span class="o">.</span><span class="n">Simplification</span><span class="p">(</span><span class="kc">False</span><span class="p">):</span>
+            <span class="n">input_widths</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="o">.</span><span class="n">width</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">pair_samples</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="o">**</span><span class="nb">sum</span><span class="p">(</span><span class="n">input_widths</span><span class="p">):</span>
+                <span class="n">iterators</span> <span class="o">=</span> <span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">input_widths</span><span class="p">]</span>
+                <span class="n">list_pairs</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">iterators</span><span class="p">):</span>
+                    <span class="n">pt</span> <span class="o">=</span> <span class="p">[</span><span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="n">x_i</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">x_i</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">input_widths</span><span class="p">)]</span>
+                    <span class="n">other_pt</span> <span class="o">=</span> <span class="p">[</span><span class="n">diff</span><span class="o">.</span><span class="n">get_pair_element</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">diff</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)]</span>
+                    <span class="n">list_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">pt</span><span class="p">,</span> <span class="n">other_pt</span><span class="p">])</span>
+                <span class="n">pair_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_pairs</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="n">pair_samples</span> <span class="o">==</span> <span class="mi">2</span><span class="o">**</span><span class="nb">sum</span><span class="p">(</span><span class="n">input_widths</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">list_pairs</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pair_samples</span><span class="p">):</span>
+                    <span class="n">pt</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">other_pt</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">diff</span> <span class="ow">in</span> <span class="n">input_diff</span><span class="p">:</span>
+                        <span class="n">random_int</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">diff</span><span class="o">.</span><span class="n">val</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+                        <span class="n">random_bv</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="n">random_int</span><span class="p">,</span> <span class="n">diff</span><span class="o">.</span><span class="n">val</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+                        <span class="n">pt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random_bv</span><span class="p">)</span>
+                        <span class="n">other_pt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff</span><span class="o">.</span><span class="n">get_pair_element</span><span class="p">(</span><span class="n">random_bv</span><span class="p">))</span>
+                    <span class="n">list_pairs</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">pt</span><span class="p">,</span> <span class="n">other_pt</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">key_samples</span><span class="p">):</span>
+                <span class="n">master_key</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">width</span> <span class="ow">in</span> <span class="n">cipher</span><span class="o">.</span><span class="n">key_schedule</span><span class="o">.</span><span class="n">input_widths</span><span class="p">:</span>
+                    <span class="n">master_key</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">width</span><span class="p">),</span> <span class="n">width</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">round_keys</span> <span class="o">=</span> <span class="n">cipher</span><span class="o">.</span><span class="n">key_schedule</span><span class="p">(</span><span class="o">*</span><span class="n">master_key</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">rk</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">)</span> <span class="k">for</span> <span class="n">rk</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">round_keys</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">round_keys</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">rk_output_diff</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">RelatedFunc</span><span class="o">.</span><span class="n">round_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">get_pair_element</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">round_keys</span><span class="p">,</span> <span class="n">rk_output_diff</span><span class="p">)]</span>
+                    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">rk</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">)</span> <span class="k">for</span> <span class="n">rk</span> <span class="ow">in</span> <span class="n">RelatedFunc</span><span class="o">.</span><span class="n">round_keys</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">RelatedFunc</span><span class="o">.</span><span class="n">round_keys</span><span class="p">)</span>
+
+                <span class="n">correct_pairs</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="k">for</span> <span class="n">index_input</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pair_samples</span><span class="p">):</span>
+                    <span class="n">pt</span><span class="p">,</span> <span class="n">other_pt</span> <span class="o">=</span> <span class="n">list_pairs</span><span class="p">[</span><span class="n">index_input</span><span class="p">]</span>
+                    <span class="n">ct</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">pt</span><span class="p">)</span>
+                    <span class="n">other_ct</span> <span class="o">=</span> <span class="n">RelatedFunc</span><span class="p">(</span><span class="o">*</span><span class="n">other_pt</span><span class="p">)</span>
+
+                    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ct</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
+                    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">other_ct</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">other_ct</span><span class="p">)</span>
+
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">diff</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">output_diff</span><span class="p">):</span>
+                        <span class="c1"># noinspection PyUnresolvedReferences</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">diff_type</span><span class="o">.</span><span class="n">from_pair</span><span class="p">(</span><span class="n">ct</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">other_ct</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">!=</span> <span class="n">diff</span><span class="p">:</span>
+                            <span class="k">break</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">correct_pairs</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="k">if</span> <span class="n">correct_pairs</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">weight</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">weight</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">correct_pairs</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">pair_samples</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+                <span class="c1"># weight = float((&quot;{0:.&quot;+str(precision)+&quot;f}&quot;).format(weight))</span>
+                <span class="n">weight</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="n">precision</span><span class="p">)</span>
+                <span class="n">empirical_weights</span><span class="p">[</span><span class="n">weight</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">round_keys</span> <span class="o">=</span> <span class="n">old_round_keys</span>
+
+        <span class="k">return</span> <span class="n">empirical_weights</span>
+
+<div class="viewcode-block" id="BvCharacteristic.signature"><a class="viewcode-back" href="../../../arxpy.differential.characteristic.html#arxpy.differential.characteristic.BvCharacteristic.signature">[docs]</a>    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ch_signature_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the signature of the characteristic.</span>
+
+<span class="sd">        The signature is a &quot;hash&quot; of the characteristic used for comparing.</span>
+
+<span class="sd">        For the type of the signature, see `ChSignatureType`.</span>
+
+<span class="sd">            &gt;&gt;&gt; from arxpy.bitvector.core import Variable</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.differential.difference import XorDiff</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.differential.characteristic import BvCharacteristic, ChSignatureType</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.primitives.primitives import BvFunction</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.primitives.chaskey import ChaskeyPi</span>
+<span class="sd">            &gt;&gt;&gt; issubclass(ChaskeyPi, BvFunction)</span>
+<span class="sd">            True</span>
+<span class="sd">            &gt;&gt;&gt; ChaskeyPi.set_rounds(1)</span>
+<span class="sd">            &gt;&gt;&gt; ch = BvCharacteristic(ChaskeyPi, XorDiff, [&quot;dv0&quot;, &quot;dv1&quot;, &quot;dv2&quot;, &quot;dv3&quot;])</span>
+<span class="sd">            &gt;&gt;&gt; ch.signature(ChSignatureType.Full)</span>
+<span class="sd">            [dv0, dv1, dv2, dv3, d0, d4, d7, d10]</span>
+<span class="sd">            &gt;&gt;&gt; ch.signature(ChSignatureType.InputOutput)</span>
+<span class="sd">            [dv0, dv1, dv2, dv3, d7, d12, d13, d9]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ch_signature_type</span> <span class="o">==</span> <span class="n">ChSignatureType</span><span class="o">.</span><span class="n">Full</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonlinear_diffs</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">ch_signature_type</span> <span class="o">==</span> <span class="n">ChSignatureType</span><span class="o">.</span><span class="n">InputOutput</span><span class="p">:</span>
+            <span class="c1"># sig = [d for d in self.input_diff]</span>
+            <span class="n">sig_var</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">out_diff</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_diff</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">aux_var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_var2diff</span><span class="p">[</span><span class="n">out_diff</span><span class="o">.</span><span class="n">val</span><span class="p">]</span><span class="o">.</span><span class="n">val</span><span class="o">.</span><span class="n">atoms</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">Variable</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">aux_var</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sig_var</span><span class="p">:</span>
+                        <span class="c1"># sig.append(out_diff)</span>
+                        <span class="n">sig_var</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out_diff</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
+                        <span class="k">break</span>
+
+            <span class="k">return</span> <span class="n">sig_var</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid ch_signature_type: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ch_signature_type</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dict_ch</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;ssa&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssa</span><span class="p">,</span>
+            <span class="s2">&quot;input_diff&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">,</span>
+            <span class="s2">&quot;output_diff&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_diff</span><span class="p">,</span>
+            <span class="s2">&quot;nonlinear_diffs&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonlinear_diffs</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">dict_ch</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_dict</span><span class="p">(),</span> <span class="n">width</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">compact</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SingleKeyCh"><a class="viewcode-back" href="../../../arxpy.differential.characteristic.html#arxpy.differential.characteristic.SingleKeyCh">[docs]</a><span class="k">class</span> <span class="nc">SingleKeyCh</span><span class="p">(</span><span class="n">BvCharacteristic</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent single-key characteristics of block ciphers.</span>
+
+<span class="sd">    A single-key characteristic of a `Cipher` is a `BvCharacteristic`</span>
+<span class="sd">    over the `Encryption` function of the cipher.</span>
+
+<span class="sd">    The plaintext differences start with the prefix ``&quot;dp&quot;``</span>
+<span class="sd">    and the non-linear differences start with the prefix ``&quot;dx&quot;``.</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.core import Variable</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.differential.difference import XorDiff</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.differential.characteristic import SingleKeyCh</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.primitives.primitives import Cipher</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.primitives import speck</span>
+<span class="sd">        &gt;&gt;&gt; Speck32 = speck.get_Speck_instance(speck.SpeckInstance.speck_32_64)</span>
+<span class="sd">        &gt;&gt;&gt; issubclass(Speck32, Cipher)</span>
+<span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; Speck32.set_rounds(1)</span>
+<span class="sd">        &gt;&gt;&gt; ch = SingleKeyCh(Speck32, XorDiff)</span>
+<span class="sd">        &gt;&gt;&gt; ch .ssa  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        {&#39;input_vars&#39;: (dp0, dp1), &#39;output_vars&#39;: (dx2, dx4),</span>
+<span class="sd">        &#39;assignments&#39;: ((dx0, dp0 &gt;&gt;&gt; 7), (dx1, dp1 + dx0), (dx2, dx1 ^ k0), (dx3, dp1 &lt;&lt;&lt; 2), (dx4, dx2 ^ dx3))}</span>
+<span class="sd">        &gt;&gt;&gt; ch.input_diff</span>
+<span class="sd">        (XorDiff(dp0), XorDiff(dp1))</span>
+<span class="sd">        &gt;&gt;&gt; ch.nonlinear_diffs</span>
+<span class="sd">        OrderedDict([(XorDiff(dx1), XDA(XorDiff(dp1), XorDiff(dp0 &gt;&gt;&gt; 7)))])</span>
+<span class="sd">        &gt;&gt;&gt; ch.output_diff</span>
+<span class="sd">        [[XorDiff(dx2), XorDiff(dx1)], [XorDiff(dx4), XorDiff(dx1 ^ (dp1 &lt;&lt;&lt; 2))]]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bv_cipher</span><span class="p">,</span> <span class="n">diff_type</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">bv_cipher</span><span class="p">,</span> <span class="n">primitives</span><span class="o">.</span><span class="n">Cipher</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">diff_type</span><span class="p">,</span> <span class="n">difference</span><span class="o">.</span><span class="n">Difference</span><span class="p">)</span>
+
+        <span class="n">rk</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">width</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bv_cipher</span><span class="o">.</span><span class="n">key_schedule</span><span class="o">.</span><span class="n">output_widths</span><span class="p">):</span>
+            <span class="n">rk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;k&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">width</span><span class="p">))</span>
+
+        <span class="k">class</span> <span class="nc">Encryption</span><span class="p">(</span><span class="n">bv_cipher</span><span class="o">.</span><span class="n">encryption</span><span class="p">):</span>
+            <span class="n">round_keys</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">rk</span><span class="p">)</span>
+
+        <span class="n">func</span> <span class="o">=</span> <span class="n">Encryption</span>
+        <span class="n">num_inputs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">input_widths</span><span class="p">)</span>
+        <span class="n">input_diff_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;dp&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_inputs</span><span class="p">)]</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;dx&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">diff_type</span><span class="p">,</span> <span class="n">input_diff_names</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cipher</span> <span class="o">=</span> <span class="n">bv_cipher</span>
+
+<div class="viewcode-block" id="SingleKeyCh.empirical_weight"><a class="viewcode-back" href="../../../arxpy.differential.characteristic.html#arxpy.differential.characteristic.SingleKeyCh.empirical_weight">[docs]</a>    <span class="k">def</span> <span class="nf">empirical_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_diff</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">,</span> <span class="n">pair_samples</span><span class="p">,</span> <span class="n">key_samples</span><span class="p">,</span>
+                         <span class="n">precision</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rk_diffs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the empirical weight distribution of a given differential.</span>
+
+<span class="sd">        This method returns a `collections.Counter` storing the distribution of</span>
+<span class="sd">        differential probability weights over the given number of keys.</span>
+
+<span class="sd">        The weights are rounded to the given number of precision</span>
+<span class="sd">        digits after the decimal point.</span>
+
+<span class="sd">        See also `BvCharacteristic.empirical_weight`.</span>
+
+<span class="sd">            &gt;&gt;&gt; from arxpy.bitvector.core import Constant</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.differential.difference import XorDiff</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.differential.characteristic import SingleKeyCh</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.primitives import speck</span>
+<span class="sd">            &gt;&gt;&gt; Speck32 = speck.get_Speck_instance(speck.SpeckInstance.speck_32_64)</span>
+<span class="sd">            &gt;&gt;&gt; Speck32.set_rounds(1)</span>
+<span class="sd">            &gt;&gt;&gt; ch = SingleKeyCh(Speck32, XorDiff)</span>
+<span class="sd">            &gt;&gt;&gt; zero, one = XorDiff(Constant(0, 16)), XorDiff(Constant(1, 16))</span>
+<span class="sd">            &gt;&gt;&gt; ch.empirical_weight([zero, zero], [zero, zero], 100, 10)</span>
+<span class="sd">            Counter({0.0: 10})</span>
+<span class="sd">            &gt;&gt;&gt; ch.empirical_weight([zero, zero], [one, one], 100, 10)</span>
+<span class="sd">            Counter({inf: 10})</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_empirical_weight_distribution</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cipher</span><span class="p">,</span> <span class="n">input_diff</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">,</span> <span class="n">pair_samples</span><span class="p">,</span> <span class="n">key_samples</span><span class="p">,</span>
+                                                   <span class="n">precision</span><span class="p">,</span> <span class="n">rk_diffs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="RelatedKeyCh"><a class="viewcode-back" href="../../../arxpy.differential.characteristic.html#arxpy.differential.characteristic.RelatedKeyCh">[docs]</a><span class="k">class</span> <span class="nc">RelatedKeyCh</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent related-key characteristics of block ciphers.</span>
+
+<span class="sd">    A related-key characteristic of a `Cipher` is a pair `BvCharacteristic`,</span>
+<span class="sd">    one over the `KeySchedule` of the cipher, and another one over the</span>
+<span class="sd">    the `Encryption` function of the cipher, where the output differences</span>
+<span class="sd">    of the key schedule characteristic are used as round key differences</span>
+<span class="sd">    in the encryption characteristic.</span>
+
+<span class="sd">    The master key differences start with the prefix ``&quot;dmk&quot;``,</span>
+<span class="sd">    the round key differences start with the prefix ``&quot;dk&quot;``,</span>
+<span class="sd">    the plaintext differences start with the prefix ``&quot;dp&quot;``</span>
+<span class="sd">    and the non-linear differences start with the prefix ``&quot;dx&quot;``.</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.core import Variable</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.differential.difference import XorDiff</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.differential.characteristic import RelatedKeyCh</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.primitives.primitives import Cipher</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.primitives.lea import LeaCipher</span>
+<span class="sd">        &gt;&gt;&gt; issubclass(LeaCipher, Cipher)</span>
+<span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; LeaCipher.set_rounds(1)</span>
+<span class="sd">        &gt;&gt;&gt; rkch = RelatedKeyCh(LeaCipher, XorDiff)</span>
+<span class="sd">        &gt;&gt;&gt; rkch .key_schedule_ch.ssa  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        {&#39;input_vars&#39;: (dmk0, dmk1, dmk2, dmk3),</span>
+<span class="sd">        &#39;output_vars&#39;: (dk1, dk3, dk5, dk3, dk7, dk3),</span>
+<span class="sd">        &#39;assignments&#39;: ((dk0, 0xc3efe9db + dmk0), (dk1, dk0 &lt;&lt;&lt; 1), (dk2, 0x87dfd3b7 + dmk1), (dk3, dk2 &lt;&lt;&lt; 3),</span>
+<span class="sd">        (dk4, 0x0fbfa76f + dmk2), (dk5, dk4 &lt;&lt;&lt; 6), (dk6, 0x1f7f4ede + dmk3), (dk7, dk6 &lt;&lt;&lt; 11))}</span>
+<span class="sd">        &gt;&gt;&gt; rkch.key_schedule_ch.input_diff</span>
+<span class="sd">        (XorDiff(dmk0), XorDiff(dmk1), XorDiff(dmk2), XorDiff(dmk3))</span>
+<span class="sd">        &gt;&gt;&gt; rkch.key_schedule_ch.output_diff  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        [[XorDiff(dk1), XorDiff(dk0 &lt;&lt;&lt; 1)], [XorDiff(dk3), XorDiff(dk2 &lt;&lt;&lt; 3)],</span>
+<span class="sd">        [XorDiff(dk5), XorDiff(dk4 &lt;&lt;&lt; 6)], [XorDiff(dk3), XorDiff(dk2 &lt;&lt;&lt; 3)],</span>
+<span class="sd">        [XorDiff(dk7), XorDiff(dk6 &lt;&lt;&lt; 11)], [XorDiff(dk3), XorDiff(dk2 &lt;&lt;&lt; 3)]]</span>
+<span class="sd">        &gt;&gt;&gt; rkch.key_schedule_ch.nonlinear_diffs  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        OrderedDict([(XorDiff(dk0), XDCA_0xc3efe9db(XorDiff(dmk0))),</span>
+<span class="sd">        (XorDiff(dk2), XDCA_0x87dfd3b7(XorDiff(dmk1))),</span>
+<span class="sd">        (XorDiff(dk4), XDCA_0x0fbfa76f(XorDiff(dmk2))),</span>
+<span class="sd">        (XorDiff(dk6), XDCA_0x1f7f4ede(XorDiff(dmk3)))])</span>
+<span class="sd">        &gt;&gt;&gt; rkch.encryption_ch.ssa  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        {&#39;input_vars&#39;: (dp0, dp1, dp2, dp3),</span>
+<span class="sd">        &#39;output_vars&#39;: (dx3, dx7, dx11, dp0),</span>
+<span class="sd">        &#39;assignments&#39;: ((dx0, dk1 ^ dp0), (dx1, dk3 ^ dp1), (dx2, dx0 + dx1), (dx3, dx2 &lt;&lt;&lt; 9),</span>
+<span class="sd">        (dx4, dk5 ^ dp1), (dx5, dk3 ^ dp2), (dx6, dx4 + dx5), (dx7, dx6 &gt;&gt;&gt; 5), (dx8, dk7 ^ dp2),</span>
+<span class="sd">        (dx9, dk3 ^ dp3), (dx10, dx8 + dx9), (dx11, dx10 &gt;&gt;&gt; 3))}</span>
+<span class="sd">        &gt;&gt;&gt; rkch.encryption_ch.input_diff</span>
+<span class="sd">        (XorDiff(dp0), XorDiff(dp1), XorDiff(dp2), XorDiff(dp3))</span>
+<span class="sd">        &gt;&gt;&gt; rkch.encryption_ch.output_diff # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        [[XorDiff(dx3), XorDiff(dx2 &lt;&lt;&lt; 9)], [XorDiff(dx7), XorDiff(dx6 &gt;&gt;&gt; 5)],</span>
+<span class="sd">        [XorDiff(dx11), XorDiff(dx10 &gt;&gt;&gt; 3)], [XorDiff(dp0), XorDiff(dp0)]]</span>
+<span class="sd">        &gt;&gt;&gt; rkch.encryption_ch.nonlinear_diffs  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        OrderedDict([(XorDiff(dx2), XDA(XorDiff(dp0 ^ (dk0 &lt;&lt;&lt; 1)), XorDiff(dp1 ^ (dk2 &lt;&lt;&lt; 3)))),</span>
+<span class="sd">        (XorDiff(dx6), XDA(XorDiff(dp1 ^ (dk4 &lt;&lt;&lt; 6)), XorDiff(dp2 ^ (dk2 &lt;&lt;&lt; 3)))),</span>
+<span class="sd">        (XorDiff(dx10), XDA(XorDiff(dp2 ^ (dk6 &lt;&lt;&lt; 11)), XorDiff(dp3 ^ (dk2 &lt;&lt;&lt; 3))))])</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        key_schedule_ch: the `BvCharacteristic` over the key schedule</span>
+<span class="sd">        encryption_ch: the `BvCharacteristic` over the encryption function</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bv_cipher</span><span class="p">,</span> <span class="n">diff_type</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">bv_cipher</span><span class="p">,</span> <span class="n">primitives</span><span class="o">.</span><span class="n">Cipher</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">diff_type</span><span class="p">,</span> <span class="n">difference</span><span class="o">.</span><span class="n">Difference</span><span class="p">)</span>
+
+        <span class="n">func</span> <span class="o">=</span> <span class="n">bv_cipher</span><span class="o">.</span><span class="n">key_schedule</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;dk&quot;</span>
+        <span class="n">input_diff_names</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="s2">&quot;dmk&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">input_widths</span><span class="p">))])</span>
+        <span class="n">ks_ch</span> <span class="o">=</span> <span class="n">BvCharacteristic</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">diff_type</span><span class="p">,</span> <span class="n">input_diff_names</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+
+        <span class="k">class</span> <span class="nc">Encryption</span><span class="p">(</span><span class="n">bv_cipher</span><span class="o">.</span><span class="n">encryption</span><span class="p">):</span>
+            <span class="n">round_keys</span> <span class="o">=</span> <span class="n">ks_ch</span><span class="o">.</span><span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">]</span>
+
+        <span class="n">func</span> <span class="o">=</span> <span class="n">Encryption</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;dx&quot;</span>
+        <span class="n">input_diff_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;dp&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">input_widths</span><span class="p">))]</span>
+        <span class="n">round_key_diff</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">diff</span> <span class="ow">in</span> <span class="n">ks_ch</span><span class="o">.</span><span class="n">output_diff</span><span class="p">:</span>
+            <span class="n">round_key_diff</span><span class="p">[</span><span class="n">var</span><span class="o">.</span><span class="n">val</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff</span>
+        <span class="n">encryption_ch</span> <span class="o">=</span> <span class="n">BvCharacteristic</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">diff_type</span><span class="p">,</span> <span class="n">input_diff_names</span><span class="p">,</span>
+                                         <span class="n">prefix</span><span class="p">,</span> <span class="n">round_key_diff</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">diff_type</span> <span class="o">=</span> <span class="n">diff_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_schedule_ch</span> <span class="o">=</span> <span class="n">ks_ch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encryption_ch</span> <span class="o">=</span> <span class="n">encryption_ch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cipher</span> <span class="o">=</span> <span class="n">bv_cipher</span>
+
+<div class="viewcode-block" id="RelatedKeyCh.empirical_weight"><a class="viewcode-back" href="../../../arxpy.differential.characteristic.html#arxpy.differential.characteristic.RelatedKeyCh.empirical_weight">[docs]</a>    <span class="k">def</span> <span class="nf">empirical_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_input_diff</span><span class="p">,</span> <span class="n">key_output_diff</span><span class="p">,</span> <span class="n">key_samples</span><span class="p">,</span>
+                         <span class="n">enc_input_diff</span><span class="p">,</span> <span class="n">enc_output_diff</span><span class="p">,</span> <span class="n">enc_samples</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the empirical weight of a given differential for multiple keys.</span>
+
+<span class="sd">        This method returns the differential probability weight for the</span>
+<span class="sd">        key schedule characteristic (see `BvCharacteristic.empirical_weight`)</span>
+<span class="sd">        and the `collections.Counter` storing the distribution of weights for the encryption</span>
+<span class="sd">        characteristic (see `SingleKeyCh.empirical_weight`).</span>
+
+<span class="sd">            &gt;&gt;&gt; from arxpy.bitvector.core import Variable, Constant</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.differential.difference import XorDiff</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.differential.characteristic import RelatedKeyCh</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.primitives.lea import LeaCipher</span>
+<span class="sd">            &gt;&gt;&gt; LeaCipher.set_rounds(1)</span>
+<span class="sd">            &gt;&gt;&gt; rkch = RelatedKeyCh(LeaCipher, XorDiff)</span>
+<span class="sd">            &gt;&gt;&gt; zero, one = XorDiff(Constant(0, 32)), XorDiff(Constant(1, 32))</span>
+<span class="sd">            &gt;&gt;&gt; kid, kod = [zero]*4, [zero]*6</span>
+<span class="sd">            &gt;&gt;&gt; eid, eod = [zero]*4, [zero]*4</span>
+<span class="sd">            &gt;&gt;&gt; rkch.empirical_weight(kid, kod, 10, eid, eod, 100)</span>
+<span class="sd">            (0.0, Counter({0.0: 10}))</span>
+<span class="sd">            &gt;&gt;&gt; kid, kod = [zero]*4, [one]*6</span>
+<span class="sd">            &gt;&gt;&gt; eid, eod = [zero]*4, [one]*4</span>
+<span class="sd">            &gt;&gt;&gt; rkch.empirical_weight(kid, kod, 10, eid, eod, 100)</span>
+<span class="sd">            (inf, Counter({inf: 10}))</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">key_weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_schedule_ch</span><span class="o">.</span><span class="n">empirical_weight</span><span class="p">(</span><span class="n">key_input_diff</span><span class="p">,</span> <span class="n">key_output_diff</span><span class="p">,</span> <span class="n">key_samples</span><span class="p">)</span>
+        <span class="c1"># noinspection PyProtectedMember</span>
+        <span class="n">enc_counter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encryption_ch</span><span class="o">.</span><span class="n">_empirical_weight_distribution</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cipher</span><span class="p">,</span>
+                                                                        <span class="n">enc_input_diff</span><span class="p">,</span> <span class="n">enc_output_diff</span><span class="p">,</span> <span class="n">enc_samples</span><span class="p">,</span>
+                                                                        <span class="n">key_samples</span><span class="p">,</span> <span class="n">precision</span><span class="p">,</span> <span class="n">key_output_diff</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">key_weight</span><span class="p">,</span> <span class="n">enc_counter</span></div>
+
+<div class="viewcode-block" id="RelatedKeyCh.signature"><a class="viewcode-back" href="../../../arxpy.differential.characteristic.html#arxpy.differential.characteristic.RelatedKeyCh.signature">[docs]</a>    <span class="k">def</span> <span class="nf">signature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ch_signature_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the signature of the related-key characteristic.</span>
+
+<span class="sd">        The signature of a related-key characteristic is the</span>
+<span class="sd">        concatenation of the key schedule and encryption signatures.</span>
+
+<span class="sd">        See also `BvCharacteristic.signature`.</span>
+
+<span class="sd">            &gt;&gt;&gt; from arxpy.bitvector.core import Variable</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.differential.difference import XorDiff</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.differential.characteristic import RelatedKeyCh, ChSignatureType</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.primitives.primitives import Cipher</span>
+<span class="sd">            &gt;&gt;&gt; from arxpy.primitives.lea import LeaCipher</span>
+<span class="sd">            &gt;&gt;&gt; LeaCipher.set_rounds(1)</span>
+<span class="sd">            &gt;&gt;&gt; rkch = RelatedKeyCh(LeaCipher, XorDiff)</span>
+<span class="sd">            &gt;&gt;&gt; rkch.signature(ChSignatureType.Full)  # doctest:+NORMALIZE_WHITESPACE</span>
+<span class="sd">            [dmk0, dmk1, dmk2, dmk3, dk0, dk2, dk4, dk6, dp0, dp1, dp2, dp3, dx2, dx6, dx10]</span>
+<span class="sd">            &gt;&gt;&gt; rkch.signature(ChSignatureType.InputOutput)  # doctest:+NORMALIZE_WHITESPACE</span>
+<span class="sd">            [dmk0, dmk1, dmk2, dmk3, dk1, dk3, dk5, dk3, dk7, dk3, dp0, dp1, dp2, dp3, dx3, dx7, dx11]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_schedule_ch</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">ch_signature_type</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">encryption_ch</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">ch_signature_type</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dict_ch</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;key_schedule_ch&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_schedule_ch</span><span class="o">.</span><span class="n">_to_dict</span><span class="p">(),</span>
+            <span class="s2">&quot;encryption_ch&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">encryption_ch</span><span class="o">.</span><span class="n">_to_dict</span><span class="p">(),</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">dict_ch</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_dict</span><span class="p">(),</span> <span class="n">width</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">compact</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

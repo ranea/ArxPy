@@ -1,0 +1,420 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.primitives.primitives &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html#subpackages">Subpackages</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>arxpy.primitives.primitives</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for arxpy.primitives.primitives</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Represent symmetric primitives.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+
+<span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">context</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">core</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">operation</span>
+
+
+<div class="viewcode-block" id="BvFunction"><a class="viewcode-back" href="../../../arxpy.primitives.primitives.html#arxpy.primitives.primitives.BvFunction">[docs]</a><span class="k">class</span> <span class="nc">BvFunction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent (iterated) fixed-width bit-vector functions.</span>
+
+<span class="sd">    A `BvFunction` takes fixed-width `Constant` operands and return a</span>
+<span class="sd">    tuple of fixed-width `Constant`. An iterated bit-vector function</span>
+<span class="sd">    contains a subroutine that is iterated a certain number of *rounds*,</span>
+<span class="sd">    which can be changed using `set_rounds`.</span>
+
+<span class="sd">    Similar to `Operation`, `BvFunction` is evaluated</span>
+<span class="sd">    using the operator ``()`` and provides *Automatic Constant Conversion*.</span>
+<span class="sd">    Note that `BvFunction` only accepts `Constant` operands and</span>
+<span class="sd">    always return a tuple, as opposed to `Operation` that accepts</span>
+<span class="sd">    `Term` and scalar operands and returns a single `Term`.</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.primitives.primitives import BvFunction</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.primitives.chaskey import ChaskeyPi</span>
+<span class="sd">        &gt;&gt;&gt; issubclass(ChaskeyPi, BvFunction)</span>
+<span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; ChaskeyPi(0, 0, 0, 0)  # automatic conversion from int to Constant</span>
+<span class="sd">        (0x00000000, 0x00000000, 0x00000000, 0x00000000)</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        input_widths: a list containing the widths of the inputs</span>
+<span class="sd">        output_widths: a list containing the widths of the outputs</span>
+<span class="sd">        rounds: the number of iterations</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">input_widths</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">output_widths</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">rounds</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">input_widths</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> requires </span><span class="si">{}</span><span class="s2"> inputs but </span><span class="si">{}</span><span class="s2"> were given: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">input_widths</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">),</span> <span class="n">args</span><span class="p">))</span>
+        <span class="n">newargs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">arg</span><span class="p">,</span> <span class="n">width</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">input_widths</span><span class="p">):</span>
+            <span class="n">newargs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">bitvectify</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">newargs</span>
+
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">)</span> <span class="ow">or</span> \
+                <span class="n">options</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;symbolic_inputs&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;expected bit-vector constant arguments&quot;</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">output_widths</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">width</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">output_widths</span><span class="p">):</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">bitvectify</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BvFunction.eval"><a class="viewcode-back" href="../../../arxpy.primitives.primitives.html#arxpy.primitives.primitives.BvFunction.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Evaluate the function (internal method).&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;subclasses need to override this method&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BvFunction.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.primitives.html#arxpy.primitives.primitives.BvFunction.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Change the number of rounds and adjust the input/output widths.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;subclasses need to override this method&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># noinspection PyArgumentList</span>
+<div class="viewcode-block" id="BvFunction.ssa"><a class="viewcode-back" href="../../../arxpy.primitives.primitives.html#arxpy.primitives.primitives.BvFunction.ssa">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">ssa</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">input_names</span><span class="p">,</span> <span class="n">id_prefix</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a static single assignment program representing the function.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input_names: the names  for the input variables</span>
+<span class="sd">            id_prefix: the prefix to denote the intermediate variables</span>
+
+<span class="sd">        Return:</span>
+<span class="sd">            : a dictionary with three keys</span>
+
+<span class="sd">            - *input_vars*: a list of `Variable` representing the inputs</span>
+<span class="sd">            - *output_vars*: a list of `Variable` representing the outputs</span>
+<span class="sd">            - *assignments*: an ordered sequence of pairs</span>
+<span class="sd">              (`Variable`, `Operation`) representing each assignment</span>
+<span class="sd">              of the SSA program.</span>
+
+<span class="sd">        ::</span>
+
+<span class="sd">                &gt;&gt;&gt; from arxpy.primitives.chaskey import ChaskeyPi</span>
+<span class="sd">                &gt;&gt;&gt; ChaskeyPi.set_rounds(1)</span>
+<span class="sd">                &gt;&gt;&gt; ChaskeyPi.ssa([&quot;v0&quot;, &quot;v1&quot;, &quot;v2&quot;, &quot;v3&quot;], &quot;x&quot;)  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">                {&#39;input_vars&#39;: (v0, v1, v2, v3),</span>
+<span class="sd">                &#39;output_vars&#39;: (x7, x12, x13, x9),</span>
+<span class="sd">                &#39;assignments&#39;: ((x0, v0 + v1), (x1, v1 &lt;&lt;&lt; 5), (x2, x0 ^ x1), (x3, x0 &lt;&lt;&lt; 16), (x4, v2 + v3),</span>
+<span class="sd">                (x5, v3 &lt;&lt;&lt; 8), (x6, x4 ^ x5), (x7, x3 + x6), (x8, x6 &lt;&lt;&lt; 13), (x9, x7 ^ x8), (x10, x2 + x4),</span>
+<span class="sd">                (x11, x2 &lt;&lt;&lt; 7), (x12, x10 ^ x11), (x13, x10 &lt;&lt;&lt; 16))}</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">input_vars</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">width</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">input_names</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">input_widths</span><span class="p">):</span>
+            <span class="n">input_vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
+        <span class="n">input_vars</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">input_vars</span><span class="p">)</span>
+
+        <span class="n">table</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">MemoizationTable</span><span class="p">(</span><span class="n">id_prefix</span><span class="o">=</span><span class="n">id_prefix</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">context</span><span class="o">.</span><span class="n">Memoization</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
+            <span class="c1"># noinspection PyArgumentList</span>
+            <span class="n">output_vars</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">input_vars</span><span class="p">,</span> <span class="n">symbolic_inputs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">ssa_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;input_vars&quot;</span><span class="p">:</span> <span class="n">input_vars</span><span class="p">,</span>
+            <span class="s2">&quot;output_vars&quot;</span><span class="p">:</span> <span class="n">output_vars</span><span class="p">,</span>
+            <span class="s2">&quot;assignments&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">expr</span> <span class="ow">in</span> <span class="n">ssa_dict</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">expr</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">operation</span><span class="o">.</span><span class="n">Operation</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;assignment </span><span class="si">{}</span><span class="s2"> &lt;- </span><span class="si">{}</span><span class="s2"> was not decomposed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">expr</span><span class="p">))</span>
+
+        <span class="n">to_delete</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">vars_needed</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">output_vars</span><span class="p">:</span>
+            <span class="n">vars_needed</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">expr</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">ssa_dict</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">vars_needed</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">expr</span><span class="o">.</span><span class="n">atoms</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">Variable</span><span class="p">):</span>
+                    <span class="n">vars_needed</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">to_delete</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">var</span><span class="p">,</span> <span class="n">expr</span><span class="p">))</span>
+                <span class="c1"># raise ValueError(&quot;assignment {} &lt;- {} is redundant in \n{}&quot;.format(var, expr, ssa_dict))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_delete</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">warnings</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;removing redundant assignments </span><span class="si">{}</span><span class="s2"> in </span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">to_delete</span><span class="p">,</span> <span class="n">ssa_dict</span><span class="p">))</span>
+            <span class="n">ssa_dict</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ssa_dict</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">assignment</span> <span class="ow">in</span> <span class="n">to_delete</span><span class="p">:</span>
+                <span class="n">ssa_dict</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">assignment</span><span class="p">)</span>
+            <span class="n">ssa_dict</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">ssa_dict</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">ssa_dict</span></div></div>
+
+
+<span class="c1"># noinspection PyAbstractClass</span>
+<div class="viewcode-block" id="KeySchedule"><a class="viewcode-back" href="../../../arxpy.primitives.primitives.html#arxpy.primitives.primitives.KeySchedule">[docs]</a><span class="k">class</span> <span class="nc">KeySchedule</span><span class="p">(</span><span class="n">BvFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent key schedule functions.</span>
+
+<span class="sd">    A key schedule function is a `BvFunction` that takes</span>
+<span class="sd">    the masterkey as input and returns the round keys.</span>
+<span class="sd">    See `BvFunction` for more information.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<span class="c1"># noinspection PyAbstractClass</span>
+<div class="viewcode-block" id="Encryption"><a class="viewcode-back" href="../../../arxpy.primitives.primitives.html#arxpy.primitives.primitives.Encryption">[docs]</a><span class="k">class</span> <span class="nc">Encryption</span><span class="p">(</span><span class="n">BvFunction</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent encryption functions.</span>
+
+<span class="sd">    An encryption function is a `BvFunction` that takes</span>
+<span class="sd">    the plaintext as input and returns the ciphertext</span>
+<span class="sd">    for some fixed key.</span>
+<span class="sd">    See `BvFunction` for more information.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        round_keys: a list of `Term` representing the round keys</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">round_keys</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Cipher"><a class="viewcode-back" href="../../../arxpy.primitives.primitives.html#arxpy.primitives.primitives.Cipher">[docs]</a><span class="k">class</span> <span class="nc">Cipher</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent (iterated) block ciphers.</span>
+
+<span class="sd">    A (iterated) block cipher consists of `KeySchedule` function</span>
+<span class="sd">    that computes round keys from a master key and an `Encryption`</span>
+<span class="sd">    function that computes a ciphertext from a given plaintext</span>
+<span class="sd">    and the round keys.</span>
+
+<span class="sd">    Given a ``cipher``, it can be evaluated with the operator ``()``</span>
+<span class="sd">    by passing it as arguments the plaintext and the master key,</span>
+<span class="sd">    that is, ``cipher(plaintext, masterkey)`` returns the ciphertext.</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.primitives.primitives import Cipher</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.primitives import speck</span>
+<span class="sd">        &gt;&gt;&gt; Speck32 = speck.get_Speck_instance(speck.SpeckInstance.speck_32_64)</span>
+<span class="sd">        &gt;&gt;&gt; issubclass(Speck32, Cipher)</span>
+<span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; plaintext = [0, 0]</span>
+<span class="sd">        &gt;&gt;&gt; masterkey = [0, 0, 0, 0]</span>
+<span class="sd">        &gt;&gt;&gt; Speck32(plaintext, masterkey)</span>
+<span class="sd">        (0x2bb9, 0xc642)</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        key_schedule: the `KeySchedule` function of the cipher</span>
+<span class="sd">        encryption: the `Encryption` function of the cipher</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">key_schedule</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">encryption</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">rounds</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">_minimum_rounds</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># for testing</span>
+
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">plaintext</span><span class="p">,</span> <span class="n">masterkey</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">masterkey</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">&gt;=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_minimum_rounds</span>
+
+        <span class="n">previous_round_keys</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">encryption</span><span class="o">.</span><span class="n">round_keys</span>
+
+        <span class="n">round_keys</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">key_schedule</span><span class="p">(</span><span class="o">*</span><span class="n">masterkey</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">encryption</span><span class="o">.</span><span class="n">round_keys</span> <span class="o">=</span> <span class="n">round_keys</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">encryption</span><span class="p">(</span><span class="o">*</span><span class="n">plaintext</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">encryption</span><span class="o">.</span><span class="n">round_keys</span> <span class="o">=</span> <span class="n">previous_round_keys</span>
+
+        <span class="k">return</span> <span class="n">result</span>
+
+<div class="viewcode-block" id="Cipher.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.primitives.html#arxpy.primitives.primitives.Cipher.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Change the number of rounds and adjust the input/output widths.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;subclasses need to override this method&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

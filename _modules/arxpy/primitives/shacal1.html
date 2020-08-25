@@ -1,0 +1,519 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.primitives.shacal1 &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html#subpackages">Subpackages</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>arxpy.primitives.shacal1</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for arxpy.primitives.shacal1</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Shacal-1 cipher.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector.operation</span> <span class="kn">import</span> <span class="n">Operation</span><span class="p">,</span> <span class="n">BvComp</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector.extraop</span> <span class="kn">import</span> <span class="n">PopCount</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector.operation</span> <span class="kn">import</span> <span class="n">RotateLeft</span> <span class="k">as</span> <span class="n">ROL</span>
+
+<span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="kn">from</span> <span class="nn">arxpy.differential.derivative</span> <span class="kn">import</span> <span class="n">Derivative</span>
+
+<span class="kn">from</span> <span class="nn">arxpy.primitives.primitives</span> <span class="kn">import</span> <span class="n">KeySchedule</span><span class="p">,</span> <span class="n">Encryption</span><span class="p">,</span> <span class="n">Cipher</span>
+
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># number of key words, at least 4 for 128-bit, at most 16</span>
+<span class="k">assert</span> <span class="n">N</span> <span class="o">&gt;=</span> <span class="mi">4</span>
+<span class="c1"># N == 16, optimized for default single-key</span>
+<span class="c1"># N == 4, ref for linear related-key characteristics</span>
+<span class="c1"># N == 4, optimized for non-linear related-key characteristics</span>
+
+<span class="n">REFERENCE_VERSION</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># ctes added in the encryption</span>
+
+
+<span class="k">def</span> <span class="nf">get_constant</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x5A827999</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x6ED9EBA1</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x8F1BBCDC</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0xCA62C1D6</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Shacal1KeySchedule"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.Shacal1KeySchedule">[docs]</a><span class="k">class</span> <span class="nc">Shacal1KeySchedule</span><span class="p">(</span><span class="n">KeySchedule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Key schedule function.&quot;&quot;&quot;</span>
+
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">80</span>
+    <span class="n">input_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+    <span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">80</span> <span class="o">-</span> <span class="p">(</span><span class="mi">16</span> <span class="o">-</span> <span class="n">N</span><span class="p">))]</span>
+
+<div class="viewcode-block" id="Shacal1KeySchedule.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.Shacal1KeySchedule.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="n">new_rounds</span> <span class="o">-</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span></div>
+
+<div class="viewcode-block" id="Shacal1KeySchedule.eval"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.Shacal1KeySchedule.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">W</span><span class="p">):</span>  <span class="c1"># w0, w1, ...</span>
+        <span class="n">rk</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">W</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">16</span><span class="p">):</span>
+            <span class="n">rk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">):</span>
+            <span class="n">rk</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ROL</span><span class="p">(</span><span class="n">rk</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">^</span> <span class="n">rk</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span> <span class="o">^</span> <span class="n">rk</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">14</span><span class="p">]</span> <span class="o">^</span> <span class="n">rk</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">16</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">REFERENCE_VERSION</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">):</span>
+                <span class="n">rk</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">get_constant</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rk</span><span class="p">[:</span><span class="n">N</span><span class="p">]</span> <span class="o">+</span> <span class="n">rk</span><span class="p">[</span><span class="mi">16</span><span class="p">:</span><span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">]</span></div></div>
+
+
+<span class="c1"># noinspection PyPep8Naming</span>
+<div class="viewcode-block" id="Shacal1Encryption"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.Shacal1Encryption">[docs]</a><span class="k">class</span> <span class="nc">Shacal1Encryption</span><span class="p">(</span><span class="n">Encryption</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Encryption function.&quot;&quot;&quot;</span>
+
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">80</span>
+    <span class="n">input_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+    <span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+    <span class="n">round_keys</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Shacal1Encryption.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.Shacal1Encryption.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">round_function</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">:</span>
+            <span class="n">W</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">round_keys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">N</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">REFERENCE_VERSION</span><span class="p">:</span>
+                <span class="n">W</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">W</span> <span class="o">=</span> <span class="n">get_constant</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">W</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">round_keys</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="p">(</span><span class="mi">16</span> <span class="o">-</span> <span class="n">N</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
+            <span class="n">F</span> <span class="o">=</span> <span class="n">BvIf</span>
+        <span class="k">elif</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">:</span>
+            <span class="n">F</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">x</span> <span class="o">^</span> <span class="n">y</span> <span class="o">^</span> <span class="n">z</span>
+        <span class="k">elif</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">:</span>
+            <span class="n">F</span> <span class="o">=</span> <span class="n">BvMaj</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">F</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">x</span> <span class="o">^</span> <span class="n">y</span> <span class="o">^</span> <span class="n">z</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">W</span> <span class="o">+</span> <span class="n">ROL</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="n">F</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span> <span class="o">+</span> <span class="n">E</span> <span class="o">+</span> <span class="n">get_constant</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">if</span> <span class="n">REFERENCE_VERSION</span> <span class="k">else</span> <span class="n">W</span> <span class="o">+</span> <span class="n">ROL</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="n">F</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span> <span class="o">+</span> <span class="n">E</span><span class="p">,</span>
+            <span class="n">A</span><span class="p">,</span>
+            <span class="n">ROL</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
+            <span class="n">C</span><span class="p">,</span>
+            <span class="n">D</span>
+        <span class="p">]</span>
+
+<div class="viewcode-block" id="Shacal1Encryption.eval"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.Shacal1Encryption.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">E</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">):</span>
+            <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">E</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">round_function</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">E</span></div></div>
+
+
+<div class="viewcode-block" id="Shacal1Cipher"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.Shacal1Cipher">[docs]</a><span class="k">class</span> <span class="nc">Shacal1Cipher</span><span class="p">(</span><span class="n">Cipher</span><span class="p">):</span>
+    <span class="n">key_schedule</span> <span class="o">=</span> <span class="n">Shacal1KeySchedule</span>
+    <span class="n">encryption</span> <span class="o">=</span> <span class="n">Shacal1Encryption</span>
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">80</span>
+
+<div class="viewcode-block" id="Shacal1Cipher.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.Shacal1Cipher.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">key_schedule</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="n">new_rounds</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">encryption</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="n">new_rounds</span><span class="p">)</span></div>
+
+    <span class="c1"># noinspection SpellCheckingInspection</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="c1"># https://www.cosic.esat.kuleuven.be/nessie/testvectors/</span>
+        <span class="c1"># key = 80000000000000000000000000000000</span>
+        <span class="c1"># 00000000000000000000000000000000</span>
+        <span class="c1"># 00000000000000000000000000000000</span>
+        <span class="c1"># 00000000000000000000000000000000</span>
+        <span class="c1"># plain = 0000000000000000000000000000000000000000</span>
+        <span class="c1"># cipher = 0FFD8D43 B4E33C7C 53461BD1 0F27A546 1050D90D</span>
+
+        <span class="n">old_rounds</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+
+        <span class="k">global</span> <span class="n">REFERENCE_VERSION</span>
+
+        <span class="k">for</span> <span class="n">ref_v</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]:</span>
+            <span class="n">REFERENCE_VERSION</span> <span class="o">=</span> <span class="n">ref_v</span>
+
+            <span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="n">Constant</span><span class="p">(</span><span class="mh">0x80000000</span><span class="p">,</span> <span class="mi">32</span><span class="p">)]</span>
+            <span class="n">key</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">)])</span>
+            <span class="n">pt</span> <span class="o">=</span> <span class="p">[</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+            <span class="n">ct</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">Constant</span><span class="p">(</span><span class="mh">0x0FFD8D43</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                <span class="n">Constant</span><span class="p">(</span><span class="mh">0xB4E33C7C</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                <span class="n">Constant</span><span class="p">(</span><span class="mh">0x53461BD1</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                <span class="n">Constant</span><span class="p">(</span><span class="mh">0x0F27A546</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                <span class="n">Constant</span><span class="p">(</span><span class="mh">0x01050D90D</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="k">assert</span> <span class="bp">cls</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">N</span> <span class="o">==</span> <span class="mi">16</span><span class="p">:</span>
+                <span class="c1"># key =    00010203 04050607 08090A0B 0C0D0E0F</span>
+                <span class="c1">#          10111213 14151617 18191A1B 1C1D1E1F</span>
+                <span class="c1">#          20212223 24252627 28292A2B 2C2D2E2F</span>
+                <span class="c1">#          30313233 34353637 38393A3B 3C3D3E3F</span>
+                <span class="c1"># plain =  00112233 44556677 8899AABB CCDDEEFF 10213243</span>
+                <span class="c1"># cipher = 213A4657 59CE3572 CA2A86D5 A680E948 45BEAA6B</span>
+
+                <span class="n">key</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">Constant</span><span class="p">(</span><span class="mh">0x00010203</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x04050607</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x08090A0B</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x0C0D0E0F</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                    <span class="n">Constant</span><span class="p">(</span><span class="mh">0x10111213</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x14151617</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x18191A1B</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x1C1D1E1F</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                    <span class="n">Constant</span><span class="p">(</span><span class="mh">0x20212223</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x24252627</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x28292A2B</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x2C2D2E2F</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                    <span class="n">Constant</span><span class="p">(</span><span class="mh">0x30313233</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x34353637</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x38393A3B</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x3C3D3E3F</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                <span class="p">]</span>
+                <span class="n">pt</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">Constant</span><span class="p">(</span><span class="mh">0x00112233</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                    <span class="n">Constant</span><span class="p">(</span><span class="mh">0x44556677</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                    <span class="n">Constant</span><span class="p">(</span><span class="mh">0x8899AABB</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                    <span class="n">Constant</span><span class="p">(</span><span class="mh">0xCCDDEEFF</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                    <span class="n">Constant</span><span class="p">(</span><span class="mh">0x10213243</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                <span class="p">]</span>
+                <span class="n">ct</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">Constant</span><span class="p">(</span><span class="mh">0x213A4657</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                    <span class="n">Constant</span><span class="p">(</span><span class="mh">0x59CE3572</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                    <span class="n">Constant</span><span class="p">(</span><span class="mh">0xCA2A86D5</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                    <span class="n">Constant</span><span class="p">(</span><span class="mh">0xA680E948</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+                    <span class="n">Constant</span><span class="p">(</span><span class="mh">0x45BEAA6B</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+                <span class="p">]</span>
+                <span class="k">assert</span> <span class="bp">cls</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="n">old_rounds</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BvIf"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.BvIf">[docs]</a><span class="k">class</span> <span class="nc">BvIf</span><span class="p">(</span><span class="n">Operation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The function If of SHACAL-1.&quot;&quot;&quot;</span>
+
+    <span class="n">arity</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">is_symmetric</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="BvIf.output_width"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.BvIf.output_width">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">output_width</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span></div>
+
+<div class="viewcode-block" id="BvIf.eval"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.BvIf.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x_i</span><span class="p">,</span> <span class="n">Constant</span><span class="p">)</span> <span class="k">for</span> <span class="n">x_i</span> <span class="ow">in</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">]):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span><span class="p">)</span> <span class="o">|</span> <span class="p">((</span><span class="o">~</span><span class="n">x</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">z</span><span class="p">)</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">xor_derivative</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">input_diff</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">XDIf</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="XDIf"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.XDIf">[docs]</a><span class="k">class</span> <span class="nc">XDIf</span><span class="p">(</span><span class="n">Derivative</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent the derivative of the function If w.r.t XOR differences.&quot;&quot;&quot;</span>
+
+    <span class="n">diff_type</span> <span class="o">=</span> <span class="n">XorDiff</span>
+    <span class="n">op</span> <span class="o">=</span> <span class="n">BvIf</span>
+
+<div class="viewcode-block" id="XDIf.is_possible"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.XDIf.is_possible">[docs]</a>    <span class="k">def</span> <span class="nf">is_possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">output_diff</span><span class="o">.</span><span class="n">val</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span>
+
+        <span class="k">def</span> <span class="nf">eq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+            <span class="k">return</span> <span class="o">~</span><span class="n">a</span> <span class="o">^</span> <span class="n">b</span>
+
+        <span class="k">return</span> <span class="n">BvComp</span><span class="p">(</span><span class="o">~</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">eq</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">eq</span><span class="p">(</span><span class="o">~</span><span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="XDIf.has_probability_one"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.XDIf.has_probability_one">[docs]</a>    <span class="k">def</span> <span class="nf">has_probability_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">output_diff</span><span class="o">.</span><span class="n">val</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span>
+
+        <span class="k">def</span> <span class="nf">eq</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="o">~</span><span class="n">x</span> <span class="o">^</span> <span class="n">y</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">x</span> <span class="o">^</span> <span class="n">z</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">BvComp</span><span class="p">(</span><span class="o">~</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">eq</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span> <span class="o">~</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="XDIf.weight"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.XDIf.weight">[docs]</a>    <span class="k">def</span> <span class="nf">weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">eq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+            <span class="k">return</span> <span class="o">~</span><span class="n">a</span> <span class="o">^</span> <span class="n">b</span>
+
+        <span class="n">pr1</span> <span class="o">=</span> <span class="o">~</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">eq</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">PopCount</span><span class="p">(</span><span class="o">~</span><span class="n">pr1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XDIf.max_weight"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.XDIf.max_weight">[docs]</a>    <span class="k">def</span> <span class="nf">max_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span></div>
+
+<div class="viewcode-block" id="XDIf.error"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.XDIf.error">[docs]</a>    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="XDIf.exact_weight"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.XDIf.exact_weight">[docs]</a>    <span class="k">def</span> <span class="nf">exact_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">(</span><span class="n">output_diff</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="XDIf.num_frac_bits"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.XDIf.num_frac_bits">[docs]</a>    <span class="k">def</span> <span class="nf">num_frac_bits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span></div></div>
+
+
+<div class="viewcode-block" id="BvMaj"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.BvMaj">[docs]</a><span class="k">class</span> <span class="nc">BvMaj</span><span class="p">(</span><span class="n">Operation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The function majority of SHACAL-1.&quot;&quot;&quot;</span>
+
+    <span class="n">arity</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">is_symmetric</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="BvMaj.output_width"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.BvMaj.output_width">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">output_width</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span></div>
+
+<div class="viewcode-block" id="BvMaj.eval"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.BvMaj.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x_i</span><span class="p">,</span> <span class="n">Constant</span><span class="p">)</span> <span class="k">for</span> <span class="n">x_i</span> <span class="ow">in</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">]):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">z</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">y</span> <span class="o">&amp;</span> <span class="n">z</span><span class="p">)</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">xor_derivative</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">input_diff</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">XDMaj</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="XDMaj"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.XDMaj">[docs]</a><span class="k">class</span> <span class="nc">XDMaj</span><span class="p">(</span><span class="n">Derivative</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent the derivative of the majority function w.r.t XOR differences.&quot;&quot;&quot;</span>
+
+    <span class="n">diff_type</span> <span class="o">=</span> <span class="n">XorDiff</span>
+    <span class="n">op</span> <span class="o">=</span> <span class="n">BvMaj</span>
+
+<div class="viewcode-block" id="XDMaj.is_possible"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.XDMaj.is_possible">[docs]</a>    <span class="k">def</span> <span class="nf">is_possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">output_diff</span><span class="o">.</span><span class="n">val</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span>
+
+        <span class="k">def</span> <span class="nf">eq</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="o">~</span><span class="n">x</span> <span class="o">^</span> <span class="n">y</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">x</span> <span class="o">^</span> <span class="n">z</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">BvComp</span><span class="p">(</span><span class="n">eq</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">^</span> <span class="n">w</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="XDMaj.has_probability_one"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.XDMaj.has_probability_one">[docs]</a>    <span class="k">def</span> <span class="nf">has_probability_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">output_diff</span><span class="o">.</span><span class="n">val</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span>
+
+        <span class="k">def</span> <span class="nf">eq</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="o">~</span><span class="n">x</span> <span class="o">^</span> <span class="n">y</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">x</span> <span class="o">^</span> <span class="n">z</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">x</span> <span class="o">^</span> <span class="n">w</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">BvComp</span><span class="p">(</span><span class="n">eq</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span> <span class="o">~</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="XDMaj.weight"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.XDMaj.weight">[docs]</a>    <span class="k">def</span> <span class="nf">weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">eq</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="o">~</span><span class="n">x</span> <span class="o">^</span> <span class="n">y</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">x</span> <span class="o">^</span> <span class="n">z</span><span class="p">)</span>
+
+        <span class="n">pr1</span> <span class="o">=</span> <span class="n">eq</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">PopCount</span><span class="p">(</span><span class="o">~</span><span class="n">pr1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XDMaj.max_weight"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.XDMaj.max_weight">[docs]</a>    <span class="k">def</span> <span class="nf">max_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span></div>
+
+<div class="viewcode-block" id="XDMaj.error"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.XDMaj.error">[docs]</a>    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="XDMaj.exact_weight"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.XDMaj.exact_weight">[docs]</a>    <span class="k">def</span> <span class="nf">exact_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">(</span><span class="n">output_diff</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="XDMaj.num_frac_bits"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.XDMaj.num_frac_bits">[docs]</a>    <span class="k">def</span> <span class="nf">num_frac_bits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

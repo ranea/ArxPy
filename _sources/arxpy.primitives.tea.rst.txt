@@ -1,0 +1,6 @@
+arxpy.primitives.tea module
+===========================
+
+.. automodule:: arxpy.primitives.tea
+   :members:
+   :show-inheritance:

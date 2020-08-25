@@ -1,0 +1,6 @@
+arxpy.smt.types module
+======================
+
+.. automodule:: arxpy.smt.types
+   :members:
+   :show-inheritance:

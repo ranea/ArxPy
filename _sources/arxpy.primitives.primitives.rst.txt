@@ -1,0 +1,6 @@
+arxpy.primitives.primitives module
+==================================
+
+.. automodule:: arxpy.primitives.primitives
+   :members:
+   :show-inheritance:

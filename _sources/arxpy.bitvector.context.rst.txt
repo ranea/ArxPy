@@ -1,0 +1,6 @@
+arxpy.bitvector.context module
+==============================
+
+.. automodule:: arxpy.bitvector.context
+   :members:
+   :show-inheritance:

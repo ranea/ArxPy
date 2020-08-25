@@ -1,0 +1,571 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.differential.characteristic module &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="arxpy.differential.derivative module" href="arxpy.differential.derivative.html" />
+    <link rel="prev" title="arxpy.differential package" href="arxpy.differential.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="arxpy.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arxpy.bitvector.html">arxpy.bitvector package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="arxpy.differential.html">arxpy.differential package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="arxpy.differential.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">arxpy.differential.characteristic module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.differential.derivative.html">arxpy.differential.derivative module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.differential.difference.html">arxpy.differential.difference module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.primitives.html">arxpy.primitives package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.smt.html">arxpy.smt package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="arxpy.html">ArxPy 0.2</a> &raquo;</li>
+        
+          <li><a href="arxpy.differential.html">arxpy.differential package</a> &raquo;</li>
+        
+      <li>arxpy.differential.characteristic module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/arxpy.differential.characteristic.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-arxpy.differential.characteristic">
+<span id="arxpy-differential-characteristic-module"></span><h1>arxpy.differential.characteristic module<a class="headerlink" href="#module-arxpy.differential.characteristic" title="Permalink to this headline">¶</a></h1>
+<p>Manage characteristics.</p>
+<dl class="py class">
+<dt id="arxpy.differential.characteristic.ChSignatureType">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.differential.characteristic.</code><code class="sig-name descname">ChSignatureType</code><a class="reference internal" href="_modules/arxpy/differential/characteristic.html#ChSignatureType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.characteristic.ChSignatureType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Represent the different types of signatures available for a characteristic.</p>
+<dl class="py attribute">
+<dt id="arxpy.differential.characteristic.ChSignatureType.Full">
+<code class="sig-name descname">Full</code><a class="headerlink" href="#arxpy.differential.characteristic.ChSignatureType.Full" title="Permalink to this definition">¶</a></dt>
+<dd><p>the signature includes the input and all output differences of each
+non-linear operation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.differential.characteristic.ChSignatureType.InputOutput">
+<code class="sig-name descname">InputOutput</code><a class="headerlink" href="#arxpy.differential.characteristic.ChSignatureType.InputOutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>the signature only includes the input and output differences</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.differential.characteristic.BvCharacteristic">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.differential.characteristic.</code><code class="sig-name descname">BvCharacteristic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em>, <em class="sig-param"><span class="n">diff_type</span></em>, <em class="sig-param"><span class="n">input_diff_names</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">'d'</span></em>, <em class="sig-param"><span class="n">initial_var2diff</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/characteristic.html#BvCharacteristic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.characteristic.BvCharacteristic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represent characteristics of bit-vector functions.</p>
+<p>Given a bit-vector function <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.BvFunction" title="arxpy.primitives.primitives.BvFunction"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvFunction</span></code></a> <span class="math notranslate nohighlight">\(f\)</span>,
+a characteristic is a trail of differences obtained by
+propagating an input difference over <span class="math notranslate nohighlight">\(f\)</span>.</p>
+<p>In particular, a characteristic is composed of the
+input difference and the output difference of each
+non-linear operation.</p>
+<p>This class manages symbolic characteristics,
+where the input difference is given symbolically
+and the intermediate differences are <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Term</span></code></a>
+that depend on the input difference.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="n">RXDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">BvCharacteristic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.primitives</span> <span class="kn">import</span> <span class="n">BvFunction</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.chaskey</span> <span class="kn">import</span> <span class="n">ChaskeyPi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">issubclass</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">BvFunction</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">BvCharacteristic</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;dv0&quot;</span><span class="p">,</span> <span class="s2">&quot;dv1&quot;</span><span class="p">,</span> <span class="s2">&quot;dv2&quot;</span><span class="p">,</span> <span class="s2">&quot;dv3&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span><span class="o">.</span><span class="n">ssa</span>  
+<span class="go">{&#39;input_vars&#39;: (dv0, dv1, dv2, dv3),</span>
+<span class="go">&#39;output_vars&#39;: (d7, d12, d13, d9),</span>
+<span class="go">&#39;assignments&#39;: ((d0, dv0 + dv1), (d1, dv1 &lt;&lt;&lt; 5), (d2, d0 ^ d1), (d3, d0 &lt;&lt;&lt; 16), (d4, dv2 + dv3),</span>
+<span class="go">(d5, dv3 &lt;&lt;&lt; 8), (d6, d4 ^ d5), (d7, d3 + d6), (d8, d6 &lt;&lt;&lt; 13), (d9, d7 ^ d8), (d10, d2 + d4),</span>
+<span class="go">(d11, d2 &lt;&lt;&lt; 7), (d12, d10 ^ d11), (d13, d10 &lt;&lt;&lt; 16))}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span><span class="o">.</span><span class="n">input_diff</span>
+<span class="go">(XorDiff(dv0), XorDiff(dv1), XorDiff(dv2), XorDiff(dv3))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span><span class="o">.</span><span class="n">nonlinear_diffs</span> 
+<span class="go">OrderedDict([(XorDiff(d0), XDA(XorDiff(dv0), XorDiff(dv1))),</span>
+<span class="go">(XorDiff(d4), XDA(XorDiff(dv2), XorDiff(dv3))),</span>
+<span class="go">(XorDiff(d7), XDA(XorDiff(d0 &lt;&lt;&lt; 16), XorDiff(d4 ^ (dv3 &lt;&lt;&lt; 8)))),</span>
+<span class="go">(XorDiff(d10), XDA(XorDiff(d0 ^ (dv1 &lt;&lt;&lt; 5)), XorDiff(d4)))])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span><span class="o">.</span><span class="n">output_diff</span> 
+<span class="go">[[XorDiff(d7), XorDiff(d7)],</span>
+<span class="go">[XorDiff(d12), XorDiff(d10 ^ ((d0 ^ (dv1 &lt;&lt;&lt; 5)) &lt;&lt;&lt; 7))],</span>
+<span class="go">[XorDiff(d13), XorDiff(d10 &lt;&lt;&lt; 16)],</span>
+<span class="go">[XorDiff(d9), XorDiff(d7 ^ ((d4 ^ (dv3 &lt;&lt;&lt; 8)) &lt;&lt;&lt; 13))]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">BvCharacteristic</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">RXDiff</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;dv0&quot;</span><span class="p">,</span> <span class="s2">&quot;dv1&quot;</span><span class="p">,</span> <span class="s2">&quot;dv2&quot;</span><span class="p">,</span> <span class="s2">&quot;dv3&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span><span class="o">.</span><span class="n">input_diff</span>
+<span class="go">(RXDiff(dv0), RXDiff(dv1), RXDiff(dv2), RXDiff(dv3))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span><span class="o">.</span><span class="n">nonlinear_diffs</span> 
+<span class="go">OrderedDict([(RXDiff(d0), RXDA(RXDiff(dv0), RXDiff(dv1))),</span>
+<span class="go">(RXDiff(d4), RXDA(RXDiff(dv2), RXDiff(dv3))),</span>
+<span class="go">(RXDiff(d7), RXDA(RXDiff(d0 &lt;&lt;&lt; 16), RXDiff(d4 ^ (dv3 &lt;&lt;&lt; 8)))),</span>
+<span class="go">(RXDiff(d10), RXDA(RXDiff(d0 ^ (dv1 &lt;&lt;&lt; 5)), RXDiff(d4)))])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span><span class="o">.</span><span class="n">output_diff</span> 
+<span class="go">[[RXDiff(d7), RXDiff(d7)],</span>
+<span class="go">[RXDiff(d12), RXDiff(d10 ^ ((d0 ^ (dv1 &lt;&lt;&lt; 5)) &lt;&lt;&lt; 7))],</span>
+<span class="go">[RXDiff(d13), RXDiff(d10 &lt;&lt;&lt; 16)],</span>
+<span class="go">[RXDiff(d9), RXDiff(d7 ^ ((d4 ^ (dv3 &lt;&lt;&lt; 8)) &lt;&lt;&lt; 13))]]</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt id="arxpy.differential.characteristic.BvCharacteristic.func">
+<code class="sig-name descname">func</code><a class="headerlink" href="#arxpy.differential.characteristic.BvCharacteristic.func" title="Permalink to this definition">¶</a></dt>
+<dd><p>the <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.BvFunction" title="arxpy.primitives.primitives.BvFunction"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvFunction</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.differential.characteristic.BvCharacteristic.diff_type">
+<code class="sig-name descname">diff_type</code><a class="headerlink" href="#arxpy.differential.characteristic.BvCharacteristic.diff_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>the <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Difference</span></code></a> of the characteristic</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.differential.characteristic.BvCharacteristic.input_diff">
+<code class="sig-name descname">input_diff</code><a class="headerlink" href="#arxpy.differential.characteristic.BvCharacteristic.input_diff" title="Permalink to this definition">¶</a></dt>
+<dd><p>a list containing the input symbolic differences</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.differential.characteristic.BvCharacteristic.nonlinear_diffs">
+<code class="sig-name descname">nonlinear_diffs</code><a class="headerlink" href="#arxpy.differential.characteristic.BvCharacteristic.nonlinear_diffs" title="Permalink to this definition">¶</a></dt>
+<dd><p>an <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.OrderedDict" title="(in Python v3.8)"><code class="xref any docutils literal notranslate"><span class="pre">collections.OrderedDict</span></code></a> mapping non-linear symbolic differences
+to their corresponding <a class="reference internal" href="arxpy.differential.derivative.html#arxpy.differential.derivative.Derivative" title="arxpy.differential.derivative.Derivative"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Derivative</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.differential.characteristic.BvCharacteristic.output_diff">
+<code class="sig-name descname">output_diff</code><a class="headerlink" href="#arxpy.differential.characteristic.BvCharacteristic.output_diff" title="Permalink to this definition">¶</a></dt>
+<dd><p>a list, where the i-th element is a pair containing
+the i-th output symbolic difference and its value</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.characteristic.BvCharacteristic.empirical_weight">
+<code class="sig-name descname">empirical_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_diff</span></em>, <em class="sig-param"><span class="n">output_diff</span></em>, <em class="sig-param"><span class="n">pair_samples</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/characteristic.html#BvCharacteristic.empirical_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.characteristic.BvCharacteristic.empirical_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the empirical weight of a given differential.</p>
+<p>Given a differential (a pair of input and output differences),
+the differential probability is the fraction of input pairs
+with the given input difference leading to output pairs
+with the given output difference.</p>
+<p>This method returns an approximation of the weight of the
+differential probability by sampling a given number
+of input pairs.</p>
+<p>If no correct output pairs are found, <a class="reference external" href="https://docs.python.org/3/library/math.html#math.inf" title="(in Python v3.8)"><code class="xref any docutils literal notranslate"><span class="pre">math.inf</span></code></a> is returned.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="n">RXDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">BvCharacteristic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.chaskey</span> <span class="kn">import</span> <span class="n">ChaskeyPi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">BvCharacteristic</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;dv&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zero</span><span class="p">,</span> <span class="n">one</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">)),</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span><span class="o">.</span><span class="n">empirical_weight</span><span class="p">([</span><span class="n">zero</span><span class="p">,</span> <span class="n">zero</span><span class="p">,</span> <span class="n">zero</span><span class="p">,</span> <span class="n">zero</span><span class="p">],</span> <span class="p">[</span><span class="n">zero</span><span class="p">,</span> <span class="n">zero</span><span class="p">,</span> <span class="n">zero</span><span class="p">,</span> <span class="n">zero</span><span class="p">],</span> <span class="mi">100</span><span class="p">)</span>
+<span class="go">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span><span class="o">.</span><span class="n">empirical_weight</span><span class="p">([</span><span class="n">zero</span><span class="p">,</span> <span class="n">zero</span><span class="p">,</span> <span class="n">zero</span><span class="p">,</span> <span class="n">zero</span><span class="p">],</span> <span class="p">[</span><span class="n">one</span><span class="p">,</span> <span class="n">one</span><span class="p">,</span> <span class="n">one</span><span class="p">,</span> <span class="n">one</span><span class="p">],</span> <span class="mi">100</span><span class="p">)</span>
+<span class="go">inf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">BvCharacteristic</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">RXDiff</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;dv&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zero</span><span class="p">,</span> <span class="n">one</span> <span class="o">=</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">)),</span> <span class="n">RXDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">4</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">ch</span><span class="o">.</span><span class="n">empirical_weight</span><span class="p">([</span><span class="n">zero</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="p">[</span><span class="n">zero</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="mi">6</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">8</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span><span class="o">.</span><span class="n">empirical_weight</span><span class="p">([</span><span class="n">zero</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="p">[</span><span class="n">one</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="mi">6</span><span class="p">)</span>
+<span class="go">inf</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.characteristic.BvCharacteristic.signature">
+<code class="sig-name descname">signature</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ch_signature_type</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/characteristic.html#BvCharacteristic.signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.characteristic.BvCharacteristic.signature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the signature of the characteristic.</p>
+<p>The signature is a “hash” of the characteristic used for comparing.</p>
+<p>For the type of the signature, see <a class="reference internal" href="#arxpy.differential.characteristic.ChSignatureType" title="arxpy.differential.characteristic.ChSignatureType"><code class="xref any py py-class docutils literal notranslate"><span class="pre">ChSignatureType</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">BvCharacteristic</span><span class="p">,</span> <span class="n">ChSignatureType</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.primitives</span> <span class="kn">import</span> <span class="n">BvFunction</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.chaskey</span> <span class="kn">import</span> <span class="n">ChaskeyPi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">issubclass</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">BvFunction</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">BvCharacteristic</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;dv0&quot;</span><span class="p">,</span> <span class="s2">&quot;dv1&quot;</span><span class="p">,</span> <span class="s2">&quot;dv2&quot;</span><span class="p">,</span> <span class="s2">&quot;dv3&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">ChSignatureType</span><span class="o">.</span><span class="n">Full</span><span class="p">)</span>
+<span class="go">[dv0, dv1, dv2, dv3, d0, d4, d7, d10]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">ChSignatureType</span><span class="o">.</span><span class="n">InputOutput</span><span class="p">)</span>
+<span class="go">[dv0, dv1, dv2, dv3, d7, d12, d13, d9]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.differential.characteristic.SingleKeyCh">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.differential.characteristic.</code><code class="sig-name descname">SingleKeyCh</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bv_cipher</span></em>, <em class="sig-param"><span class="n">diff_type</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/characteristic.html#SingleKeyCh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.characteristic.SingleKeyCh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#arxpy.differential.characteristic.BvCharacteristic" title="arxpy.differential.characteristic.BvCharacteristic"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.differential.characteristic.BvCharacteristic</span></code></a></p>
+<p>Represent single-key characteristics of block ciphers.</p>
+<p>A single-key characteristic of a <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.Cipher" title="arxpy.primitives.primitives.Cipher"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Cipher</span></code></a> is a <a class="reference internal" href="#arxpy.differential.characteristic.BvCharacteristic" title="arxpy.differential.characteristic.BvCharacteristic"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvCharacteristic</span></code></a>
+over the <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.Encryption" title="arxpy.primitives.primitives.Encryption"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Encryption</span></code></a> function of the cipher.</p>
+<p>The plaintext differences start with the prefix <code class="docutils literal notranslate"><span class="pre">&quot;dp&quot;</span></code>
+and the non-linear differences start with the prefix <code class="docutils literal notranslate"><span class="pre">&quot;dx&quot;</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">SingleKeyCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.primitives</span> <span class="kn">import</span> <span class="n">Cipher</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives</span> <span class="kn">import</span> <span class="n">speck</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span> <span class="o">=</span> <span class="n">speck</span><span class="o">.</span><span class="n">get_Speck_instance</span><span class="p">(</span><span class="n">speck</span><span class="o">.</span><span class="n">SpeckInstance</span><span class="o">.</span><span class="n">speck_32_64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">issubclass</span><span class="p">(</span><span class="n">Speck32</span><span class="p">,</span> <span class="n">Cipher</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">SingleKeyCh</span><span class="p">(</span><span class="n">Speck32</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">.</span><span class="n">ssa</span>  
+<span class="go">{&#39;input_vars&#39;: (dp0, dp1), &#39;output_vars&#39;: (dx2, dx4),</span>
+<span class="go">&#39;assignments&#39;: ((dx0, dp0 &gt;&gt;&gt; 7), (dx1, dp1 + dx0), (dx2, dx1 ^ k0), (dx3, dp1 &lt;&lt;&lt; 2), (dx4, dx2 ^ dx3))}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span><span class="o">.</span><span class="n">input_diff</span>
+<span class="go">(XorDiff(dp0), XorDiff(dp1))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span><span class="o">.</span><span class="n">nonlinear_diffs</span>
+<span class="go">OrderedDict([(XorDiff(dx1), XDA(XorDiff(dp1), XorDiff(dp0 &gt;&gt;&gt; 7)))])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span><span class="o">.</span><span class="n">output_diff</span>
+<span class="go">[[XorDiff(dx2), XorDiff(dx1)], [XorDiff(dx4), XorDiff(dx1 ^ (dp1 &lt;&lt;&lt; 2))]]</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.differential.characteristic.SingleKeyCh.empirical_weight">
+<code class="sig-name descname">empirical_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_diff</span></em>, <em class="sig-param"><span class="n">output_diff</span></em>, <em class="sig-param"><span class="n">pair_samples</span></em>, <em class="sig-param"><span class="n">key_samples</span></em>, <em class="sig-param"><span class="n">precision</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">rk_diffs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/characteristic.html#SingleKeyCh.empirical_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.characteristic.SingleKeyCh.empirical_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the empirical weight distribution of a given differential.</p>
+<p>This method returns a <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.8)"><code class="xref any docutils literal notranslate"><span class="pre">collections.Counter</span></code></a> storing the distribution of
+differential probability weights over the given number of keys.</p>
+<p>The weights are rounded to the given number of precision
+digits after the decimal point.</p>
+<p>See also <a class="reference internal" href="#arxpy.differential.characteristic.BvCharacteristic.empirical_weight" title="arxpy.differential.characteristic.BvCharacteristic.empirical_weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">BvCharacteristic.empirical_weight</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">SingleKeyCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives</span> <span class="kn">import</span> <span class="n">speck</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span> <span class="o">=</span> <span class="n">speck</span><span class="o">.</span><span class="n">get_Speck_instance</span><span class="p">(</span><span class="n">speck</span><span class="o">.</span><span class="n">SpeckInstance</span><span class="o">.</span><span class="n">speck_32_64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">SingleKeyCh</span><span class="p">(</span><span class="n">Speck32</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zero</span><span class="p">,</span> <span class="n">one</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">)),</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span><span class="o">.</span><span class="n">empirical_weight</span><span class="p">([</span><span class="n">zero</span><span class="p">,</span> <span class="n">zero</span><span class="p">],</span> <span class="p">[</span><span class="n">zero</span><span class="p">,</span> <span class="n">zero</span><span class="p">],</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="go">Counter({0.0: 10})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span><span class="o">.</span><span class="n">empirical_weight</span><span class="p">([</span><span class="n">zero</span><span class="p">,</span> <span class="n">zero</span><span class="p">],</span> <span class="p">[</span><span class="n">one</span><span class="p">,</span> <span class="n">one</span><span class="p">],</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="go">Counter({inf: 10})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.differential.characteristic.RelatedKeyCh">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.differential.characteristic.</code><code class="sig-name descname">RelatedKeyCh</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bv_cipher</span></em>, <em class="sig-param"><span class="n">diff_type</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/characteristic.html#RelatedKeyCh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.characteristic.RelatedKeyCh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represent related-key characteristics of block ciphers.</p>
+<p>A related-key characteristic of a <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.Cipher" title="arxpy.primitives.primitives.Cipher"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Cipher</span></code></a> is a pair <a class="reference internal" href="#arxpy.differential.characteristic.BvCharacteristic" title="arxpy.differential.characteristic.BvCharacteristic"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvCharacteristic</span></code></a>,
+one over the <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.KeySchedule" title="arxpy.primitives.primitives.KeySchedule"><code class="xref any py py-class docutils literal notranslate"><span class="pre">KeySchedule</span></code></a> of the cipher, and another one over the
+the <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.Encryption" title="arxpy.primitives.primitives.Encryption"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Encryption</span></code></a> function of the cipher, where the output differences
+of the key schedule characteristic are used as round key differences
+in the encryption characteristic.</p>
+<p>The master key differences start with the prefix <code class="docutils literal notranslate"><span class="pre">&quot;dmk&quot;</span></code>,
+the round key differences start with the prefix <code class="docutils literal notranslate"><span class="pre">&quot;dk&quot;</span></code>,
+the plaintext differences start with the prefix <code class="docutils literal notranslate"><span class="pre">&quot;dp&quot;</span></code>
+and the non-linear differences start with the prefix <code class="docutils literal notranslate"><span class="pre">&quot;dx&quot;</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">RelatedKeyCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.primitives</span> <span class="kn">import</span> <span class="n">Cipher</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.lea</span> <span class="kn">import</span> <span class="n">LeaCipher</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">issubclass</span><span class="p">(</span><span class="n">LeaCipher</span><span class="p">,</span> <span class="n">Cipher</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LeaCipher</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span> <span class="o">=</span> <span class="n">RelatedKeyCh</span><span class="p">(</span><span class="n">LeaCipher</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span> <span class="o">.</span><span class="n">key_schedule_ch</span><span class="o">.</span><span class="n">ssa</span>  
+<span class="go">{&#39;input_vars&#39;: (dmk0, dmk1, dmk2, dmk3),</span>
+<span class="go">&#39;output_vars&#39;: (dk1, dk3, dk5, dk3, dk7, dk3),</span>
+<span class="go">&#39;assignments&#39;: ((dk0, 0xc3efe9db + dmk0), (dk1, dk0 &lt;&lt;&lt; 1), (dk2, 0x87dfd3b7 + dmk1), (dk3, dk2 &lt;&lt;&lt; 3),</span>
+<span class="go">(dk4, 0x0fbfa76f + dmk2), (dk5, dk4 &lt;&lt;&lt; 6), (dk6, 0x1f7f4ede + dmk3), (dk7, dk6 &lt;&lt;&lt; 11))}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span><span class="o">.</span><span class="n">key_schedule_ch</span><span class="o">.</span><span class="n">input_diff</span>
+<span class="go">(XorDiff(dmk0), XorDiff(dmk1), XorDiff(dmk2), XorDiff(dmk3))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span><span class="o">.</span><span class="n">key_schedule_ch</span><span class="o">.</span><span class="n">output_diff</span>  
+<span class="go">[[XorDiff(dk1), XorDiff(dk0 &lt;&lt;&lt; 1)], [XorDiff(dk3), XorDiff(dk2 &lt;&lt;&lt; 3)],</span>
+<span class="go">[XorDiff(dk5), XorDiff(dk4 &lt;&lt;&lt; 6)], [XorDiff(dk3), XorDiff(dk2 &lt;&lt;&lt; 3)],</span>
+<span class="go">[XorDiff(dk7), XorDiff(dk6 &lt;&lt;&lt; 11)], [XorDiff(dk3), XorDiff(dk2 &lt;&lt;&lt; 3)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span><span class="o">.</span><span class="n">key_schedule_ch</span><span class="o">.</span><span class="n">nonlinear_diffs</span>  
+<span class="go">OrderedDict([(XorDiff(dk0), XDCA_0xc3efe9db(XorDiff(dmk0))),</span>
+<span class="go">(XorDiff(dk2), XDCA_0x87dfd3b7(XorDiff(dmk1))),</span>
+<span class="go">(XorDiff(dk4), XDCA_0x0fbfa76f(XorDiff(dmk2))),</span>
+<span class="go">(XorDiff(dk6), XDCA_0x1f7f4ede(XorDiff(dmk3)))])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span><span class="o">.</span><span class="n">encryption_ch</span><span class="o">.</span><span class="n">ssa</span>  
+<span class="go">{&#39;input_vars&#39;: (dp0, dp1, dp2, dp3),</span>
+<span class="go">&#39;output_vars&#39;: (dx3, dx7, dx11, dp0),</span>
+<span class="go">&#39;assignments&#39;: ((dx0, dk1 ^ dp0), (dx1, dk3 ^ dp1), (dx2, dx0 + dx1), (dx3, dx2 &lt;&lt;&lt; 9),</span>
+<span class="go">(dx4, dk5 ^ dp1), (dx5, dk3 ^ dp2), (dx6, dx4 + dx5), (dx7, dx6 &gt;&gt;&gt; 5), (dx8, dk7 ^ dp2),</span>
+<span class="go">(dx9, dk3 ^ dp3), (dx10, dx8 + dx9), (dx11, dx10 &gt;&gt;&gt; 3))}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span><span class="o">.</span><span class="n">encryption_ch</span><span class="o">.</span><span class="n">input_diff</span>
+<span class="go">(XorDiff(dp0), XorDiff(dp1), XorDiff(dp2), XorDiff(dp3))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span><span class="o">.</span><span class="n">encryption_ch</span><span class="o">.</span><span class="n">output_diff</span> 
+<span class="go">[[XorDiff(dx3), XorDiff(dx2 &lt;&lt;&lt; 9)], [XorDiff(dx7), XorDiff(dx6 &gt;&gt;&gt; 5)],</span>
+<span class="go">[XorDiff(dx11), XorDiff(dx10 &gt;&gt;&gt; 3)], [XorDiff(dp0), XorDiff(dp0)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span><span class="o">.</span><span class="n">encryption_ch</span><span class="o">.</span><span class="n">nonlinear_diffs</span>  
+<span class="go">OrderedDict([(XorDiff(dx2), XDA(XorDiff(dp0 ^ (dk0 &lt;&lt;&lt; 1)), XorDiff(dp1 ^ (dk2 &lt;&lt;&lt; 3)))),</span>
+<span class="go">(XorDiff(dx6), XDA(XorDiff(dp1 ^ (dk4 &lt;&lt;&lt; 6)), XorDiff(dp2 ^ (dk2 &lt;&lt;&lt; 3)))),</span>
+<span class="go">(XorDiff(dx10), XDA(XorDiff(dp2 ^ (dk6 &lt;&lt;&lt; 11)), XorDiff(dp3 ^ (dk2 &lt;&lt;&lt; 3))))])</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt id="arxpy.differential.characteristic.RelatedKeyCh.key_schedule_ch">
+<code class="sig-name descname">key_schedule_ch</code><a class="headerlink" href="#arxpy.differential.characteristic.RelatedKeyCh.key_schedule_ch" title="Permalink to this definition">¶</a></dt>
+<dd><p>the <a class="reference internal" href="#arxpy.differential.characteristic.BvCharacteristic" title="arxpy.differential.characteristic.BvCharacteristic"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvCharacteristic</span></code></a> over the key schedule</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.differential.characteristic.RelatedKeyCh.encryption_ch">
+<code class="sig-name descname">encryption_ch</code><a class="headerlink" href="#arxpy.differential.characteristic.RelatedKeyCh.encryption_ch" title="Permalink to this definition">¶</a></dt>
+<dd><p>the <a class="reference internal" href="#arxpy.differential.characteristic.BvCharacteristic" title="arxpy.differential.characteristic.BvCharacteristic"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvCharacteristic</span></code></a> over the encryption function</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.characteristic.RelatedKeyCh.empirical_weight">
+<code class="sig-name descname">empirical_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key_input_diff</span></em>, <em class="sig-param"><span class="n">key_output_diff</span></em>, <em class="sig-param"><span class="n">key_samples</span></em>, <em class="sig-param"><span class="n">enc_input_diff</span></em>, <em class="sig-param"><span class="n">enc_output_diff</span></em>, <em class="sig-param"><span class="n">enc_samples</span></em>, <em class="sig-param"><span class="n">precision</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/characteristic.html#RelatedKeyCh.empirical_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.characteristic.RelatedKeyCh.empirical_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the empirical weight of a given differential for multiple keys.</p>
+<p>This method returns the differential probability weight for the
+key schedule characteristic (see <a class="reference internal" href="#arxpy.differential.characteristic.BvCharacteristic.empirical_weight" title="arxpy.differential.characteristic.BvCharacteristic.empirical_weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">BvCharacteristic.empirical_weight</span></code></a>)
+and the <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.8)"><code class="xref any docutils literal notranslate"><span class="pre">collections.Counter</span></code></a> storing the distribution of weights for the encryption
+characteristic (see <a class="reference internal" href="#arxpy.differential.characteristic.SingleKeyCh.empirical_weight" title="arxpy.differential.characteristic.SingleKeyCh.empirical_weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">SingleKeyCh.empirical_weight</span></code></a>).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">Constant</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">RelatedKeyCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.lea</span> <span class="kn">import</span> <span class="n">LeaCipher</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LeaCipher</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span> <span class="o">=</span> <span class="n">RelatedKeyCh</span><span class="p">(</span><span class="n">LeaCipher</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zero</span><span class="p">,</span> <span class="n">one</span> <span class="o">=</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">32</span><span class="p">)),</span> <span class="n">XorDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kid</span><span class="p">,</span> <span class="n">kod</span> <span class="o">=</span> <span class="p">[</span><span class="n">zero</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="p">[</span><span class="n">zero</span><span class="p">]</span><span class="o">*</span><span class="mi">6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eid</span><span class="p">,</span> <span class="n">eod</span> <span class="o">=</span> <span class="p">[</span><span class="n">zero</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="p">[</span><span class="n">zero</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span><span class="o">.</span><span class="n">empirical_weight</span><span class="p">(</span><span class="n">kid</span><span class="p">,</span> <span class="n">kod</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">eid</span><span class="p">,</span> <span class="n">eod</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="go">(0.0, Counter({0.0: 10}))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kid</span><span class="p">,</span> <span class="n">kod</span> <span class="o">=</span> <span class="p">[</span><span class="n">zero</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="p">[</span><span class="n">one</span><span class="p">]</span><span class="o">*</span><span class="mi">6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">eid</span><span class="p">,</span> <span class="n">eod</span> <span class="o">=</span> <span class="p">[</span><span class="n">zero</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="p">[</span><span class="n">one</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span><span class="o">.</span><span class="n">empirical_weight</span><span class="p">(</span><span class="n">kid</span><span class="p">,</span> <span class="n">kod</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">eid</span><span class="p">,</span> <span class="n">eod</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="go">(inf, Counter({inf: 10}))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.differential.characteristic.RelatedKeyCh.signature">
+<code class="sig-name descname">signature</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ch_signature_type</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/characteristic.html#RelatedKeyCh.signature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.characteristic.RelatedKeyCh.signature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the signature of the related-key characteristic.</p>
+<p>The signature of a related-key characteristic is the
+concatenation of the key schedule and encryption signatures.</p>
+<p>See also <a class="reference internal" href="#arxpy.differential.characteristic.BvCharacteristic.signature" title="arxpy.differential.characteristic.BvCharacteristic.signature"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">BvCharacteristic.signature</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">RelatedKeyCh</span><span class="p">,</span> <span class="n">ChSignatureType</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.primitives</span> <span class="kn">import</span> <span class="n">Cipher</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.lea</span> <span class="kn">import</span> <span class="n">LeaCipher</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LeaCipher</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span> <span class="o">=</span> <span class="n">RelatedKeyCh</span><span class="p">(</span><span class="n">LeaCipher</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">ChSignatureType</span><span class="o">.</span><span class="n">Full</span><span class="p">)</span>  
+<span class="go">[dmk0, dmk1, dmk2, dmk3, dk0, dk2, dk4, dk6, dp0, dp1, dp2, dp3, dx2, dx6, dx10]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">ChSignatureType</span><span class="o">.</span><span class="n">InputOutput</span><span class="p">)</span>  
+<span class="go">[dmk0, dmk1, dmk2, dmk3, dk1, dk3, dk5, dk3, dk7, dk3, dp0, dp1, dp2, dp3, dx3, dx7, dx11]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="arxpy.differential.derivative.html" class="btn btn-neutral float-right" title="arxpy.differential.derivative module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="arxpy.differential.html" class="btn btn-neutral float-left" title="arxpy.differential package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

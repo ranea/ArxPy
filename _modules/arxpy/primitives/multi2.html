@@ -1,0 +1,533 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.primitives.multi2 &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html#subpackages">Subpackages</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>arxpy.primitives.multi2</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for arxpy.primitives.multi2</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;MULTI2 cipher.</span>
+
+<span class="sd">Source: Cryptanalysis of the ISDB Scrambling Algorithm (MULTI2)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector.operation</span> <span class="kn">import</span> <span class="n">RotateLeft</span>
+
+<span class="kn">from</span> <span class="nn">arxpy.primitives.primitives</span> <span class="kn">import</span> <span class="n">KeySchedule</span><span class="p">,</span> <span class="n">Encryption</span><span class="p">,</span> <span class="n">Cipher</span>
+
+<span class="c1"># for BvOR and XDOr</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector.operation</span> <span class="kn">import</span> <span class="n">BvComp</span><span class="p">,</span> <span class="n">Operation</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector.extraop</span> <span class="kn">import</span> <span class="n">PopCount</span>
+<span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="kn">from</span> <span class="nn">arxpy.differential.derivative</span> <span class="kn">import</span> <span class="n">Derivative</span>
+
+
+<span class="n">REFERENCE_VERSION</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># if True, ctes are added in the encryption</span>
+
+
+<div class="viewcode-block" id="BvOr"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.BvOr">[docs]</a><span class="k">class</span> <span class="nc">BvOr</span><span class="p">(</span><span class="n">Operation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The OR function.&quot;&quot;&quot;</span>
+
+    <span class="n">arity</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">is_symmetric</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="BvOr.output_width"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.BvOr.output_width">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">output_width</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span></div>
+
+<div class="viewcode-block" id="BvOr.eval"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.BvOr.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x_i</span><span class="p">,</span> <span class="n">Constant</span><span class="p">)</span> <span class="k">for</span> <span class="n">x_i</span> <span class="ow">in</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]):</span>
+            <span class="k">return</span> <span class="n">x</span> <span class="o">|</span> <span class="n">y</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">xor_derivative</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">input_diff</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">XDOr</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="XDOr"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.XDOr">[docs]</a><span class="k">class</span> <span class="nc">XDOr</span><span class="p">(</span><span class="n">Derivative</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represent the derivative of the function If w.r.t XOR differences.&quot;&quot;&quot;</span>
+
+    <span class="n">diff_type</span> <span class="o">=</span> <span class="n">XorDiff</span>
+    <span class="n">op</span> <span class="o">=</span> <span class="n">BvOr</span>
+
+<div class="viewcode-block" id="XDOr.is_possible"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.XDOr.is_possible">[docs]</a>    <span class="k">def</span> <span class="nf">is_possible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">):</span>
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+        <span class="n">dz</span> <span class="o">=</span> <span class="n">output_diff</span><span class="o">.</span><span class="n">val</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">dx</span><span class="o">.</span><span class="n">width</span>
+
+        <span class="c1"># (dx, dy) = (0, 0) -&gt; dz =(1)</span>
+        <span class="n">bad_case</span> <span class="o">=</span> <span class="p">(</span><span class="o">~</span><span class="n">dx</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">dy</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">dz</span>
+
+        <span class="k">return</span> <span class="n">BvComp</span><span class="p">(</span><span class="n">bad_case</span><span class="p">,</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="XDOr.has_probability_one"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.XDOr.has_probability_one">[docs]</a>    <span class="k">def</span> <span class="nf">has_probability_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">):</span>
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+        <span class="n">dz</span> <span class="o">=</span> <span class="n">output_diff</span><span class="o">.</span><span class="n">val</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">dx</span><span class="o">.</span><span class="n">width</span>
+
+        <span class="c1"># (dx, dy) = (0, 0) -&gt; dz =(0)</span>
+        <span class="n">pr1_case</span> <span class="o">=</span> <span class="p">(</span><span class="o">~</span><span class="n">dx</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">dy</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">dz</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">BvComp</span><span class="p">(</span><span class="n">pr1_case</span><span class="p">,</span> <span class="o">~</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="XDOr.weight"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.XDOr.weight">[docs]</a>    <span class="k">def</span> <span class="nf">weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">):</span>
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">PopCount</span><span class="p">(</span><span class="n">dx</span> <span class="o">|</span> <span class="n">dy</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XDOr.max_weight"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.XDOr.max_weight">[docs]</a>    <span class="k">def</span> <span class="nf">max_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">dx</span><span class="o">.</span><span class="n">width</span></div>
+
+<div class="viewcode-block" id="XDOr.error"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.XDOr.error">[docs]</a>    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="XDOr.exact_weight"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.XDOr.exact_weight">[docs]</a>    <span class="k">def</span> <span class="nf">exact_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">(</span><span class="n">output_diff</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="XDOr.num_frac_bits"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.XDOr.num_frac_bits">[docs]</a>    <span class="k">def</span> <span class="nf">num_frac_bits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">pi1</span><span class="p">(</span><span class="n">L</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">L</span>
+
+
+<span class="k">def</span> <span class="nf">pi2</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">k_i</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">REFERENCE_VERSION</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">RotateLeft</span><span class="p">(</span><span class="n">R</span> <span class="o">+</span> <span class="n">k_i</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">R</span> <span class="o">+</span> <span class="n">k_i</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k_i</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">RotateLeft</span><span class="p">(</span><span class="n">R</span> <span class="o">+</span> <span class="n">k_i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">R</span> <span class="o">+</span> <span class="n">k_i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">RotateLeft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">^</span> <span class="n">x</span>
+
+
+<span class="k">def</span> <span class="nf">pi3</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">k_i</span><span class="p">,</span> <span class="n">k_j</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">REFERENCE_VERSION</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">RotateLeft</span><span class="p">(</span><span class="n">L</span> <span class="o">+</span> <span class="n">k_i</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">L</span> <span class="o">+</span> <span class="n">k_i</span><span class="p">)</span> <span class="o">+</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k_i</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">RotateLeft</span><span class="p">(</span><span class="n">L</span> <span class="o">+</span> <span class="n">k_i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">L</span> <span class="o">+</span> <span class="n">k_i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">RotateLeft</span><span class="p">(</span><span class="n">RotateLeft</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">k_j</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">RotateLeft</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">k_j</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">RotateLeft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">BvOr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">L</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">pi4</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">k_i</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">REFERENCE_VERSION</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">RotateLeft</span><span class="p">(</span><span class="n">R</span> <span class="o">+</span> <span class="n">k_i</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">R</span> <span class="o">+</span> <span class="n">k_i</span><span class="p">)</span> <span class="o">+</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k_i</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">RotateLeft</span><span class="p">(</span><span class="n">R</span> <span class="o">+</span> <span class="n">k_i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">R</span> <span class="o">+</span> <span class="n">k_i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+
+<div class="viewcode-block" id="Multi2KeySchedule"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.Multi2KeySchedule">[docs]</a><span class="k">class</span> <span class="nc">Multi2KeySchedule</span><span class="p">(</span><span class="n">KeySchedule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Key schedule function.&quot;&quot;&quot;</span>
+
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="n">input_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">32</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)]</span>
+    <span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)]</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_num_keys</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">num_system_keys</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">num_round_keys</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># s[1] |</span>
+                <span class="n">num_system_keys</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># s[2], s[3] | k[1]</span>
+                <span class="n">num_system_keys</span> <span class="o">+=</span> <span class="mi">2</span>
+                <span class="n">num_round_keys</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="c1"># s[4] |  k[2], k[3]</span>
+                <span class="n">num_system_keys</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">num_round_keys</span> <span class="o">+=</span> <span class="mi">2</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="c1"># | k[4]</span>
+                <span class="n">num_round_keys</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="c1"># s[5] |</span>
+                <span class="n">num_system_keys</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="c1"># s[6], s[7] | k[5]</span>
+                <span class="n">num_system_keys</span> <span class="o">+=</span> <span class="mi">2</span>
+                <span class="n">num_round_keys</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+                <span class="c1"># s[8] | k[6], k[7]</span>
+                <span class="n">num_system_keys</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">num_round_keys</span> <span class="o">+=</span> <span class="mi">2</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
+                <span class="c1"># | k[8]</span>
+                <span class="n">num_round_keys</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">num_expanded_round_keys</span> <span class="o">=</span> <span class="n">num_round_keys</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">REFERENCE_VERSION</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">num_expanded_round_keys</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">num_expanded_round_keys</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="n">num_expanded_round_keys</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                    <span class="n">num_expanded_round_keys</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+                    <span class="n">num_expanded_round_keys</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
+                    <span class="n">num_expanded_round_keys</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">num_system_keys</span><span class="p">,</span> <span class="n">num_round_keys</span><span class="p">,</span> <span class="n">num_expanded_round_keys</span>
+
+<div class="viewcode-block" id="Multi2KeySchedule.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.Multi2KeySchedule.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span>
+        <span class="n">num_system_keys</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">num_expanded_round_keys</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_num_keys</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">input_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">32</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_system_keys</span><span class="p">)]</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_expanded_round_keys</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="Multi2KeySchedule.eval"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.Multi2KeySchedule.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="o">*</span><span class="n">system_key</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">system_key</span><span class="p">)</span>
+
+        <span class="n">num_system_keys</span><span class="p">,</span> <span class="n">num_round_keys</span><span class="p">,</span> <span class="n">num_expanded_round_keys</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_num_keys</span><span class="p">()</span>
+
+        <span class="k">global</span> <span class="n">REFERENCE_VERSION</span>
+        <span class="n">old_ref_v</span> <span class="o">=</span> <span class="n">REFERENCE_VERSION</span>
+        <span class="n">REFERENCE_VERSION</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">k</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_round_keys</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d1</span> <span class="o">^</span> <span class="n">pi2</span><span class="p">(</span><span class="n">d1</span> <span class="o">^</span> <span class="n">d2</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d1</span> <span class="o">^</span> <span class="n">d2</span> <span class="o">^</span> <span class="n">pi3</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">^</span> <span class="n">pi4</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="mi">4</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">^</span> <span class="n">pi2</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="mi">5</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="n">k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">^</span> <span class="n">pi3</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="mi">7</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+                <span class="n">k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">^</span> <span class="n">pi4</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="mi">8</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
+                <span class="n">k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">==</span> <span class="n">num_round_keys</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="n">REFERENCE_VERSION</span> <span class="o">=</span> <span class="n">old_ref_v</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">REFERENCE_VERSION</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="c1"># pi4(R, k[8]) | pi4 : k_i + Constant(1, 32)</span>
+                <span class="n">k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">+</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">6</span><span class="p">:</span>
+                <span class="c1"># pi3(L, k[6], *) | pi3 : k_i + Constant(1, 32)</span>
+                <span class="n">k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="c1"># pi2(R, k[5]) | pi2 : k_i + (-Constant(1, 32))</span>
+                <span class="n">k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">)))</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="c1"># pi4(R, k[4]) | pi4 : k_i + Constant(1, 32)</span>
+                <span class="n">k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="c1"># pi3(L, k[2], *) | pi3 : k_i + Constant(1, 32)</span>
+                <span class="n">k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># pi2(R, k[1]) | pi2 : k_i + (-Constant(1, 32))</span>
+                <span class="n">k</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">)))</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">==</span> <span class="n">num_expanded_round_keys</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span> <span class="mi">1</span><span class="o">+</span><span class="n">num_expanded_round_keys</span><span class="p">]</span></div></div>
+
+
+<div class="viewcode-block" id="Multi2Encryption"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.Multi2Encryption">[docs]</a><span class="k">class</span> <span class="nc">Multi2Encryption</span><span class="p">(</span><span class="n">Encryption</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Encryption function.&quot;&quot;&quot;</span>
+
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="n">input_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">]</span>
+    <span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">]</span>
+    <span class="n">round_keys</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Multi2Encryption.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.Multi2Encryption.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span></div>
+
+<div class="viewcode-block" id="Multi2Encryption.eval"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.Multi2Encryption.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">R</span><span class="p">):</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">round_keys</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">REFERENCE_VERSION</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">R</span> <span class="o">^=</span> <span class="n">pi1</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">L</span> <span class="o">^=</span> <span class="n">pi2</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">R</span> <span class="o">^=</span> <span class="n">pi3</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">k</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="n">L</span> <span class="o">^=</span> <span class="n">pi4</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">k</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                    <span class="n">R</span> <span class="o">^=</span> <span class="n">pi1</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                    <span class="n">L</span> <span class="o">^=</span> <span class="n">pi2</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">k</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+                    <span class="n">R</span> <span class="o">^=</span> <span class="n">pi3</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">k</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
+                    <span class="n">L</span> <span class="o">^=</span> <span class="n">pi4</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">k</span><span class="p">[</span><span class="mi">8</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">R</span> <span class="o">^=</span> <span class="n">pi1</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">L</span> <span class="o">^=</span> <span class="n">pi2</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">R</span> <span class="o">^=</span> <span class="n">pi3</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]],</span> <span class="n">k</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="n">L</span> <span class="o">^=</span> <span class="n">pi4</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">]])</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                    <span class="n">R</span> <span class="o">^=</span> <span class="n">pi1</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                    <span class="n">L</span> <span class="o">^=</span> <span class="n">pi2</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">]])</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+                    <span class="n">R</span> <span class="o">^=</span> <span class="n">pi3</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">]],</span> <span class="n">k</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
+                    <span class="n">L</span> <span class="o">^=</span> <span class="n">pi4</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">]])</span>
+
+        <span class="k">return</span> <span class="n">L</span><span class="p">,</span> <span class="n">R</span></div></div>
+
+
+<div class="viewcode-block" id="Multi2Cipher"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.Multi2Cipher">[docs]</a><span class="k">class</span> <span class="nc">Multi2Cipher</span><span class="p">(</span><span class="n">Cipher</span><span class="p">):</span>
+    <span class="n">key_schedule</span> <span class="o">=</span> <span class="n">Multi2KeySchedule</span>
+    <span class="n">encryption</span> <span class="o">=</span> <span class="n">Multi2Encryption</span>
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">32</span>
+
+<div class="viewcode-block" id="Multi2Cipher.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.multi2.html#arxpy.primitives.multi2.Multi2Cipher.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">encryption</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="n">new_rounds</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">key_schedule</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="n">new_rounds</span><span class="p">)</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">old_rounds</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span>
+
+        <span class="k">global</span> <span class="n">REFERENCE_VERSION</span>
+
+        <span class="k">for</span> <span class="n">ref_v</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]:</span>
+            <span class="n">REFERENCE_VERSION</span> <span class="o">=</span> <span class="n">ref_v</span>
+
+            <span class="bp">cls</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+
+            <span class="n">plaintext</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">key_schedule</span><span class="o">.</span><span class="n">input_widths</span><span class="p">))]</span>
+            <span class="n">ciphertext</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0x1d9dfa1e</span><span class="p">,</span> <span class="mh">0x4d64bc67</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="bp">cls</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="n">ciphertext</span>
+
+            <span class="n">plaintext</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x23</span><span class="p">]</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x23</span><span class="p">,</span> <span class="mh">0x45</span><span class="p">,</span> <span class="mh">0x67</span><span class="p">,</span> <span class="mh">0x89</span><span class="p">,</span> <span class="mh">0xAB</span><span class="p">,</span> <span class="mh">0xCD</span><span class="p">,</span> <span class="mh">0xEF</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x23</span><span class="p">]</span>
+            <span class="n">ciphertext</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0xd241e7c8</span><span class="p">,</span> <span class="mh">0x74166979</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="bp">cls</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="n">ciphertext</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="n">old_rounds</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

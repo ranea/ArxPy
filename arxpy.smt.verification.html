@@ -1,0 +1,493 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.smt.verification module &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="arxpy.smt.types module" href="arxpy.smt.types.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="arxpy.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arxpy.bitvector.html">arxpy.bitvector package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.differential.html">arxpy.differential package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.primitives.html">arxpy.primitives package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="arxpy.smt.html">arxpy.smt package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="arxpy.smt.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="arxpy.smt.search.html">arxpy.smt.search module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.smt.types.html">arxpy.smt.types module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">arxpy.smt.verification module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="arxpy.html">ArxPy 0.2</a> &raquo;</li>
+        
+          <li><a href="arxpy.smt.html">arxpy.smt package</a> &raquo;</li>
+        
+      <li>arxpy.smt.verification module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/arxpy.smt.verification.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-arxpy.smt.verification">
+<span id="arxpy-smt-verification-module"></span><h1>arxpy.smt.verification module<a class="headerlink" href="#module-arxpy.smt.verification" title="Permalink to this headline">¶</a></h1>
+<p>Verify characteristics found by the SMT solver.</p>
+<p>To this end, a characteristic is split into sub-characteristics
+where each sub-ch has up to <code class="xref any docutils literal notranslate"><span class="pre">MAX_WEIGHT</span></code> weight.</p>
+<dl class="py function">
+<dt id="arxpy.smt.verification.bv2ccode">
+<code class="sig-prename descclassname">arxpy.smt.verification.</code><code class="sig-name descname">bv2ccode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bv</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/verification.html#bv2ccode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.verification.bv2ccode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a bit-vector type to C code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bv</strong> – the bit-vector <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Term</span></code></a> to convert</p>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.operation</span> <span class="kn">import</span> <span class="n">RotateLeft</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.verification</span> <span class="kn">import</span> <span class="n">bv2ccode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bv2ccode</span><span class="p">(</span><span class="n">x</span> <span class="o">|</span> <span class="n">y</span><span class="p">)</span>
+<span class="go">&#39;x | y&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bv2ccode</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+<span class="go">&#39;(x + y) &amp; 255&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bv2ccode</span><span class="p">(</span><span class="n">RotateLeft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="go">&#39;((x &lt;&lt; 1) | (x &gt;&gt; 7)) &amp; 255&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bv2ccode</span><span class="p">((</span><span class="o">~</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">nested bit-vector operations are not supported</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="arxpy.smt.verification.ssa2ccode">
+<code class="sig-prename descclassname">arxpy.smt.verification.</code><code class="sig-name descname">ssa2ccode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ssa</span></em>, <em class="sig-param"><span class="n">diff_type</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/verification.html#ssa2ccode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.verification.ssa2ccode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the C code to compute a differential probability over a function in ssa form.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="n">RXDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.chaskey</span> <span class="kn">import</span> <span class="n">ChaskeyPi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.verification</span> <span class="kn">import</span> <span class="n">ssa2ccode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ssa</span> <span class="o">=</span> <span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">ssa</span><span class="p">([</span><span class="s2">&quot;v0&quot;</span><span class="p">,</span> <span class="s2">&quot;v1&quot;</span><span class="p">,</span> <span class="s2">&quot;v2&quot;</span><span class="p">,</span> <span class="s2">&quot;v3&quot;</span><span class="p">],</span> <span class="s2">&quot;x&quot;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">header</span><span class="p">,</span> <span class="n">source</span> <span class="o">=</span> <span class="n">ssa2ccode</span><span class="p">(</span><span class="n">ssa</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+<span class="go">static unsigned long get_num_valid_pairs(uint32_t input_diff[], uint32_t output_diff[], unsigned long pair_samples, unsigned int seed);</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>  
+<span class="go">void eval(uint32_t v0, uint32_t v1, uint32_t v2, uint32_t v3, uint32_t* x7, uint32_t* x12, uint32_t* x13, uint32_t* x9){</span>
+<span class="go">    uint32_t x0 = (v0 + v1) &amp; 4294967295;</span>
+<span class="go">    uint32_t x1 = ((v1 &lt;&lt; 5) | (v1 &gt;&gt; 27)) &amp; 4294967295;</span>
+<span class="go">    uint32_t x2 = x0 ^ x1;</span>
+<span class="go">    uint32_t x3 = ((x0 &lt;&lt; 16) | (x0 &gt;&gt; 16)) &amp; 4294967295;</span>
+<span class="go">    uint32_t x4 = (v2 + v3) &amp; 4294967295;</span>
+<span class="go">    uint32_t x5 = ((v3 &lt;&lt; 8) | (v3 &gt;&gt; 24)) &amp; 4294967295;</span>
+<span class="go">    uint32_t x6 = x4 ^ x5;</span>
+<span class="go">    *x7 = (x3 + x6) &amp; 4294967295;</span>
+<span class="go">    uint32_t x8 = ((x6 &lt;&lt; 13) | (x6 &gt;&gt; 19)) &amp; 4294967295;</span>
+<span class="go">    *x9 = *x7 ^ x8;</span>
+<span class="go">    uint32_t x10 = (x2 + x4) &amp; 4294967295;</span>
+<span class="go">    uint32_t x11 = ((x2 &lt;&lt; 7) | (x2 &gt;&gt; 25)) &amp; 4294967295;</span>
+<span class="go">    *x12 = x10 ^ x11;</span>
+<span class="go">    *x13 = ((x10 &lt;&lt; 16) | (x10 &gt;&gt; 16)) &amp; 4294967295;</span>
+<span class="go">};</span>
+<span class="go">static unsigned long get_num_valid_pairs(uint32_t input_diff[], uint32_t output_diff[], unsigned long pair_samples, unsigned int seed){</span>
+<span class="go">    if (seed == 0) srand((unsigned int) time (NULL));</span>
+<span class="go">    else srand(seed);</span>
+<span class="go">    unsigned long num_valid_pairs = 0;</span>
+<span class="go">    unsigned long i = 0;</span>
+<span class="go">    unsigned int j = 0;</span>
+<span class="go">    uint32_t input1[4];</span>
+<span class="go">    uint32_t input2[4];</span>
+<span class="go">    uint32_t output1[4];</span>
+<span class="go">    uint32_t output2[4];</span>
+<span class="go">    for (; i &lt; pair_samples; ++i) {</span>
+<span class="go">        for (j = 0; j &lt; 4; ++j) {</span>
+<span class="go">            input1[j] = rand();</span>
+<span class="go">            input2[j] = input1[j] ^ input_diff[j];</span>
+<span class="go">        }</span>
+<span class="go">        eval(input1[0], input1[1], input1[2], input1[3], &amp;output1[0], &amp;output1[1], &amp;output1[2], &amp;output1[3]);</span>
+<span class="go">        eval(input2[0], input2[1], input2[2], input2[3], &amp;output2[0], &amp;output2[1], &amp;output2[2], &amp;output2[3]);</span>
+<span class="go">        for (j = 0; j &lt; 4; ++j) {</span>
+<span class="go">            if ( (output1[j] ^ output2[j]) != output_diff[j] ) break;</span>
+<span class="go">            if (j == 4 - 1) num_valid_pairs += 1;</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+<span class="go">    return num_valid_pairs;</span>
+<span class="go">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">header</span><span class="p">,</span> <span class="n">source</span> <span class="o">=</span> <span class="n">ssa2ccode</span><span class="p">(</span><span class="n">ssa</span><span class="p">,</span> <span class="n">RXDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+<span class="go">static unsigned long get_num_valid_pairs(uint32_t input_diff[], uint32_t output_diff[], unsigned long pair_samples, unsigned int seed);</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>  
+<span class="go">void eval(uint32_t v0, uint32_t v1, uint32_t v2, uint32_t v3, uint32_t* x7, uint32_t* x12, uint32_t* x13, uint32_t* x9){</span>
+<span class="go">    uint32_t x0 = (v0 + v1) &amp; 4294967295;</span>
+<span class="go">    uint32_t x1 = ((v1 &lt;&lt; 5) | (v1 &gt;&gt; 27)) &amp; 4294967295;</span>
+<span class="go">    uint32_t x2 = x0 ^ x1;</span>
+<span class="go">    uint32_t x3 = ((x0 &lt;&lt; 16) | (x0 &gt;&gt; 16)) &amp; 4294967295;</span>
+<span class="go">    uint32_t x4 = (v2 + v3) &amp; 4294967295;</span>
+<span class="go">    uint32_t x5 = ((v3 &lt;&lt; 8) | (v3 &gt;&gt; 24)) &amp; 4294967295;</span>
+<span class="go">    uint32_t x6 = x4 ^ x5;</span>
+<span class="go">    *x7 = (x3 + x6) &amp; 4294967295;</span>
+<span class="go">    uint32_t x8 = ((x6 &lt;&lt; 13) | (x6 &gt;&gt; 19)) &amp; 4294967295;</span>
+<span class="go">    *x9 = *x7 ^ x8;</span>
+<span class="go">    uint32_t x10 = (x2 + x4) &amp; 4294967295;</span>
+<span class="go">    uint32_t x11 = ((x2 &lt;&lt; 7) | (x2 &gt;&gt; 25)) &amp; 4294967295;</span>
+<span class="go">    *x12 = x10 ^ x11;</span>
+<span class="go">    *x13 = ((x10 &lt;&lt; 16) | (x10 &gt;&gt; 16)) &amp; 4294967295;</span>
+<span class="go">};</span>
+<span class="go">static unsigned long get_num_valid_pairs(uint32_t input_diff[], uint32_t output_diff[], unsigned long pair_samples, unsigned int seed){</span>
+<span class="go">    if (seed == 0) srand((unsigned int) time (NULL));</span>
+<span class="go">    else srand(seed);</span>
+<span class="go">    unsigned long num_valid_pairs = 0;</span>
+<span class="go">    unsigned long i = 0;</span>
+<span class="go">    unsigned int j = 0;</span>
+<span class="go">    uint32_t input1[4];</span>
+<span class="go">    uint32_t input2[4];</span>
+<span class="go">    uint32_t output1[4];</span>
+<span class="go">    uint32_t output2[4];</span>
+<span class="go">    for (; i &lt; pair_samples; ++i) {</span>
+<span class="go">        for (j = 0; j &lt; 4; ++j) {</span>
+<span class="go">            input1[j] = rand();</span>
+<span class="go">            input2[j] = ( ((input1[j] &lt;&lt; 1) | (input1[j] &gt;&gt; 31)) ^ input_diff[j] ) &amp; 4294967295;</span>
+<span class="go">        }</span>
+<span class="go">        eval(input1[0], input1[1], input1[2], input1[3], &amp;output1[0], &amp;output1[1], &amp;output1[2], &amp;output1[3]);</span>
+<span class="go">        eval(input2[0], input2[1], input2[2], input2[3], &amp;output2[0], &amp;output2[1], &amp;output2[2], &amp;output2[3]);</span>
+<span class="go">        for (j = 0; j &lt; 4; ++j) {</span>
+<span class="go">            if ( (( ((output1[j] &lt;&lt; 1) | (output1[j] &gt;&gt; 31)) ^ output2[j] ) &amp; 4294967295) != output_diff[j] ) break;</span>
+<span class="go">            if (j == 4 - 1) num_valid_pairs += 1;</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+<span class="go">    return num_valid_pairs;</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="arxpy.smt.verification.relatedssa2ccode">
+<code class="sig-prename descclassname">arxpy.smt.verification.</code><code class="sig-name descname">relatedssa2ccode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ssa1</span></em>, <em class="sig-param"><span class="n">ssa2</span></em>, <em class="sig-param"><span class="n">diff_type</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/verification.html#relatedssa2ccode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.verification.relatedssa2ccode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the C code to compute a differential probability over a (related) function in ssa form.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.chaskey</span> <span class="kn">import</span> <span class="n">ChaskeyPi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.verification</span> <span class="kn">import</span> <span class="n">relatedssa2ccode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ssa1</span> <span class="o">=</span> <span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">ssa</span><span class="p">([</span><span class="s2">&quot;v0&quot;</span><span class="p">,</span> <span class="s2">&quot;v1&quot;</span><span class="p">,</span> <span class="s2">&quot;v2&quot;</span><span class="p">,</span> <span class="s2">&quot;v3&quot;</span><span class="p">],</span> <span class="s2">&quot;x&quot;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ssa2</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">ssa1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ssa2</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ssa2</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ssa2</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">ssa2</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">ssa2</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">header</span><span class="p">,</span> <span class="n">source</span> <span class="o">=</span> <span class="n">relatedssa2ccode</span><span class="p">(</span><span class="n">ssa1</span><span class="p">,</span> <span class="n">ssa2</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+<span class="go">static unsigned long get_num_valid_pairs(uint32_t input_diff[], uint32_t output_diff[], unsigned long pair_samples, unsigned int seed);</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>  
+<span class="go">void eval1(uint32_t v0, uint32_t v1, uint32_t v2, uint32_t v3, uint32_t* x7, uint32_t* x12, uint32_t* x13, uint32_t* x9){</span>
+<span class="go">    uint32_t x0 = (v0 + v1) &amp; 4294967295;</span>
+<span class="go">    uint32_t x1 = ((v1 &lt;&lt; 5) | (v1 &gt;&gt; 27)) &amp; 4294967295;</span>
+<span class="go">    uint32_t x2 = x0 ^ x1;</span>
+<span class="go">    uint32_t x3 = ((x0 &lt;&lt; 16) | (x0 &gt;&gt; 16)) &amp; 4294967295;</span>
+<span class="go">    uint32_t x4 = (v2 + v3) &amp; 4294967295;</span>
+<span class="go">    uint32_t x5 = ((v3 &lt;&lt; 8) | (v3 &gt;&gt; 24)) &amp; 4294967295;</span>
+<span class="go">    uint32_t x6 = x4 ^ x5;</span>
+<span class="go">    *x7 = (x3 + x6) &amp; 4294967295;</span>
+<span class="go">    uint32_t x8 = ((x6 &lt;&lt; 13) | (x6 &gt;&gt; 19)) &amp; 4294967295;</span>
+<span class="go">    *x9 = *x7 ^ x8;</span>
+<span class="go">    uint32_t x10 = (x2 + x4) &amp; 4294967295;</span>
+<span class="go">    uint32_t x11 = ((x2 &lt;&lt; 7) | (x2 &gt;&gt; 25)) &amp; 4294967295;</span>
+<span class="go">    *x12 = x10 ^ x11;</span>
+<span class="go">    *x13 = ((x10 &lt;&lt; 16) | (x10 &gt;&gt; 16)) &amp; 4294967295;</span>
+<span class="go">};</span>
+<span class="go">void eval2(uint32_t v0, uint32_t v1, uint32_t v2, uint32_t v3, uint32_t* x7, uint32_t* x12, uint32_t* x13, uint32_t* x9){</span>
+<span class="go">    uint32_t x0 = (v0 + v1) &amp; 4294967295;</span>
+<span class="go">    uint32_t x1 = ((v1 &lt;&lt; 5) | (v1 &gt;&gt; 27)) &amp; 4294967295;</span>
+<span class="go">    uint32_t x2 = x0 ^ x1;</span>
+<span class="go">    uint32_t x3 = ((x0 &lt;&lt; 16) | (x0 &gt;&gt; 16)) &amp; 4294967295;</span>
+<span class="go">    uint32_t x4 = (v2 + v3) &amp; 4294967295;</span>
+<span class="go">    uint32_t x5 = ((v3 &lt;&lt; 8) | (v3 &gt;&gt; 24)) &amp; 4294967295;</span>
+<span class="go">    uint32_t x6 = x4 ^ x5;</span>
+<span class="go">    *x7 = (x3 + x6) &amp; 4294967295;</span>
+<span class="go">    uint32_t x8 = ((x6 &lt;&lt; 13) | (x6 &gt;&gt; 19)) &amp; 4294967295;</span>
+<span class="go">    *x9 = *x7 ^ x8;</span>
+<span class="go">    uint32_t x10 = (x2 + x4) &amp; 4294967295;</span>
+<span class="go">    uint32_t x11 = ((x2 &lt;&lt; 7) | (x2 &gt;&gt; 25)) &amp; 4294967295;</span>
+<span class="go">    *x12 = x10 ^ x11;</span>
+<span class="go">    *x13 = ((x10 &lt;&lt; 16) | (x10 &gt;&gt; 16)) &amp; 4294967295;</span>
+<span class="go">    *x7 = *x7;</span>
+<span class="go">};</span>
+<span class="go">static unsigned long get_num_valid_pairs(uint32_t input_diff[], uint32_t output_diff[], unsigned long pair_samples, unsigned int seed){</span>
+<span class="go">    if (seed == 0) srand((unsigned int) time (NULL));</span>
+<span class="go">    else srand(seed);</span>
+<span class="go">    unsigned long num_valid_pairs = 0;</span>
+<span class="go">    unsigned long i = 0;</span>
+<span class="go">    unsigned int j = 0;</span>
+<span class="go">    uint32_t input1[4];</span>
+<span class="go">    uint32_t input2[4];</span>
+<span class="go">    uint32_t output1[4];</span>
+<span class="go">    uint32_t output2[4];</span>
+<span class="go">    for (; i &lt; pair_samples; ++i) {</span>
+<span class="go">        for (j = 0; j &lt; 4; ++j) {</span>
+<span class="go">            input1[j] = rand();</span>
+<span class="go">            input2[j] = input1[j] ^ input_diff[j];</span>
+<span class="go">        }</span>
+<span class="go">        eval1(input1[0], input1[1], input1[2], input1[3], &amp;output1[0], &amp;output1[1], &amp;output1[2], &amp;output1[3]);</span>
+<span class="go">        eval2(input2[0], input2[1], input2[2], input2[3], &amp;output2[0], &amp;output2[1], &amp;output2[2], &amp;output2[3]);</span>
+<span class="go">        for (j = 0; j &lt; 4; ++j) {</span>
+<span class="go">            if ( (output1[j] ^ output2[j]) != output_diff[j] ) break;</span>
+<span class="go">            if (j == 4 - 1) num_valid_pairs += 1;</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+<span class="go">    return num_valid_pairs;</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="arxpy.smt.verification.compile_run_empirical_weight">
+<code class="sig-prename descclassname">arxpy.smt.verification.</code><code class="sig-name descname">compile_run_empirical_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ccode</span></em>, <em class="sig-param"><span class="n">module_name</span></em>, <em class="sig-param"><span class="n">input_diff</span></em>, <em class="sig-param"><span class="n">output_diff</span></em>, <em class="sig-param"><span class="n">target_weight</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/verification.html#compile_run_empirical_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.verification.compile_run_empirical_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compile and execute the C code to compute the empirical weight</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="n">RXDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.chaskey</span> <span class="kn">import</span> <span class="n">ChaskeyPi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.verification</span> <span class="kn">import</span> <span class="n">ssa2ccode</span><span class="p">,</span> <span class="n">compile_run_empirical_weight</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ssa</span> <span class="o">=</span> <span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">ssa</span><span class="p">([</span><span class="s2">&quot;v0&quot;</span><span class="p">,</span> <span class="s2">&quot;v1&quot;</span><span class="p">,</span> <span class="s2">&quot;v2&quot;</span><span class="p">,</span> <span class="s2">&quot;v3&quot;</span><span class="p">],</span> <span class="s2">&quot;x&quot;</span><span class="p">)</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">header</span><span class="p">,</span> <span class="n">source</span> <span class="o">=</span> <span class="n">ssa2ccode</span><span class="p">(</span><span class="n">ssa</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ind</span><span class="p">,</span> <span class="n">outd</span><span class="p">,</span> <span class="n">tw</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compile_run_empirical_weight</span><span class="p">([</span><span class="n">header</span><span class="p">,</span> <span class="n">source</span><span class="p">],</span> <span class="s2">&quot;_libverChaskeyPi&quot;</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span class="n">outd</span><span class="p">,</span> <span class="n">tw</span><span class="p">)</span>
+<span class="go">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ind</span><span class="p">,</span> <span class="n">outd</span><span class="p">,</span> <span class="n">tw</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compile_run_empirical_weight</span><span class="p">([</span><span class="n">header</span><span class="p">,</span> <span class="n">source</span><span class="p">],</span> <span class="s2">&quot;_libverChaskeyPi&quot;</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span class="n">outd</span><span class="p">,</span> <span class="n">tw</span><span class="p">)</span>
+<span class="go">inf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">header</span><span class="p">,</span> <span class="n">source</span> <span class="o">=</span> <span class="n">ssa2ccode</span><span class="p">(</span><span class="n">ssa</span><span class="p">,</span> <span class="n">RXDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ind</span><span class="p">,</span> <span class="n">outd</span><span class="p">,</span> <span class="n">tw</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="mi">8</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">4</span> <span class="o">&lt;=</span> <span class="n">compile_run_empirical_weight</span><span class="p">([</span><span class="n">header</span><span class="p">,</span> <span class="n">source</span><span class="p">],</span> <span class="s2">&quot;_libverChaskeyPi&quot;</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span class="n">outd</span><span class="p">,</span> <span class="n">tw</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">8</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ind</span><span class="p">,</span> <span class="n">outd</span><span class="p">,</span> <span class="n">tw</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="mi">8</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">compile_run_empirical_weight</span><span class="p">([</span><span class="n">header</span><span class="p">,</span> <span class="n">source</span><span class="p">],</span> <span class="s2">&quot;_libverChaskeyPi&quot;</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span class="n">outd</span><span class="p">,</span> <span class="n">tw</span><span class="p">)</span>
+<span class="go">inf</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="arxpy.smt.verification.fast_empirical_weight">
+<code class="sig-prename descclassname">arxpy.smt.verification.</code><code class="sig-name descname">fast_empirical_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ch_found</span></em>, <em class="sig-param"><span class="n">verbose_lvl</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">debug</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/verification.html#fast_empirical_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.verification.fast_empirical_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the empirical weight of the model using C code.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">filename</span></code> is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the output will be printed
+to the given file rather than the to stdout.</p>
+<p>The argument <code class="docutils literal notranslate"><span class="pre">verbose_lvl</span></code> can take an integer between
+<code class="docutils literal notranslate"><span class="pre">0</span></code> (no verbose) and <code class="docutils literal notranslate"><span class="pre">3</span></code> (full verbose).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="n">RXDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">BvCharacteristic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.chaskey</span> <span class="kn">import</span> <span class="n">ChaskeyPi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search</span> <span class="kn">import</span> <span class="n">SearchCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.verification</span> <span class="kn">import</span> <span class="n">fast_empirical_weight</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">BvCharacteristic</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;dv0&quot;</span><span class="p">,</span> <span class="s2">&quot;dv1&quot;</span><span class="p">,</span> <span class="s2">&quot;dv2&quot;</span><span class="p">,</span> <span class="s2">&quot;dv3&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span> <span class="o">=</span> <span class="n">SearchCh</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span> <span class="o">=</span> <span class="n">search_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span><span class="o">.</span><span class="n">ch_weight</span>
+<span class="go">0x04</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">3</span> <span class="o">&lt;=</span> <span class="n">fast_empirical_weight</span><span class="p">(</span><span class="n">ch_found</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">5</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">BvCharacteristic</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">RXDiff</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;dv0&quot;</span><span class="p">,</span> <span class="s2">&quot;dv1&quot;</span><span class="p">,</span> <span class="s2">&quot;dv2&quot;</span><span class="p">,</span> <span class="s2">&quot;dv3&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ic</span> <span class="o">=</span> <span class="p">[</span><span class="n">operation</span><span class="o">.</span><span class="n">BvComp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">ch</span><span class="o">.</span><span class="n">input_diff</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ic</span> <span class="o">+=</span> <span class="p">[</span><span class="n">operation</span><span class="o">.</span><span class="n">BvComp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">ch</span><span class="o">.</span><span class="n">output_diff</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span> <span class="o">=</span> <span class="n">SearchCh</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">allow_zero_input_diff</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">initial_constraints</span><span class="o">=</span><span class="n">ic</span><span class="p">)</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch_found</span><span class="o">.</span><span class="n">ch_weight</span>
+<span class="go">0x05</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">4</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">fast_empirical_weight</span><span class="p">(</span><span class="n">ch_found</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">8</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="arxpy.smt.types.html" class="btn btn-neutral float-left" title="arxpy.smt.types module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

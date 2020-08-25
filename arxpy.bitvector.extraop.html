@@ -1,0 +1,490 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.bitvector.extraop module &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="arxpy.bitvector.operation module" href="arxpy.bitvector.operation.html" />
+    <link rel="prev" title="arxpy.bitvector.core module" href="arxpy.bitvector.core.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="arxpy.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="arxpy.bitvector.html">arxpy.bitvector package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="arxpy.bitvector.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="arxpy.bitvector.context.html">arxpy.bitvector.context module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.bitvector.core.html">arxpy.bitvector.core module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">arxpy.bitvector.extraop module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.bitvector.operation.html">arxpy.bitvector.operation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.bitvector.printing.html">arxpy.bitvector.printing module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.differential.html">arxpy.differential package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.primitives.html">arxpy.primitives package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.smt.html">arxpy.smt package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="arxpy.html">ArxPy 0.2</a> &raquo;</li>
+        
+          <li><a href="arxpy.bitvector.html">arxpy.bitvector package</a> &raquo;</li>
+        
+      <li>arxpy.bitvector.extraop module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/arxpy.bitvector.extraop.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-arxpy.bitvector.extraop">
+<span id="arxpy-bitvector-extraop-module"></span><h1>arxpy.bitvector.extraop module<a class="headerlink" href="#module-arxpy.bitvector.extraop" title="Permalink to this headline">¶</a></h1>
+<p>Provide additional bit-vector operators.</p>
+<dl class="py function">
+<dt id="arxpy.bitvector.extraop.repeat_pattern">
+<code class="sig-prename descclassname">arxpy.bitvector.extraop.</code><code class="sig-name descname">repeat_pattern</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern</span></em>, <em class="sig-param"><span class="n">width</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#repeat_pattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.repeat_pattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repeat the pattern until obtain a bit-vector of given width.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="arxpy.bitvector.extraop.pattern01">
+<code class="sig-prename descclassname">arxpy.bitvector.extraop.</code><code class="sig-name descname">pattern01</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">width</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#pattern01"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.pattern01" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtain the pattern 0…01…1 with given 0-width.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.bitvector.extraop.PopCount">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.bitvector.extraop.</code><code class="sig-name descname">PopCount</code><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#PopCount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.PopCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.Operation" title="arxpy.bitvector.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.operation.Operation</span></code></a></p>
+<p>Count the number of 1’s in the bit-vector.</p>
+<p>This operation is also known as the hamming weight of a bit-vector.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.extraop</span> <span class="kn">import</span> <span class="n">PopCount</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PopCount</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mb">0b1010</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="go">0b010</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PopCount</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mb">0b101</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="go">0b10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PopCount</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>  
+<span class="go">((0x3 &amp; ((x - (0x5 &amp; (x &gt;&gt; 0x1))) &gt;&gt; 0x2)) + (0x3 &amp; (x - (0x5 &amp; (x &gt;&gt; 0x1)))))[2:]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PopCount</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>  
+<span class="go">(0b0 :: (x[0])) + (0b0 :: (x[1])) + (0b0 :: (x[2]))</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.bitvector.extraop.PopCount.output_width">
+<em class="property">classmethod </em><code class="sig-name descname">output_width</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#PopCount.output_width"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.PopCount.output_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the bit-width of the resulting bit-vector.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.extraop.PopCount.eval">
+<em class="property">classmethod </em><code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bv</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#PopCount.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.PopCount.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operator with given operands.</p>
+<p>This is an internal method. To evaluate a bit-vector operation,
+use the operator <code class="docutils literal notranslate"><span class="pre">()</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.bitvector.extraop.Reverse">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.bitvector.extraop.</code><code class="sig-name descname">Reverse</code><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#Reverse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.Reverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.Operation" title="arxpy.bitvector.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.operation.Operation</span></code></a></p>
+<p>Reverse the bit-vector.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.extraop</span> <span class="kn">import</span> <span class="n">PopCount</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Reverse</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mb">0b1010</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="go">0x5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Reverse</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mb">0b001</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="go">0b100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Reverse</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>  
+<span class="go">(0x3 &amp; (((0x5 &amp; (x &gt;&gt; 0x1)) | ((0x5 &amp; x) &lt;&lt; 0x1)) &gt;&gt; 0x2)) |</span>
+<span class="go">((0x3 &amp; ((0x5 &amp; (x &gt;&gt; 0x1)) | ((0x5 &amp; x) &lt;&lt; 0x1))) &lt;&lt; 0x2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Reverse</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>  
+<span class="go">(x[0]) :: (x[1]) :: (x[2])</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.bitvector.extraop.Reverse.output_width">
+<em class="property">classmethod </em><code class="sig-name descname">output_width</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#Reverse.output_width"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.Reverse.output_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the bit-width of the resulting bit-vector.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.extraop.Reverse.eval">
+<em class="property">classmethod </em><code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bv</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#Reverse.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.Reverse.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operator with given operands.</p>
+<p>This is an internal method. To evaluate a bit-vector operation,
+use the operator <code class="docutils literal notranslate"><span class="pre">()</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.bitvector.extraop.PopCountSum2">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.bitvector.extraop.</code><code class="sig-name descname">PopCountSum2</code><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#PopCountSum2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.PopCountSum2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.Operation" title="arxpy.bitvector.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.operation.Operation</span></code></a></p>
+<p>Count the number of 1’s of two bit-vectors.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.extraop</span> <span class="kn">import</span> <span class="n">PopCountSum2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PopCountSum2</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mb">0b000</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mb">0b001</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="go">0b001</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PopCountSum2</span><span class="p">(</span><span class="o">~</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span> <span class="o">~</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
+<span class="go">0b11110</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PopCountSum2</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>  
+<span class="go">(0x3 &amp; ((x - (0x5 &amp; (x &gt;&gt; 0x1))) &gt;&gt; 0x2)) + (0x3 &amp; (x - (0x5 &amp; (x &gt;&gt; 0x1)))) +</span>
+<span class="go">(0x3 &amp; ((y - (0x5 &amp; (y &gt;&gt; 0x1))) &gt;&gt; 0x2)) + (0x3 &amp; (y - (0x5 &amp; (y &gt;&gt; 0x1))))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PopCountSum2</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>  
+<span class="go">(0b0 :: ((0b0 :: (x[0])) + (0b0 :: (x[1])) + (0b0 :: (x[2])))) +</span>
+<span class="go">(0b0 :: ((0b0 :: (y[0])) + (0b0 :: (y[1])) + (0b0 :: (y[2]))))</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.bitvector.extraop.PopCountSum2.condition">
+<em class="property">classmethod </em><code class="sig-name descname">condition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#PopCountSum2.condition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.PopCountSum2.condition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the operands verify the restrictions of the operator.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.extraop.PopCountSum2.output_width">
+<em class="property">classmethod </em><code class="sig-name descname">output_width</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#PopCountSum2.output_width"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.PopCountSum2.output_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the bit-width of the resulting bit-vector.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.extraop.PopCountSum2.eval">
+<em class="property">classmethod </em><code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#PopCountSum2.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.PopCountSum2.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operator with given operands.</p>
+<p>This is an internal method. To evaluate a bit-vector operation,
+use the operator <code class="docutils literal notranslate"><span class="pre">()</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.bitvector.extraop.PopCountSum3">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.bitvector.extraop.</code><code class="sig-name descname">PopCountSum3</code><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#PopCountSum3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.PopCountSum3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.Operation" title="arxpy.bitvector.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.operation.Operation</span></code></a></p>
+<p>Count the number of 1’s of three bit-vectors.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.extraop</span> <span class="kn">import</span> <span class="n">PopCountSum3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PopCountSum3</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mb">0b000</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mb">0b001</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mb">0b011</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="go">0x3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PopCountSum3</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>  
+<span class="go">(0x3 &amp; ((x - (0x5 &amp; (x &gt;&gt; 0x1))) &gt;&gt; 0x2)) + (0x3 &amp; (x - (0x5 &amp; (x &gt;&gt; 0x1)))) +</span>
+<span class="go">(0x3 &amp; ((y - (0x5 &amp; (y &gt;&gt; 0x1))) &gt;&gt; 0x2)) + (0x3 &amp; (y - (0x5 &amp; (y &gt;&gt; 0x1)))) +</span>
+<span class="go">(0x3 &amp; ((z - (0x5 &amp; (z &gt;&gt; 0x1))) &gt;&gt; 0x2)) + (0x3 &amp; (z - (0x5 &amp; (z &gt;&gt; 0x1))))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PopCountSum3</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>  
+<span class="go">(0b00 :: ((0b0 :: (x[0])) + (0b0 :: (x[1])) + (0b0 :: (x[2])))) +</span>
+<span class="go">(0b00 :: ((0b0 :: (y[0])) + (0b0 :: (y[1])) + (0b0 :: (y[2]))))</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.bitvector.extraop.PopCountSum3.condition">
+<em class="property">classmethod </em><code class="sig-name descname">condition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">z</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#PopCountSum3.condition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.PopCountSum3.condition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the operands verify the restrictions of the operator.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.extraop.PopCountSum3.output_width">
+<em class="property">classmethod </em><code class="sig-name descname">output_width</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">z</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#PopCountSum3.output_width"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.PopCountSum3.output_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the bit-width of the resulting bit-vector.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.extraop.PopCountSum3.eval">
+<em class="property">classmethod </em><code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">z</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#PopCountSum3.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.PopCountSum3.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operator with given operands.</p>
+<p>This is an internal method. To evaluate a bit-vector operation,
+use the operator <code class="docutils literal notranslate"><span class="pre">()</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.bitvector.extraop.PopCountDiff">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.bitvector.extraop.</code><code class="sig-name descname">PopCountDiff</code><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#PopCountDiff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.PopCountDiff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.Operation" title="arxpy.bitvector.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.operation.Operation</span></code></a></p>
+<p>Compute the difference of the hamming weight of two words</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.extraop</span> <span class="kn">import</span> <span class="n">PopCountDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PopCountDiff</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mb">0b011</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mb">0b100</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="go">0b01</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PopCountDiff</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>  
+<span class="go">(((0x3 &amp; ((x - (0x5 &amp; (x &gt;&gt; 0x1))) &gt;&gt; 0x2)) + (0x3 &amp; (x - (0x5 &amp; (x &gt;&gt; 0x1)))) +</span>
+<span class="go">(0x3 &amp; ((~y - (0x5 &amp; (~y &gt;&gt; 0x1))) &gt;&gt; 0x2)) + (0x3 &amp; (~y - (0x5 &amp; (~y &gt;&gt; 0x1))))) - 0x4)[2:]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PopCountDiff</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>  
+<span class="go">((0b0 :: (x[0])) + (0b0 :: (x[1])) + (0b0 :: (x[2]))) -</span>
+<span class="go">((0b0 :: (y[0])) + (0b0 :: (y[1])) + (0b0 :: (y[2])))</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.bitvector.extraop.PopCountDiff.condition">
+<em class="property">classmethod </em><code class="sig-name descname">condition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#PopCountDiff.condition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.PopCountDiff.condition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the operands verify the restrictions of the operator.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.extraop.PopCountDiff.output_width">
+<em class="property">classmethod </em><code class="sig-name descname">output_width</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#PopCountDiff.output_width"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.PopCountDiff.output_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the bit-width of the resulting bit-vector.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.extraop.PopCountDiff.eval">
+<em class="property">classmethod </em><code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#PopCountDiff.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.PopCountDiff.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operator with given operands.</p>
+<p>This is an internal method. To evaluate a bit-vector operation,
+use the operator <code class="docutils literal notranslate"><span class="pre">()</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.bitvector.extraop.LeadingZeros">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.bitvector.extraop.</code><code class="sig-name descname">LeadingZeros</code><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#LeadingZeros"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.LeadingZeros" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.Operation" title="arxpy.bitvector.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.operation.Operation</span></code></a></p>
+<p>Return a bit-vector with the leading zeros set to one and the rest to zero.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.extraop</span> <span class="kn">import</span> <span class="n">PopCount</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LeadingZeros</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mb">0b11111</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="go">0b00000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LeadingZeros</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mb">0b001</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="go">0b110</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LeadingZeros</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>  
+<span class="go">~(((x | (x &gt;&gt; 0x1)) &gt;&gt; 0x2) | x | (x &gt;&gt; 0x1))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LeadingZeros</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>  
+<span class="go">~((((((0b0 :: x) &gt;&gt; 0x1) | (0b0 :: x)) &gt;&gt; 0x2) | ((0b0 :: x) &gt;&gt; 0x1) | (0b0 :: x))[2:])</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.bitvector.extraop.LeadingZeros.output_width">
+<em class="property">classmethod </em><code class="sig-name descname">output_width</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#LeadingZeros.output_width"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.LeadingZeros.output_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the bit-width of the resulting bit-vector.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.extraop.LeadingZeros.eval">
+<em class="property">classmethod </em><code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bv</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#LeadingZeros.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.LeadingZeros.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operator with given operands.</p>
+<p>This is an internal method. To evaluate a bit-vector operation,
+use the operator <code class="docutils literal notranslate"><span class="pre">()</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.bitvector.extraop.PartialOperation">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.bitvector.extraop.</code><code class="sig-name descname">PartialOperation</code><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#PartialOperation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.PartialOperation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.Operation" title="arxpy.bitvector.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.operation.Operation</span></code></a></p>
+<p>Represent the bit-vector operations with fixed arguments.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="arxpy.bitvector.extraop.make_partial_operation">
+<code class="sig-prename descclassname">arxpy.bitvector.extraop.</code><code class="sig-name descname">make_partial_operation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bv_op</span></em>, <em class="sig-param"><span class="n">fixed_args</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#make_partial_operation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.make_partial_operation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new operation based on the given one but with fixed arguments.</p>
+<p>The argument <code class="docutils literal notranslate"><span class="pre">fixed_args</span></code> is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref any docutils literal notranslate"><span class="pre">tuple</span></code></a> with the same length as the
+number of operands of the given function, containing <code class="docutils literal notranslate"><span class="pre">None</span></code> or <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Constant" title="arxpy.bitvector.core.Constant"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Constant</span></code></a> elements.
+If <code class="docutils literal notranslate"><span class="pre">fixed_args[i]</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the i-th operand is not fixed;
+otherwise, the i-th operand is replaced with <code class="docutils literal notranslate"><span class="pre">fixed_args[i]</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.operation</span> <span class="kn">import</span> <span class="n">BvAdd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BvCteAdd</span> <span class="o">=</span> <span class="n">make_partial_operation</span><span class="p">(</span><span class="n">BvAdd</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">([</span><span class="kc">None</span><span class="p">,</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BvCteAdd</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="go">BvAdd(·, 0x1)(a)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BvCteAdd</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="go">0x2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">BvCteAdd</span> <span class="o">==</span> <span class="n">make_partial_operation</span><span class="p">(</span><span class="n">BvAdd</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">([</span><span class="kc">None</span><span class="p">,</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="arxpy.bitvector.operation.html" class="btn btn-neutral float-right" title="arxpy.bitvector.operation module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="arxpy.bitvector.core.html" class="btn btn-neutral float-left" title="arxpy.bitvector.core module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

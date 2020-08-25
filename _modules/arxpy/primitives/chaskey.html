@@ -1,0 +1,247 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.primitives.chaskey &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html#subpackages">Subpackages</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>arxpy.primitives.chaskey</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for arxpy.primitives.chaskey</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Permutation :math:`\pi` of Chaskey.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector.operation</span> <span class="kn">import</span> <span class="n">RotateLeft</span>
+
+<span class="kn">from</span> <span class="nn">arxpy.primitives.primitives</span> <span class="kn">import</span> <span class="n">BvFunction</span>
+
+
+<div class="viewcode-block" id="ChaskeyPi"><a class="viewcode-back" href="../../../arxpy.primitives.chaskey.html#arxpy.primitives.chaskey.ChaskeyPi">[docs]</a><span class="k">class</span> <span class="nc">ChaskeyPi</span><span class="p">(</span><span class="n">BvFunction</span><span class="p">):</span>
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">input_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">]</span>
+    <span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">]</span>
+
+<div class="viewcode-block" id="ChaskeyPi.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.chaskey.html#arxpy.primitives.chaskey.ChaskeyPi.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span></div>
+
+<div class="viewcode-block" id="ChaskeyPi.eval"><a class="viewcode-back" href="../../../arxpy.primitives.chaskey.html#arxpy.primitives.chaskey.ChaskeyPi.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v0</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">):</span>
+            <span class="n">v0</span> <span class="o">+=</span> <span class="n">v1</span>
+            <span class="n">v1</span> <span class="o">=</span> <span class="n">RotateLeft</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+            <span class="n">v1</span> <span class="o">^=</span> <span class="n">v0</span>
+            <span class="n">v0</span> <span class="o">=</span> <span class="n">RotateLeft</span><span class="p">(</span><span class="n">v0</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+
+            <span class="n">v2</span> <span class="o">+=</span> <span class="n">v3</span>
+            <span class="n">v3</span> <span class="o">=</span> <span class="n">RotateLeft</span><span class="p">(</span><span class="n">v3</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+            <span class="n">v3</span> <span class="o">^=</span> <span class="n">v2</span>
+
+            <span class="n">v0</span> <span class="o">+=</span> <span class="n">v3</span>
+            <span class="n">v3</span> <span class="o">=</span> <span class="n">RotateLeft</span><span class="p">(</span><span class="n">v3</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+            <span class="n">v3</span> <span class="o">^=</span> <span class="n">v0</span>
+
+            <span class="n">v2</span> <span class="o">+=</span> <span class="n">v1</span>
+            <span class="n">v1</span> <span class="o">=</span> <span class="n">RotateLeft</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+            <span class="n">v1</span> <span class="o">^=</span> <span class="n">v2</span>
+            <span class="n">v2</span> <span class="o">=</span> <span class="n">RotateLeft</span><span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">v0</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">v3</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">old_rounds</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+
+        <span class="n">pt</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Constant</span><span class="p">(</span><span class="mh">0x00000000</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+        <span class="p">]</span> <span class="o">*</span> <span class="mi">4</span>
+        <span class="n">ct</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Constant</span><span class="p">(</span><span class="mh">0x00000000</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+        <span class="p">]</span> <span class="o">*</span> <span class="mi">4</span>
+        <span class="k">assert</span> <span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">pt</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="n">old_rounds</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

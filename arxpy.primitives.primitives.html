@@ -1,0 +1,400 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.primitives.primitives module &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="arxpy.primitives.shacal1 module" href="arxpy.primitives.shacal1.html" />
+    <link rel="prev" title="arxpy.primitives.picipher module" href="arxpy.primitives.picipher.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="arxpy.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arxpy.bitvector.html">arxpy.bitvector package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.differential.html">arxpy.differential package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="arxpy.primitives.html">arxpy.primitives package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="arxpy.primitives.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.cham.html">arxpy.primitives.cham module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.chaskey.html">arxpy.primitives.chaskey module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.feal.html">arxpy.primitives.feal module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.hight.html">arxpy.primitives.hight module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.lea.html">arxpy.primitives.lea module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.multi2.html">arxpy.primitives.multi2 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.picipher.html">arxpy.primitives.picipher module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">arxpy.primitives.primitives module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.shacal1.html">arxpy.primitives.shacal1 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.shacal2.html">arxpy.primitives.shacal2 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.simeck.html">arxpy.primitives.simeck module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.simon.html">arxpy.primitives.simon module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.speck.html">arxpy.primitives.speck module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.tea.html">arxpy.primitives.tea module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.threefish.html">arxpy.primitives.threefish module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.primitives.xtea.html">arxpy.primitives.xtea module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.smt.html">arxpy.smt package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="arxpy.html">ArxPy 0.2</a> &raquo;</li>
+        
+          <li><a href="arxpy.primitives.html">arxpy.primitives package</a> &raquo;</li>
+        
+      <li>arxpy.primitives.primitives module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/arxpy.primitives.primitives.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-arxpy.primitives.primitives">
+<span id="arxpy-primitives-primitives-module"></span><h1>arxpy.primitives.primitives module<a class="headerlink" href="#module-arxpy.primitives.primitives" title="Permalink to this headline">¶</a></h1>
+<p>Represent symmetric primitives.</p>
+<dl class="py class">
+<dt id="arxpy.primitives.primitives.BvFunction">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.primitives.primitives.</code><code class="sig-name descname">BvFunction</code><a class="reference internal" href="_modules/arxpy/primitives/primitives.html#BvFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.primitives.BvFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represent (iterated) fixed-width bit-vector functions.</p>
+<p>A <a class="reference internal" href="#arxpy.primitives.primitives.BvFunction" title="arxpy.primitives.primitives.BvFunction"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvFunction</span></code></a> takes fixed-width <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Constant" title="arxpy.bitvector.core.Constant"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Constant</span></code></a> operands and return a
+tuple of fixed-width <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Constant" title="arxpy.bitvector.core.Constant"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Constant</span></code></a>. An iterated bit-vector function
+contains a subroutine that is iterated a certain number of <em>rounds</em>,
+which can be changed using <a class="reference internal" href="#arxpy.primitives.primitives.BvFunction.set_rounds" title="arxpy.primitives.primitives.BvFunction.set_rounds"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">set_rounds</span></code></a>.</p>
+<p>Similar to <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.Operation" title="arxpy.bitvector.operation.Operation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a>, <a class="reference internal" href="#arxpy.primitives.primitives.BvFunction" title="arxpy.primitives.primitives.BvFunction"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvFunction</span></code></a> is evaluated
+using the operator <code class="docutils literal notranslate"><span class="pre">()</span></code> and provides <em>Automatic Constant Conversion</em>.
+Note that <a class="reference internal" href="#arxpy.primitives.primitives.BvFunction" title="arxpy.primitives.primitives.BvFunction"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvFunction</span></code></a> only accepts <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Constant" title="arxpy.bitvector.core.Constant"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Constant</span></code></a> operands and
+always return a tuple, as opposed to <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.Operation" title="arxpy.bitvector.operation.Operation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a> that accepts
+<a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Term</span></code></a> and scalar operands and returns a single <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Term</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.primitives</span> <span class="kn">import</span> <span class="n">BvFunction</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.chaskey</span> <span class="kn">import</span> <span class="n">ChaskeyPi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">issubclass</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">BvFunction</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChaskeyPi</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># automatic conversion from int to Constant</span>
+<span class="go">(0x00000000, 0x00000000, 0x00000000, 0x00000000)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt id="arxpy.primitives.primitives.BvFunction.input_widths">
+<code class="sig-name descname">input_widths</code><a class="headerlink" href="#arxpy.primitives.primitives.BvFunction.input_widths" title="Permalink to this definition">¶</a></dt>
+<dd><p>a list containing the widths of the inputs</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.primitives.primitives.BvFunction.output_widths">
+<code class="sig-name descname">output_widths</code><a class="headerlink" href="#arxpy.primitives.primitives.BvFunction.output_widths" title="Permalink to this definition">¶</a></dt>
+<dd><p>a list containing the widths of the outputs</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.primitives.primitives.BvFunction.rounds">
+<code class="sig-name descname">rounds</code><a class="headerlink" href="#arxpy.primitives.primitives.BvFunction.rounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>the number of iterations</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.primitives.BvFunction.eval">
+<em class="property">classmethod </em><code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/primitives.html#BvFunction.eval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.primitives.BvFunction.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the function (internal method).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.primitives.BvFunction.set_rounds">
+<em class="property">classmethod </em><code class="sig-name descname">set_rounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_rounds</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/primitives.html#BvFunction.set_rounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.primitives.BvFunction.set_rounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the number of rounds and adjust the input/output widths.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.primitives.BvFunction.ssa">
+<em class="property">classmethod </em><code class="sig-name descname">ssa</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_names</span></em>, <em class="sig-param"><span class="n">id_prefix</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/primitives.html#BvFunction.ssa"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.primitives.BvFunction.ssa" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a static single assignment program representing the function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_names</strong> – the names  for the input variables</p></li>
+<li><p><strong>id_prefix</strong> – the prefix to denote the intermediate variables</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a dictionary with three keys</p>
+<ul class="simple">
+<li><p><em>input_vars</em>: a list of <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Variable" title="arxpy.bitvector.core.Variable"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Variable</span></code></a> representing the inputs</p></li>
+<li><p><em>output_vars</em>: a list of <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Variable" title="arxpy.bitvector.core.Variable"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Variable</span></code></a> representing the outputs</p></li>
+<li><p><em>assignments</em>: an ordered sequence of pairs
+(<a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Variable" title="arxpy.bitvector.core.Variable"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Variable</span></code></a>, <a class="reference internal" href="arxpy.bitvector.operation.html#arxpy.bitvector.operation.Operation" title="arxpy.bitvector.operation.Operation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a>) representing each assignment
+of the SSA program.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.chaskey</span> <span class="kn">import</span> <span class="n">ChaskeyPi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">ssa</span><span class="p">([</span><span class="s2">&quot;v0&quot;</span><span class="p">,</span> <span class="s2">&quot;v1&quot;</span><span class="p">,</span> <span class="s2">&quot;v2&quot;</span><span class="p">,</span> <span class="s2">&quot;v3&quot;</span><span class="p">],</span> <span class="s2">&quot;x&quot;</span><span class="p">)</span>  
+<span class="go">{&#39;input_vars&#39;: (v0, v1, v2, v3),</span>
+<span class="go">&#39;output_vars&#39;: (x7, x12, x13, x9),</span>
+<span class="go">&#39;assignments&#39;: ((x0, v0 + v1), (x1, v1 &lt;&lt;&lt; 5), (x2, x0 ^ x1), (x3, x0 &lt;&lt;&lt; 16), (x4, v2 + v3),</span>
+<span class="go">(x5, v3 &lt;&lt;&lt; 8), (x6, x4 ^ x5), (x7, x3 + x6), (x8, x6 &lt;&lt;&lt; 13), (x9, x7 ^ x8), (x10, x2 + x4),</span>
+<span class="go">(x11, x2 &lt;&lt;&lt; 7), (x12, x10 ^ x11), (x13, x10 &lt;&lt;&lt; 16))}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.primitives.primitives.KeySchedule">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.primitives.primitives.</code><code class="sig-name descname">KeySchedule</code><a class="reference internal" href="_modules/arxpy/primitives/primitives.html#KeySchedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.primitives.KeySchedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#arxpy.primitives.primitives.BvFunction" title="arxpy.primitives.primitives.BvFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.primitives.primitives.BvFunction</span></code></a></p>
+<p>Represent key schedule functions.</p>
+<p>A key schedule function is a <a class="reference internal" href="#arxpy.primitives.primitives.BvFunction" title="arxpy.primitives.primitives.BvFunction"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvFunction</span></code></a> that takes
+the masterkey as input and returns the round keys.
+See <a class="reference internal" href="#arxpy.primitives.primitives.BvFunction" title="arxpy.primitives.primitives.BvFunction"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvFunction</span></code></a> for more information.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.primitives.primitives.Encryption">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.primitives.primitives.</code><code class="sig-name descname">Encryption</code><a class="reference internal" href="_modules/arxpy/primitives/primitives.html#Encryption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.primitives.Encryption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#arxpy.primitives.primitives.BvFunction" title="arxpy.primitives.primitives.BvFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.primitives.primitives.BvFunction</span></code></a></p>
+<p>Represent encryption functions.</p>
+<p>An encryption function is a <a class="reference internal" href="#arxpy.primitives.primitives.BvFunction" title="arxpy.primitives.primitives.BvFunction"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvFunction</span></code></a> that takes
+the plaintext as input and returns the ciphertext
+for some fixed key.
+See <a class="reference internal" href="#arxpy.primitives.primitives.BvFunction" title="arxpy.primitives.primitives.BvFunction"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvFunction</span></code></a> for more information.</p>
+<dl class="py attribute">
+<dt id="arxpy.primitives.primitives.Encryption.round_keys">
+<code class="sig-name descname">round_keys</code><a class="headerlink" href="#arxpy.primitives.primitives.Encryption.round_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>a list of <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Term</span></code></a> representing the round keys</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.primitives.primitives.Cipher">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.primitives.primitives.</code><code class="sig-name descname">Cipher</code><a class="reference internal" href="_modules/arxpy/primitives/primitives.html#Cipher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.primitives.Cipher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represent (iterated) block ciphers.</p>
+<p>A (iterated) block cipher consists of <a class="reference internal" href="#arxpy.primitives.primitives.KeySchedule" title="arxpy.primitives.primitives.KeySchedule"><code class="xref any py py-class docutils literal notranslate"><span class="pre">KeySchedule</span></code></a> function
+that computes round keys from a master key and an <a class="reference internal" href="#arxpy.primitives.primitives.Encryption" title="arxpy.primitives.primitives.Encryption"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Encryption</span></code></a>
+function that computes a ciphertext from a given plaintext
+and the round keys.</p>
+<p>Given a <code class="docutils literal notranslate"><span class="pre">cipher</span></code>, it can be evaluated with the operator <code class="docutils literal notranslate"><span class="pre">()</span></code>
+by passing it as arguments the plaintext and the master key,
+that is, <code class="docutils literal notranslate"><span class="pre">cipher(plaintext,</span> <span class="pre">masterkey)</span></code> returns the ciphertext.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.primitives</span> <span class="kn">import</span> <span class="n">Cipher</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives</span> <span class="kn">import</span> <span class="n">speck</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span> <span class="o">=</span> <span class="n">speck</span><span class="o">.</span><span class="n">get_Speck_instance</span><span class="p">(</span><span class="n">speck</span><span class="o">.</span><span class="n">SpeckInstance</span><span class="o">.</span><span class="n">speck_32_64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">issubclass</span><span class="p">(</span><span class="n">Speck32</span><span class="p">,</span> <span class="n">Cipher</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plaintext</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">masterkey</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">masterkey</span><span class="p">)</span>
+<span class="go">(0x2bb9, 0xc642)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt id="arxpy.primitives.primitives.Cipher.key_schedule">
+<code class="sig-name descname">key_schedule</code><a class="headerlink" href="#arxpy.primitives.primitives.Cipher.key_schedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>the <a class="reference internal" href="#arxpy.primitives.primitives.KeySchedule" title="arxpy.primitives.primitives.KeySchedule"><code class="xref any py py-class docutils literal notranslate"><span class="pre">KeySchedule</span></code></a> function of the cipher</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.primitives.primitives.Cipher.encryption">
+<code class="sig-name descname">encryption</code><a class="headerlink" href="#arxpy.primitives.primitives.Cipher.encryption" title="Permalink to this definition">¶</a></dt>
+<dd><p>the <a class="reference internal" href="#arxpy.primitives.primitives.Encryption" title="arxpy.primitives.primitives.Encryption"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Encryption</span></code></a> function of the cipher</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.primitives.primitives.Cipher.set_rounds">
+<em class="property">classmethod </em><code class="sig-name descname">set_rounds</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">new_rounds</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/primitives/primitives.html#Cipher.set_rounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.primitives.Cipher.set_rounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the number of rounds and adjust the input/output widths.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="arxpy.primitives.shacal1.html" class="btn btn-neutral float-right" title="arxpy.primitives.shacal1 module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="arxpy.primitives.picipher.html" class="btn btn-neutral float-left" title="arxpy.primitives.picipher module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,413 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.bitvector.core module &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="arxpy.bitvector.extraop module" href="arxpy.bitvector.extraop.html" />
+    <link rel="prev" title="arxpy.bitvector.context module" href="arxpy.bitvector.context.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="arxpy.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="arxpy.bitvector.html">arxpy.bitvector package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="arxpy.bitvector.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="arxpy.bitvector.context.html">arxpy.bitvector.context module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">arxpy.bitvector.core module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.bitvector.extraop.html">arxpy.bitvector.extraop module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.bitvector.operation.html">arxpy.bitvector.operation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="arxpy.bitvector.printing.html">arxpy.bitvector.printing module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.differential.html">arxpy.differential package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.primitives.html">arxpy.primitives package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arxpy.smt.html">arxpy.smt package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="arxpy.html">ArxPy 0.2</a> &raquo;</li>
+        
+          <li><a href="arxpy.bitvector.html">arxpy.bitvector package</a> &raquo;</li>
+        
+      <li>arxpy.bitvector.core module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/arxpy.bitvector.core.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-arxpy.bitvector.core">
+<span id="arxpy-bitvector-core-module"></span><h1>arxpy.bitvector.core module<a class="headerlink" href="#module-arxpy.bitvector.core" title="Permalink to this headline">¶</a></h1>
+<p>Provide the basic bit-vector types.</p>
+<dl class="py class">
+<dt id="arxpy.bitvector.core.Term">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.bitvector.core.</code><code class="sig-name descname">Term</code><a class="reference internal" href="_modules/arxpy/bitvector/core.html#Term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.core.Term" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.basic.Basic" title="(in SymPy v1.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sympy.core.basic.Basic</span></code></a></p>
+<p>Represent bit-vector terms.</p>
+<p>Bit-vector terms are constants, variables and operations applied to terms.</p>
+<p>Bit-vector terms support many operations with the standard
+operators symbols (&lt;=, +, ^, etc.). See <a class="reference internal" href="arxpy.bitvector.operation.html#module-arxpy.bitvector.operation" title="arxpy.bitvector.operation"><code class="xref any py py-mod docutils literal notranslate"><span class="pre">operation</span></code></a>
+for more information.</p>
+<p>This class is not meant to be instantiated but to provide a base
+class for the different types of terms.</p>
+<p>Note that Term inherits the methods of the SymPy class <a class="reference external" href="http://docs.sympy.org/latest/modules/core.html#module-sympy.core.basic">Basic</a>;
+many of these methods work with bit-vector terms out of the box.</p>
+<dl class="py method">
+<dt id="arxpy.bitvector.core.Term.width">
+<em class="property">property </em><code class="sig-name descname">width</code><a class="headerlink" href="#arxpy.bitvector.core.Term.width" title="Permalink to this definition">¶</a></dt>
+<dd><p>The bit-width of the term.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.core.Term.formula_size">
+<em class="property">property </em><code class="sig-name descname">formula_size</code><a class="headerlink" href="#arxpy.bitvector.core.Term.formula_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The formula size of the bit-vector term.</p>
+<p>As defined in <a class="reference external" href="https://doi.org/10.1007/s00224-015-9653-1">Complexity of Fixed-Size Bit-Vector Logics</a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.core.Term.vrepr">
+<code class="sig-name descname">vrepr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/core.html#Term.vrepr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.core.Term.vrepr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a verbose string representation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.core.Term.srepr">
+<code class="sig-name descname">srepr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/core.html#Term.srepr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.core.Term.srepr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a short string representation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.core.Term.doit">
+<code class="sig-name descname">doit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/core.html#Term.doit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.core.Term.doit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the term.</p>
+<p>Terms are evaluated by default, but this behaviour can be disabled.
+See <a class="reference internal" href="arxpy.bitvector.context.html#arxpy.bitvector.context.Evaluation" title="arxpy.bitvector.context.Evaluation"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Evaluation</span></code></a> for more information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.core.Term.class_key">
+<code class="sig-name descname">class_key</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/core.html#Term.class_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.core.Term.class_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the key (identifier) of the class for sorting.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.bitvector.core.Constant">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.bitvector.core.</code><code class="sig-name descname">Constant</code><a class="reference internal" href="_modules/arxpy/bitvector/core.html#Constant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.core.Constant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.basic.Atom" title="(in SymPy v1.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sympy.core.basic.Atom</span></code></a>, <a class="reference internal" href="#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.core.Term</span></code></a></p>
+<p>Represent bit-vector constants.</p>
+<p>Bit-vector constants are interpreted as unsigned integers in base 2,
+that is, a bit-vector <span class="math notranslate nohighlight">\((x_{n-1}, \dots, x_1, x_0)\)</span> represents
+the non-negative integer <span class="math notranslate nohighlight">\(x_0 + 2 x_1 + \dots + 2^{n-1} x_{n-1}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>val</strong> – the integer value.</p></li>
+<li><p><strong>width</strong> – the bit-width.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Constant</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+<span class="go">0x003</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Constant</span><span class="p">(</span><span class="mb">0b11</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+<span class="go">0x003</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Constant</span><span class="p">(</span><span class="mh">0x003</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+<span class="go">0x003</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Constant</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span><span class="o">.</span><span class="n">vrepr</span><span class="p">()</span>
+<span class="go">&#39;Constant(0b000000000011, width=12)&#39;</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.bitvector.core.Constant.class_key">
+<em class="property">classmethod </em><code class="sig-name descname">class_key</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/core.html#Constant.class_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.core.Constant.class_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the key (identifier) of the class for sorting.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.core.Constant.val">
+<em class="property">property </em><code class="sig-name descname">val</code><a class="headerlink" href="#arxpy.bitvector.core.Constant.val" title="Permalink to this definition">¶</a></dt>
+<dd><p>The integer represented by the bit-vector constant.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.core.Constant.formula_size">
+<em class="property">property </em><code class="sig-name descname">formula_size</code><a class="headerlink" href="#arxpy.bitvector.core.Constant.formula_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The formula size of the constant.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.core.Constant.bin">
+<code class="sig-name descname">bin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/core.html#Constant.bin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.core.Constant.bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the binary representation.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">bin</span><span class="p">())</span>
+<span class="go">0b0011</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span><span class="o">.</span><span class="n">bin</span><span class="p">())</span>
+<span class="go">0b000100</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.core.Constant.hex">
+<code class="sig-name descname">hex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/core.html#Constant.hex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.core.Constant.hex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the hexadecimal representation.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">hex</span><span class="p">())</span>
+<span class="go">0x3</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.core.Constant.oct">
+<code class="sig-name descname">oct</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/core.html#Constant.oct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.core.Constant.oct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the octal representation.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span><span class="o">.</span><span class="n">oct</span><span class="p">())</span>
+<span class="go">0o04</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.bitvector.core.Variable">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.bitvector.core.</code><code class="sig-name descname">Variable</code><a class="reference internal" href="_modules/arxpy/bitvector/core.html#Variable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.core.Variable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.basic.Atom" title="(in SymPy v1.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sympy.core.basic.Atom</span></code></a>, <a class="reference internal" href="#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.core.Term</span></code></a></p>
+<p>Represent bit-vector variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – the name of the variable.</p></li>
+<li><p><strong>width</strong> – the bit-width.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+<span class="go">x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span><span class="o">.</span><span class="n">vrepr</span><span class="p">()</span>
+<span class="go">&quot;Variable(&#39;x&#39;, width=12)&quot;</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.bitvector.core.Variable.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#arxpy.bitvector.core.Variable.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the variable.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.bitvector.core.Variable.formula_size">
+<em class="property">property </em><code class="sig-name descname">formula_size</code><a class="headerlink" href="#arxpy.bitvector.core.Variable.formula_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The formula size of the variable.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="arxpy.bitvector.core.bitvectify">
+<code class="sig-prename descclassname">arxpy.bitvector.core.</code><code class="sig-name descname">bitvectify</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em>, <em class="sig-param"><span class="n">width</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/core.html#bitvectify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.core.bitvectify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the argument <em>t</em> to a bit-vector of bit-width <em>width</em>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">bitvectify</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">bitvectify</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">vrepr</span><span class="p">())</span>
+<span class="go">Constant(0b00000000, width=8)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">bitvectify</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">vrepr</span><span class="p">())</span>
+<span class="go">Variable(&#39;x&#39;, width=8)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="arxpy.bitvector.extraop.html" class="btn btn-neutral float-right" title="arxpy.bitvector.extraop module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="arxpy.bitvector.context.html" class="btn btn-neutral float-left" title="arxpy.bitvector.context module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

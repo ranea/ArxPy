@@ -1,0 +1,6 @@
+arxpy.primitives.picipher module
+================================
+
+.. automodule:: arxpy.primitives.picipher
+   :members:
+   :show-inheritance:

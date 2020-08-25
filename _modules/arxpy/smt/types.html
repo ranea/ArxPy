@@ -1,0 +1,513 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.smt.types &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html#subpackages">Subpackages</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>arxpy.smt.types</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for arxpy.smt.types</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Convert between pySMT_ types and `bitvector` types.</span>
+
+<span class="sd">.. _pySMT: https://github.com/pysmt/pysmt</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">pysmt</span> <span class="kn">import</span> <span class="n">environment</span>
+
+<span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">core</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">operation</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">extraop</span>
+
+<span class="kn">from</span> <span class="nn">arxpy.differential</span> <span class="kn">import</span> <span class="n">difference</span>
+
+
+<span class="k">def</span> <span class="nf">_is_power_of_2</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="c1"># http://graphics.stanford.edu/~seander/bithacks.html#DetermineIfPowerOf2</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span>
+
+
+<div class="viewcode-block" id="bv2pysmt"><a class="viewcode-back" href="../../../arxpy.smt.types.html#arxpy.smt.types.bv2pysmt">[docs]</a><span class="k">def</span> <span class="nf">bv2pysmt</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="n">boolean</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">strict_shift</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a bit-vector type to a pySMT type.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        bv: the bit-vector `Term` to convert</span>
+<span class="sd">        boolean: if True, boolean pySMT types (e.g., `pysmt.shortcuts.Bool`) are used instead of</span>
+<span class="sd">            bit-vector pySMT types (e.g., `pysmt.shortcuts.BV`).</span>
+<span class="sd">        strict_shift: if `True`, shifts and rotation by non-power-of-two offsets</span>
+<span class="sd">            are power of two are translated to pySMT&#39;s shifts and</span>
+<span class="sd">            rotation directly.</span>
+<span class="sd">        env: a `pysmt.environment.Environment`; if not specified, a new pySMT environment is created.</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.core import Constant, Variable</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.smt.types import bv2pysmt</span>
+<span class="sd">        &gt;&gt;&gt; s = bv2pysmt(Constant(0b00000001, 8), boolean=False)</span>
+<span class="sd">        &gt;&gt;&gt; s, s.get_type()</span>
+<span class="sd">        (1_8, BV{8})</span>
+<span class="sd">        &gt;&gt;&gt; x, y = Variable(&quot;x&quot;, 8), Variable(&quot;y&quot;, 8)</span>
+<span class="sd">        &gt;&gt;&gt; s = bv2pysmt(x)</span>
+<span class="sd">        &gt;&gt;&gt; s, s.get_type()</span>
+<span class="sd">        (x, BV{8})</span>
+<span class="sd">        &gt;&gt;&gt; s = bv2pysmt(x +  y)</span>
+<span class="sd">        &gt;&gt;&gt; s, s.get_type()</span>
+<span class="sd">        ((x + y), BV{8})</span>
+<span class="sd">        &gt;&gt;&gt; s = bv2pysmt(x &lt;=  y)</span>
+<span class="sd">        &gt;&gt;&gt; s, s.get_type()</span>
+<span class="sd">        ((x u&lt;= y), Bool)</span>
+<span class="sd">        &gt;&gt;&gt; s = bv2pysmt(x[4: 2])</span>
+<span class="sd">        &gt;&gt;&gt; s, s.get_type()</span>
+<span class="sd">        (x[2:4], BV{3})</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;unknown conversion of </span><span class="si">{}</span><span class="s2"> to a pySMT type&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">environment</span><span class="o">.</span><span class="n">reset_env</span><span class="p">()</span>
+    <span class="n">fm</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">formula_manager</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">bv</span>
+
+    <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Variable</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">boolean</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="mi">1</span>
+            <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Symbol</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">type_manager</span><span class="o">.</span><span class="n">BOOL</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Symbol</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">type_manager</span><span class="o">.</span><span class="n">BVType</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">boolean</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="mi">1</span>
+            <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">bv</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BV</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">val</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="n">operation</span><span class="o">.</span><span class="n">Operation</span><span class="p">):</span>
+        <span class="c1"># only 1st layer can return a boolean</span>
+        <span class="c1"># Equals and Ite work well with BV, the rest don&#39;t</span>
+
+        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">),</span> <span class="n">extraop</span><span class="o">.</span><span class="n">PartialOperation</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;PartialOperation is not yet supported&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvNot</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">boolean</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="mi">1</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">bv2pysmt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">]</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Not</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">bv2pysmt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">]</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVNot</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvAnd</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">boolean</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="mi">1</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">bv2pysmt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">]</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">bv2pysmt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">]</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVAnd</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvOr</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">boolean</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="mi">1</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">bv2pysmt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">]</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Or</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">bv2pysmt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">]</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVOr</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvXor</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">boolean</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="mi">1</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">bv2pysmt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">]</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Xor</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">bv2pysmt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">]</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVXor</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">Ite</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">))]</span>
+            <span class="c1"># fm.Ite requires a Boolean type for args[0] but</span>
+            <span class="c1"># bv2pysmt(bv.args[0], True, ...)  caused an error</span>
+            <span class="c1"># (if args[0] is BvComp, it can be further optimized)</span>
+            <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">bv2pysmt</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">,</span> <span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_type</span><span class="p">()</span><span class="o">.</span><span class="n">is_bv_type</span><span class="p">():</span>
+                <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Equals</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fm</span><span class="o">.</span><span class="n">BV</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">boolean</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="mi">1</span>
+                <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">bv2pysmt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">bv2pysmt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span>
+            <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Ite</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">bv2pysmt</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvComp</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">boolean</span><span class="p">:</span>
+                    <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">Equals</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVComp</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvUlt</span><span class="p">:</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVULT</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvUle</span><span class="p">:</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVULE</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvUgt</span><span class="p">:</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVUGT</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvUge</span><span class="p">:</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVUGE</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">boolean</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> cannot return a boolean type&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="n">operation</span><span class="o">.</span><span class="n">BvShl</span><span class="p">,</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvLshr</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">strict_shift</span> <span class="ow">or</span> <span class="n">_is_power_of_2</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bv_width</span><span class="p">()):</span>
+                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvShl</span><span class="p">:</span>
+                        <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVLShl</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvLshr</span><span class="p">:</span>
+                        <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVLShr</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">x</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span>
+                    <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">while</span> <span class="ow">not</span> <span class="n">_is_power_of_2</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
+                        <span class="n">x</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="n">r</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="n">offset</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                    <span class="n">shift</span> <span class="o">=</span> <span class="n">bv2pysmt</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)(</span><span class="n">x</span><span class="p">,</span> <span class="n">r</span><span class="p">),</span> <span class="kc">False</span><span class="p">,</span> <span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+                    <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVExtract</span><span class="p">(</span><span class="n">shift</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">shift</span><span class="o">.</span><span class="n">bv_width</span><span class="p">()</span> <span class="o">-</span> <span class="n">offset</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">RotateLeft</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">strict_shift</span> <span class="ow">or</span> <span class="n">_is_power_of_2</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bv_width</span><span class="p">()):</span>
+                    <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVRol</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Left hand side width must be a power of 2</span>
+                    <span class="n">x</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span>
+                    <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span>
+                    <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">bv2pysmt</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">Concat</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:],</span> <span class="n">x</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span> <span class="n">n</span> <span class="o">-</span> <span class="n">r</span><span class="p">]),</span>
+                                    <span class="kc">False</span><span class="p">,</span> <span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">RotateRight</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">strict_shift</span> <span class="ow">or</span> <span class="n">_is_power_of_2</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bv_width</span><span class="p">()):</span>
+                    <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVRor</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Left hand side width must be a power of 2</span>
+                    <span class="n">x</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span>
+                    <span class="n">n</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">width</span>
+                    <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">bv2pysmt</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">Concat</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:],</span> <span class="n">x</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span> <span class="n">r</span><span class="p">]),</span>
+                                    <span class="kc">False</span><span class="p">,</span> <span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">Extract</span><span class="p">:</span>
+                <span class="c1"># pySMT Extract(bv, start, end)</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVExtract</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">Concat</span><span class="p">:</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVConcat</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">ZeroExtend</span><span class="p">:</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVZExt</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">Repeat</span><span class="p">:</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">BVRepeat</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvNeg</span><span class="p">:</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVNeg</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvAdd</span><span class="p">:</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVAdd</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvSub</span><span class="p">:</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVSub</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvMul</span><span class="p">:</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVMul</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvUdiv</span><span class="p">:</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVUDiv</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)</span> <span class="o">==</span> <span class="n">operation</span><span class="o">.</span><span class="n">BvUrem</span><span class="p">:</span>
+                <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">BVURem</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">bv2</span> <span class="o">=</span> <span class="n">bv</span><span class="o">.</span><span class="n">doit</span><span class="p">()</span>
+                <span class="k">assert</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="n">bv2</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> == </span><span class="si">{}</span><span class="se">\n</span><span class="si">{}</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">bv2</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">bv</span><span class="o">.</span><span class="n">vrepr</span><span class="p">(),</span> <span class="n">bv2</span><span class="o">.</span><span class="n">vrepr</span><span class="p">())</span>
+                <span class="k">if</span> <span class="n">bv</span> <span class="o">!=</span> <span class="n">bv2</span><span class="p">:</span>  <span class="c1"># avoid cyclic loop</span>
+                    <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">bv2pysmt</span><span class="p">(</span><span class="n">bv2</span><span class="p">,</span> <span class="n">boolean</span><span class="o">=</span><span class="n">boolean</span><span class="p">,</span> <span class="n">strict_shift</span><span class="o">=</span><span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;(doit) &quot;</span> <span class="o">+</span> <span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="n">difference</span><span class="o">.</span><span class="n">Difference</span><span class="p">):</span>
+        <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">bv2pysmt</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">val</span><span class="p">,</span> <span class="n">boolean</span><span class="p">,</span> <span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">pysmt_bv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">pysmt_bv_width</span> <span class="o">=</span> <span class="n">pysmt_bv</span><span class="o">.</span><span class="n">bv_width</span><span class="p">()</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">AssertionError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="n">pysmt_bv_width</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># boolean type</span>
+
+        <span class="k">assert</span> <span class="n">bv</span><span class="o">.</span><span class="n">width</span> <span class="o">==</span> <span class="n">pysmt_bv_width</span>
+        <span class="k">return</span> <span class="n">pysmt_bv</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="pysmt2bv"><a class="viewcode-back" href="../../../arxpy.smt.types.html#arxpy.smt.types.pysmt2bv">[docs]</a><span class="k">def</span> <span class="nf">pysmt2bv</span><span class="p">(</span><span class="n">ps</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a pySMT type to a bit-vector type.</span>
+
+<span class="sd">    Currently, only conversion from `pysmt.shortcuts.BV`</span>
+<span class="sd">    and `pysmt.shortcuts.Symbol` is supported.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pysmt import shortcuts, typing  # pySMT shortcuts and typing modules</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.smt.types import pysmt2bv</span>
+<span class="sd">        &gt;&gt;&gt; env = shortcuts.reset_env()</span>
+<span class="sd">        &gt;&gt;&gt; pysmt2bv(env.formula_manager.Symbol(&quot;x&quot;, env.type_manager.BVType(8))).vrepr()</span>
+<span class="sd">        &quot;Variable(&#39;x&#39;, width=8)&quot;</span>
+<span class="sd">        &gt;&gt;&gt; pysmt2bv(env.formula_manager.BV(1, 8)).vrepr()</span>
+<span class="sd">        &#39;Constant(0b00000001, width=8)&#39;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">class_name</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;unknown conversion of </span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">) to a bit-vector type&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="n">ps</span><span class="o">.</span><span class="n">get_type</span><span class="p">(),</span> <span class="n">class_name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ps</span><span class="o">.</span><span class="n">is_symbol</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">ps</span><span class="o">.</span><span class="n">get_type</span><span class="p">())</span> <span class="o">==</span> <span class="s2">&quot;Bool&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">core</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">ps</span><span class="o">.</span><span class="n">symbol_name</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">core</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">ps</span><span class="o">.</span><span class="n">symbol_name</span><span class="p">(),</span> <span class="n">ps</span><span class="o">.</span><span class="n">bv_width</span><span class="p">())</span>
+    <span class="k">elif</span> <span class="n">ps</span><span class="o">.</span><span class="n">is_bv_constant</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">ps</span><span class="o">.</span><span class="n">constant_value</span><span class="p">()),</span> <span class="n">ps</span><span class="o">.</span><span class="n">bv_width</span><span class="p">())</span>
+    <span class="k">elif</span> <span class="n">ps</span><span class="o">.</span><span class="n">is_false</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">ps</span><span class="o">.</span><span class="n">is_true</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="pysmt_model2bv_model"><a class="viewcode-back" href="../../../arxpy.smt.types.html#arxpy.smt.types.pysmt_model2bv_model">[docs]</a><span class="k">def</span> <span class="nf">pysmt_model2bv_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert a `pysmt.solvers.solver.Model` into a `dict` of bit-vector types.</span>
+
+<span class="sd">    To return `Difference` values instead of `Term` values,</span>
+<span class="sd">    a list of symbolic differences can be passed as argument.</span>
+<span class="sd">    In that case, variables in the model also present in ``differences``</span>
+<span class="sd">    will be added to the bit-vector model as `Difference` objects.</span>
+
+<span class="sd">        &gt;&gt;&gt; from pysmt import shortcuts</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.smt.types import pysmt_model2bv_model  # pySMT shortcuts</span>
+<span class="sd">        &gt;&gt;&gt; env = shortcuts.reset_env()</span>
+<span class="sd">        &gt;&gt;&gt; fm = env.formula_manager</span>
+<span class="sd">        &gt;&gt;&gt; formula = fm.Equals(fm.BV(0, 8), fm.Symbol(&quot;x&quot;, env.type_manager.BVType(8)))</span>
+<span class="sd">        &gt;&gt;&gt; pysmt_model = env.factory.get_model(formula)</span>
+<span class="sd">        &gt;&gt;&gt; for var, val in pysmt_model: print(var, val, var.get_type(), val.get_type())</span>
+<span class="sd">        x 0_8 BV{8} BV{8}</span>
+<span class="sd">        &gt;&gt;&gt; bv_model = pysmt_model2bv_model(pysmt_model)</span>
+<span class="sd">        &gt;&gt;&gt; for var, val in bv_model.items(): print(var, val, type(var), type(val))</span>
+<span class="sd">        x 0x00 &lt;class &#39;arxpy.bitvector.core.Variable&#39;&gt; &lt;class &#39;arxpy.bitvector.core.Constant&#39;&gt;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">differences</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># diff_dict is a dictionary of name -&gt; diff</span>
+        <span class="n">name2diff</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">diff</span> <span class="ow">in</span> <span class="n">differences</span><span class="p">:</span>
+            <span class="n">name2diff</span><span class="p">[</span><span class="n">diff</span><span class="o">.</span><span class="n">val</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">name2diff</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">bv_model</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+        <span class="n">bv_var</span> <span class="o">=</span> <span class="n">pysmt2bv</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+        <span class="n">bv_value</span> <span class="o">=</span> <span class="n">pysmt2bv</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bv_var</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Variable</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">bv_var</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">name2diff</span><span class="p">:</span>
+                <span class="n">bv_var</span> <span class="o">=</span> <span class="n">name2diff</span><span class="p">[</span><span class="n">bv_var</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">bv_value</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv_var</span><span class="p">)(</span><span class="n">bv_value</span><span class="p">)</span>
+        <span class="n">bv_model</span><span class="p">[</span><span class="n">bv_var</span><span class="p">]</span> <span class="o">=</span> <span class="n">bv_value</span>
+    <span class="k">return</span> <span class="n">bv_model</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

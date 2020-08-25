@@ -1,0 +1,371 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.primitives.threefish &mdash; ArxPy 0.2.alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html">ArxPy 0.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html#subpackages">Subpackages</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>arxpy.primitives.threefish</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for arxpy.primitives.threefish</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Threefish 256-bit cipher.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+
+<span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span>
+<span class="kn">from</span> <span class="nn">arxpy.bitvector.operation</span> <span class="kn">import</span> <span class="n">RotateLeft</span> <span class="k">as</span> <span class="n">ROL</span>
+
+<span class="kn">from</span> <span class="nn">arxpy.primitives.primitives</span> <span class="kn">import</span> <span class="n">KeySchedule</span><span class="p">,</span> <span class="n">Encryption</span><span class="p">,</span> <span class="n">Cipher</span>
+
+
+<span class="n">FIXED_TWEAK</span> <span class="o">=</span> <span class="kc">True</span>
+
+
+<div class="viewcode-block" id="ThreefishFixedTweakKeySchedule"><a class="viewcode-back" href="../../../arxpy.primitives.threefish.html#arxpy.primitives.threefish.ThreefishFixedTweakKeySchedule">[docs]</a><span class="k">class</span> <span class="nc">ThreefishFixedTweakKeySchedule</span><span class="p">(</span><span class="n">KeySchedule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Key schedule function.&quot;&quot;&quot;</span>
+
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">72</span> <span class="o">//</span> <span class="mi">4</span>
+    <span class="n">input_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">]</span>
+    <span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">64</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="mi">72</span> <span class="o">//</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))]</span>
+
+<div class="viewcode-block" id="ThreefishFixedTweakKeySchedule.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.threefish.html#arxpy.primitives.threefish.ThreefishFixedTweakKeySchedule.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">64</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">new_rounds</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))]</span></div>
+
+<div class="viewcode-block" id="ThreefishFixedTweakKeySchedule.eval"><a class="viewcode-back" href="../../../arxpy.primitives.threefish.html#arxpy.primitives.threefish.ThreefishFixedTweakKeySchedule.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">k0</span><span class="p">,</span> <span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">k3</span><span class="p">):</span>
+        <span class="n">nw</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">nr_div4</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span>
+
+        <span class="n">round_keys</span> <span class="o">=</span> <span class="p">[[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nw</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nr_div4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="n">c240</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x1BD11BDAA9FC1A22</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+
+        <span class="n">k</span> <span class="o">=</span> <span class="p">[</span><span class="n">k0</span><span class="p">,</span> <span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">k3</span><span class="p">,</span> <span class="n">c240</span> <span class="o">^</span> <span class="n">k0</span> <span class="o">^</span> <span class="n">k1</span> <span class="o">^</span> <span class="n">k2</span> <span class="o">^</span> <span class="n">k3</span><span class="p">]</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">k0</span><span class="o">.</span><span class="n">width</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">k0</span><span class="o">.</span><span class="n">width</span><span class="p">),</span> <span class="n">Constant</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">k0</span><span class="o">.</span><span class="n">width</span><span class="p">)]</span>
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nr_div4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">round_keys</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="n">s</span> <span class="o">%</span> <span class="p">(</span><span class="n">nw</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+            <span class="n">round_keys</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="p">[(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">nw</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">+</span> <span class="n">t</span><span class="p">[</span><span class="n">s</span> <span class="o">%</span> <span class="mi">3</span><span class="p">]</span>
+            <span class="n">round_keys</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="p">[(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">nw</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">+</span> <span class="n">t</span><span class="p">[(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">3</span><span class="p">]</span>
+            <span class="n">round_keys</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="p">[(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">nw</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">+</span> <span class="n">Constant</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">round_keys</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="ThreefishKeySchedule"><a class="viewcode-back" href="../../../arxpy.primitives.threefish.html#arxpy.primitives.threefish.ThreefishKeySchedule">[docs]</a><span class="k">class</span> <span class="nc">ThreefishKeySchedule</span><span class="p">(</span><span class="n">KeySchedule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Key schedule function.&quot;&quot;&quot;</span>
+
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">72</span> <span class="o">//</span> <span class="mi">4</span>
+    <span class="n">input_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">]</span>
+    <span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">64</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="mi">72</span> <span class="o">//</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))]</span>
+
+<div class="viewcode-block" id="ThreefishKeySchedule.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.threefish.html#arxpy.primitives.threefish.ThreefishKeySchedule.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">64</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="p">(</span><span class="n">new_rounds</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))]</span></div>
+
+<div class="viewcode-block" id="ThreefishKeySchedule.eval"><a class="viewcode-back" href="../../../arxpy.primitives.threefish.html#arxpy.primitives.threefish.ThreefishKeySchedule.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">k0</span><span class="p">,</span> <span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">k3</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">):</span>
+        <span class="n">nw</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">nr_div4</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span>
+
+        <span class="n">round_keys</span> <span class="o">=</span> <span class="p">[[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nw</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nr_div4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="n">c240</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mh">0x1BD11BDAA9FC1A22</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+
+        <span class="n">k</span> <span class="o">=</span> <span class="p">[</span><span class="n">k0</span><span class="p">,</span> <span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">k3</span><span class="p">,</span> <span class="n">c240</span> <span class="o">^</span> <span class="n">k0</span> <span class="o">^</span> <span class="n">k1</span> <span class="o">^</span> <span class="n">k2</span> <span class="o">^</span> <span class="n">k3</span><span class="p">]</span>
+        <span class="n">t2</span> <span class="o">=</span> <span class="n">t0</span> <span class="o">^</span> <span class="n">t1</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nr_div4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">round_keys</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="n">s</span> <span class="o">%</span> <span class="p">(</span><span class="n">nw</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+            <span class="n">round_keys</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="p">[(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">nw</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">+</span> <span class="n">t</span><span class="p">[</span><span class="n">s</span> <span class="o">%</span> <span class="mi">3</span><span class="p">]</span>
+            <span class="n">round_keys</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="p">[(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">nw</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">+</span> <span class="n">t</span><span class="p">[(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">3</span><span class="p">]</span>
+            <span class="n">round_keys</span><span class="p">[</span><span class="n">s</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="p">[(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="n">nw</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">+</span> <span class="n">Constant</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">round_keys</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="ThreefishEncryption"><a class="viewcode-back" href="../../../arxpy.primitives.threefish.html#arxpy.primitives.threefish.ThreefishEncryption">[docs]</a><span class="k">class</span> <span class="nc">ThreefishEncryption</span><span class="p">(</span><span class="n">Encryption</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Encryption function.&quot;&quot;&quot;</span>
+
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">72</span> <span class="o">//</span> <span class="mi">4</span>
+    <span class="n">input_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">]</span>
+    <span class="n">output_widths</span> <span class="o">=</span> <span class="p">[</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">]</span>
+    <span class="n">round_keys</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="mi">14</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">52</span><span class="p">,</span> <span class="mi">57</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">23</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">37</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">33</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">46</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">58</span><span class="p">,</span> <span class="mi">22</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
+    <span class="p">]</span>
+
+<div class="viewcode-block" id="ThreefishEncryption.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.threefish.html#arxpy.primitives.threefish.ThreefishEncryption.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">mix</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+        <span class="n">y0</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">x1</span>
+        <span class="n">y1</span> <span class="o">=</span> <span class="n">ROL</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">R</span><span class="p">[</span><span class="n">d</span> <span class="o">%</span> <span class="mi">8</span><span class="p">][</span><span class="n">j</span><span class="p">])</span> <span class="o">^</span> <span class="n">y0</span>
+        <span class="k">return</span> <span class="n">y0</span><span class="p">,</span> <span class="n">y1</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">pi</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+
+<div class="viewcode-block" id="ThreefishEncryption.eval"><a class="viewcode-back" href="../../../arxpy.primitives.threefish.html#arxpy.primitives.threefish.ThreefishEncryption.eval">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">):</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">]</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+
+        <span class="n">nw</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">nr_div4</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span>
+
+        <span class="n">k</span> <span class="o">=</span> <span class="p">[[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nw</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nr_div4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">rk</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">round_keys</span><span class="p">):</span>
+            <span class="n">k</span><span class="p">[</span><span class="n">i</span> <span class="o">//</span> <span class="n">nw</span><span class="p">][</span><span class="n">i</span> <span class="o">%</span> <span class="n">nw</span><span class="p">]</span> <span class="o">=</span> <span class="n">rk</span>
+
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nr_div4</span> <span class="o">*</span> <span class="mi">4</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nw</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">d</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="n">d</span> <span class="o">//</span> <span class="mi">4</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+                <span class="n">f</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span><span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">mix</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span><span class="p">],</span> <span class="n">e</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">d</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nw</span><span class="p">):</span>
+                <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">pi</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+
+        <span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nw</span><span class="p">):</span>
+            <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="n">nr_div4</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">c</span></div></div>
+
+
+<div class="viewcode-block" id="ThreefishCipher"><a class="viewcode-back" href="../../../arxpy.primitives.threefish.html#arxpy.primitives.threefish.ThreefishCipher">[docs]</a><span class="k">class</span> <span class="nc">ThreefishCipher</span><span class="p">(</span><span class="n">Cipher</span><span class="p">):</span>
+    <span class="n">key_schedule</span> <span class="o">=</span> <span class="n">ThreefishFixedTweakKeySchedule</span> <span class="k">if</span> <span class="n">FIXED_TWEAK</span> <span class="k">else</span> <span class="n">ThreefishKeySchedule</span>
+    <span class="n">encryption</span> <span class="o">=</span> <span class="n">ThreefishEncryption</span>
+    <span class="n">rounds</span> <span class="o">=</span> <span class="mi">72</span> <span class="o">//</span> <span class="mi">4</span>
+
+<div class="viewcode-block" id="ThreefishCipher.set_rounds"><a class="viewcode-back" href="../../../arxpy.primitives.threefish.html#arxpy.primitives.threefish.ThreefishCipher.set_rounds">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_rounds</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">key_schedule</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="n">new_rounds</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">encryption</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="n">new_rounds</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ThreefishCipher.test"><a class="viewcode-back" href="../../../arxpy.primitives.threefish.html#arxpy.primitives.threefish.ThreefishCipher.test">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Test Threefish with official test vectors.&quot;&quot;&quot;</span>
+        <span class="n">old_rounds</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">72</span> <span class="o">//</span> <span class="mi">4</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">FIXED_TWEAK</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">plaintext</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">ciphertext</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0x94eeea8b1f2ada84</span><span class="p">,</span> <span class="mh">0xadf103313eae6670</span><span class="p">,</span> <span class="mh">0x952419a1f4b16d53</span><span class="p">,</span> <span class="mh">0xd83f13e63c9f6b11</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="bp">cls</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="n">ciphertext</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">FIXED_TWEAK</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x1716151413121110</span><span class="p">,</span> <span class="mh">0x1F1E1D1C1B1A1918</span><span class="p">,</span> <span class="mh">0x2726252423222120</span><span class="p">,</span> <span class="mh">0x2F2E2D2C2B2A2928</span><span class="p">]</span>
+            <span class="n">tweak</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x0706050403020100</span><span class="p">,</span> <span class="mh">0x0F0E0D0C0B0A0908</span><span class="p">]</span>
+            <span class="n">plaintext</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0xF8F9FAFBFCFDFEFF</span><span class="p">,</span> <span class="mh">0xF0F1F2F3F4F5F6F7</span><span class="p">,</span> <span class="mh">0xE8E9EAEBECEDEEEF</span><span class="p">,</span> <span class="mh">0xE0E1E2E3E4E5E6E7</span><span class="p">]</span>
+            <span class="n">ciphertext</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0xDF8FEA0EFF91D0E0</span><span class="p">,</span> <span class="mh">0xD50AD82EE69281C9</span><span class="p">,</span> <span class="mh">0x76F48D58085D869D</span><span class="p">,</span> <span class="mh">0xDF975E95B5567065</span><span class="p">)</span>
+
+            <span class="k">assert</span> <span class="bp">cls</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">key</span> <span class="o">+</span> <span class="n">tweak</span><span class="p">)</span> <span class="o">==</span> <span class="n">ciphertext</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="n">old_rounds</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Adrian Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

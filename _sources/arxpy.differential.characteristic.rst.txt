@@ -1,0 +1,6 @@
+arxpy.differential.characteristic module
+========================================
+
+.. automodule:: arxpy.differential.characteristic
+   :members:
+   :show-inheritance:

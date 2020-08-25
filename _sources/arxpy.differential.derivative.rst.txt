@@ -1,0 +1,6 @@
+arxpy.differential.derivative module
+====================================
+
+.. automodule:: arxpy.differential.derivative
+   :members:
+   :show-inheritance:
