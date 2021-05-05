@@ -21,8 +21,8 @@ Usage
 =====
 
 First, the ARX cipher needs to be implemented following ArxPy interface.
-There are several ARX ciphers implemented already (see the folder ``arxpy/primitives``).
-To implemented a new cipher, the easiest way is to take a similar cipher
+There are several ARX ciphers already implemented (see the folder ``arxpy/primitives``).
+To implemente a new cipher, the easiest way is to take a similar cipher
 already implemented as a template and modify the python code directly.
 
 Searching the optimal XOR differential characteristic can be done easily with
