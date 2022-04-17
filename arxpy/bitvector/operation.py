@@ -5,7 +5,7 @@ import itertools
 import math
 
 from sympy.core import cache
-from sympy.core import compatibility
+from sympy import default_sort_key
 from sympy.printing import precedence as sympy_precedence
 
 from arxpy.bitvector import context
@@ -166,7 +166,7 @@ class Operation(core.Term):
         assert num_terms >= 1
 
         if cls.is_symmetric:
-            args = sorted(args, key=compatibility.default_sort_key)
+            args = sorted(args, key=default_sort_key)
 
         assert cls.condition(*args), "{}.condition({}) did not hold".format(cls, args)
 
