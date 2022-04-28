@@ -11,6 +11,8 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   arxpy.smt.search
+   arxpy.smt.search_differential
+   arxpy.smt.search_impossible
    arxpy.smt.types
-   arxpy.smt.verification
+   arxpy.smt.verification_differential
+   arxpy.smt.verification_impossible

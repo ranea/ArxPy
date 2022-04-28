@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>arxpy.smt.types &mdash; ArxPy 0.2.alpha documentation</title>
+  <title>arxpy.smt.types &mdash; ArxPy 0.3 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.2
+                0.3
               </div>
             
           
@@ -161,6 +161,7 @@
 <span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">extraop</span>
 
 <span class="kn">from</span> <span class="nn">arxpy.differential</span> <span class="kn">import</span> <span class="n">difference</span>
+<span class="c1"># from arxpy.linear import mask</span>
 
 
 <span class="k">def</span> <span class="nf">_is_power_of_2</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -381,7 +382,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;(doit) &quot;</span> <span class="o">+</span> <span class="n">msg</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="n">difference</span><span class="o">.</span><span class="n">Difference</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="n">difference</span><span class="o">.</span><span class="n">Difference</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="n">mask</span><span class="o">.</span><span class="n">Mask</span><span class="p">):</span>
         <span class="n">pysmt_bv</span> <span class="o">=</span> <span class="n">bv2pysmt</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">val</span><span class="p">,</span> <span class="n">boolean</span><span class="p">,</span> <span class="n">strict_shift</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">pysmt_bv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -429,13 +430,14 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="pysmt_model2bv_model"><a class="viewcode-back" href="../../../arxpy.smt.types.html#arxpy.smt.types.pysmt_model2bv_model">[docs]</a><span class="k">def</span> <span class="nf">pysmt_model2bv_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="pysmt_model2bv_model"><a class="viewcode-back" href="../../../arxpy.smt.types.html#arxpy.smt.types.pysmt_model2bv_model">[docs]</a><span class="k">def</span> <span class="nf">pysmt_model2bv_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">differences</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">masks</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Convert a `pysmt.solvers.solver.Model` into a `dict` of bit-vector types.</span>
 
-<span class="sd">    To return `Difference` values instead of `Term` values,</span>
-<span class="sd">    a list of symbolic differences can be passed as argument.</span>
+<span class="sd">    To return `Difference` (resp. `Mask`) values instead of `Term` values,</span>
+<span class="sd">    a list of symbolic differences (resp. masks) can be passed as argument.</span>
 <span class="sd">    In that case, variables in the model also present in ``differences``</span>
-<span class="sd">    will be added to the bit-vector model as `Difference` objects.</span>
+<span class="sd">    (resp. `masks`) will be added to the bit-vector model as `Difference`</span>
+<span class="sd">    (resp. `Mask`) objects.</span>
 
 <span class="sd">        &gt;&gt;&gt; from pysmt import shortcuts</span>
 <span class="sd">        &gt;&gt;&gt; from arxpy.smt.types import pysmt_model2bv_model  # pySMT shortcuts</span>
@@ -458,6 +460,13 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">name2diff</span> <span class="o">=</span> <span class="p">{}</span>
 
+    <span class="k">if</span> <span class="n">masks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">name2mask</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">masks</span><span class="p">:</span>
+            <span class="n">name2diff</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">val</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">name2mask</span> <span class="o">=</span> <span class="p">{}</span>
+
     <span class="n">bv_model</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
         <span class="n">bv_var</span> <span class="o">=</span> <span class="n">pysmt2bv</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
@@ -466,6 +475,9 @@
             <span class="k">if</span> <span class="n">bv_var</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">name2diff</span><span class="p">:</span>
                 <span class="n">bv_var</span> <span class="o">=</span> <span class="n">name2diff</span><span class="p">[</span><span class="n">bv_var</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
                 <span class="n">bv_value</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">bv_var</span><span class="p">)(</span><span class="n">bv_value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">bv_var</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">name2mask</span><span class="p">:</span>
+                <span class="n">bv_var</span> <span class="o">=</span> <span class="n">name2mask</span><span class="p">[</span><span class="n">bv_var</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">bv_value</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">Mask</span><span class="p">(</span><span class="n">bv_value</span><span class="p">)</span>
         <span class="n">bv_model</span><span class="p">[</span><span class="n">bv_var</span><span class="p">]</span> <span class="o">=</span> <span class="n">bv_value</span>
     <span class="k">return</span> <span class="n">bv_model</span></div>
 </pre></div>
@@ -480,7 +492,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Adrian Ranea
+        &copy; Copyright 2021, Adrián Ranea
 
     </p>
   </div>

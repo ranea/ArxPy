@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>arxpy.primitives.shacal1 &mdash; ArxPy 0.2.alpha documentation</title>
+  <title>arxpy.primitives.shacal1 &mdash; ArxPy 0.3 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.2
+                0.3
               </div>
             
           
@@ -209,6 +209,15 @@
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">):</span>
                 <span class="n">rk</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">get_constant</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;skip_rounds&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">skip_rounds</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">:</span>
+                    <span class="n">rk</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">W</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">N</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">:</span>
+                    <span class="k">pass</span>  <span class="c1"># rk[i] = 0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">rk</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">W</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
         <span class="k">return</span> <span class="n">rk</span><span class="p">[:</span><span class="n">N</span><span class="p">]</span> <span class="o">+</span> <span class="n">rk</span><span class="p">[</span><span class="mi">16</span><span class="p">:</span><span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">]</span></div></div>
 
 
@@ -255,7 +264,11 @@
 
 <div class="viewcode-block" id="Shacal1Encryption.eval"><a class="viewcode-back" href="../../../arxpy.primitives.shacal1.html#arxpy.primitives.shacal1.Shacal1Encryption.eval">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">E</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">round_inputs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span><span class="p">):</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">round_inputs</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">E</span><span class="p">])</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;skip_rounds&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">skip_rounds</span><span class="p">:</span>
+                <span class="k">continue</span>
             <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">E</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">round_function</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">E</span></div></div>
@@ -271,6 +284,11 @@
         <span class="bp">cls</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="n">new_rounds</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">key_schedule</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="n">new_rounds</span><span class="p">)</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">encryption</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="n">new_rounds</span><span class="p">)</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">set_skip_rounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">skip_rounds</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">encryption</span><span class="o">.</span><span class="n">skip_rounds</span> <span class="o">=</span> <span class="n">skip_rounds</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">key_schedule</span><span class="o">.</span><span class="n">skip_rounds</span> <span class="o">=</span> <span class="n">skip_rounds</span>
 
     <span class="c1"># noinspection SpellCheckingInspection</span>
     <span class="nd">@classmethod</span>
@@ -486,7 +504,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Adrian Ranea
+        &copy; Copyright 2021, Adrián Ranea
 
     </p>
   </div>

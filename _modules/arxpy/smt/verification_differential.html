@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>arxpy.smt.verification &mdash; ArxPy 0.2.alpha documentation</title>
+  <title>arxpy.smt.verification_differential &mdash; ArxPy 0.3 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.2
+                0.3
               </div>
             
           
@@ -133,7 +133,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>arxpy.smt.verification</li>
+      <li>arxpy.smt.verification_differential</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -148,7 +148,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for arxpy.smt.verification</h1><div class="highlight"><pre>
+  <h1>Source code for arxpy.smt.verification_differential</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Verify characteristics found by the SMT solver.</span>
 
 <span class="sd">To this end, a characteristic is split into sub-characteristics</span>
@@ -171,7 +171,7 @@
 <span class="n">KEY_SAMPLES</span> <span class="o">=</span> <span class="mi">256</span>  <span class="c1"># total complexity 2^{30}</span>
 
 
-<div class="viewcode-block" id="bv2ccode"><a class="viewcode-back" href="../../../arxpy.smt.verification.html#arxpy.smt.verification.bv2ccode">[docs]</a><span class="k">def</span> <span class="nf">bv2ccode</span><span class="p">(</span><span class="n">bv</span><span class="p">):</span>
+<div class="viewcode-block" id="bv2ccode"><a class="viewcode-back" href="../../../arxpy.smt.verification_differential.html#arxpy.smt.verification_differential.bv2ccode">[docs]</a><span class="k">def</span> <span class="nf">bv2ccode</span><span class="p">(</span><span class="n">bv</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Convert a bit-vector type to C code.</span>
 
 <span class="sd">    Args:</span>
@@ -180,7 +180,7 @@
 
 <span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.core import Constant, Variable</span>
 <span class="sd">        &gt;&gt;&gt; from arxpy.bitvector.operation import RotateLeft</span>
-<span class="sd">        &gt;&gt;&gt; from arxpy.smt.verification import bv2ccode</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.smt.verification_differential import bv2ccode</span>
 <span class="sd">        &gt;&gt;&gt; x, y = Variable(&quot;x&quot;, 8), Variable(&quot;y&quot;, 8)</span>
 <span class="sd">        &gt;&gt;&gt; bv2ccode(x | y)</span>
 <span class="sd">        &#39;x | y&#39;</span>
@@ -259,6 +259,11 @@
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">bv</span><span class="o">.</span><span class="n">args</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> | </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
+    <span class="kn">from</span> <span class="nn">arxpy.linear.correlation</span> <span class="kn">import</span> <span class="n">BvIdentity</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bv</span><span class="p">,</span> <span class="n">BvIdentity</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bv</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid operation: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">bv</span><span class="p">)))</span></div>
 
@@ -314,12 +319,12 @@
 <span class="s2">}}&quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="ssa2ccode"><a class="viewcode-back" href="../../../arxpy.smt.verification.html#arxpy.smt.verification.ssa2ccode">[docs]</a><span class="k">def</span> <span class="nf">ssa2ccode</span><span class="p">(</span><span class="n">ssa</span><span class="p">,</span> <span class="n">diff_type</span><span class="p">):</span>
+<div class="viewcode-block" id="ssa2ccode"><a class="viewcode-back" href="../../../arxpy.smt.verification_differential.html#arxpy.smt.verification_differential.ssa2ccode">[docs]</a><span class="k">def</span> <span class="nf">ssa2ccode</span><span class="p">(</span><span class="n">ssa</span><span class="p">,</span> <span class="n">diff_type</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return the C code to compute a differential probability over a function in ssa form.</span>
 
 <span class="sd">        &gt;&gt;&gt; from arxpy.differential.difference import XorDiff, RXDiff</span>
 <span class="sd">        &gt;&gt;&gt; from arxpy.primitives.chaskey import ChaskeyPi</span>
-<span class="sd">        &gt;&gt;&gt; from arxpy.smt.verification import ssa2ccode</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.smt.verification_differential import ssa2ccode</span>
 <span class="sd">        &gt;&gt;&gt; ChaskeyPi.set_rounds(1)</span>
 <span class="sd">        &gt;&gt;&gt; ssa = ChaskeyPi.ssa([&quot;v0&quot;, &quot;v1&quot;, &quot;v2&quot;, &quot;v3&quot;], &quot;x&quot;)  # doctest: +NORMALIZE_WHITESPACE</span>
 <span class="sd">        &gt;&gt;&gt; header, source = ssa2ccode(ssa, XorDiff)</span>
@@ -478,12 +483,12 @@
     <span class="k">return</span> <span class="n">header_ccode</span><span class="p">,</span> <span class="n">source_ccode</span></div>
 
 
-<div class="viewcode-block" id="relatedssa2ccode"><a class="viewcode-back" href="../../../arxpy.smt.verification.html#arxpy.smt.verification.relatedssa2ccode">[docs]</a><span class="k">def</span> <span class="nf">relatedssa2ccode</span><span class="p">(</span><span class="n">ssa1</span><span class="p">,</span> <span class="n">ssa2</span><span class="p">,</span> <span class="n">diff_type</span><span class="p">):</span>
+<div class="viewcode-block" id="relatedssa2ccode"><a class="viewcode-back" href="../../../arxpy.smt.verification_differential.html#arxpy.smt.verification_differential.relatedssa2ccode">[docs]</a><span class="k">def</span> <span class="nf">relatedssa2ccode</span><span class="p">(</span><span class="n">ssa1</span><span class="p">,</span> <span class="n">ssa2</span><span class="p">,</span> <span class="n">diff_type</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Return the C code to compute a differential probability over a (related) function in ssa form.</span>
 
 <span class="sd">        &gt;&gt;&gt; from arxpy.differential.difference import XorDiff</span>
 <span class="sd">        &gt;&gt;&gt; from arxpy.primitives.chaskey import ChaskeyPi</span>
-<span class="sd">        &gt;&gt;&gt; from arxpy.smt.verification import relatedssa2ccode</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.smt.verification_differential import relatedssa2ccode</span>
 <span class="sd">        &gt;&gt;&gt; ChaskeyPi.set_rounds(1)</span>
 <span class="sd">        &gt;&gt;&gt; ssa1 = ChaskeyPi.ssa([&quot;v0&quot;, &quot;v1&quot;, &quot;v2&quot;, &quot;v3&quot;], &quot;x&quot;)  # doctest: +NORMALIZE_WHITESPACE</span>
 <span class="sd">        &gt;&gt;&gt; ssa2 = dict(ssa1)</span>
@@ -627,12 +632,12 @@
     <span class="k">return</span> <span class="n">header_ccode</span><span class="p">,</span> <span class="n">source_ccode</span></div>
 
 
-<div class="viewcode-block" id="compile_run_empirical_weight"><a class="viewcode-back" href="../../../arxpy.smt.verification.html#arxpy.smt.verification.compile_run_empirical_weight">[docs]</a><span class="k">def</span> <span class="nf">compile_run_empirical_weight</span><span class="p">(</span><span class="n">ccode</span><span class="p">,</span> <span class="n">module_name</span><span class="p">,</span> <span class="n">input_diff</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">,</span> <span class="n">target_weight</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="compile_run_empirical_weight"><a class="viewcode-back" href="../../../arxpy.smt.verification_differential.html#arxpy.smt.verification_differential.compile_run_empirical_weight">[docs]</a><span class="k">def</span> <span class="nf">compile_run_empirical_weight</span><span class="p">(</span><span class="n">ccode</span><span class="p">,</span> <span class="n">module_name</span><span class="p">,</span> <span class="n">input_diff</span><span class="p">,</span> <span class="n">output_diff</span><span class="p">,</span> <span class="n">target_weight</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Compile and execute the C code to compute the empirical weight</span>
 
 <span class="sd">        &gt;&gt;&gt; from arxpy.differential.difference import XorDiff, RXDiff</span>
 <span class="sd">        &gt;&gt;&gt; from arxpy.primitives.chaskey import ChaskeyPi</span>
-<span class="sd">        &gt;&gt;&gt; from arxpy.smt.verification import ssa2ccode, compile_run_empirical_weight</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.smt.verification_differential import ssa2ccode, compile_run_empirical_weight</span>
 <span class="sd">        &gt;&gt;&gt; ChaskeyPi.set_rounds(1)</span>
 <span class="sd">        &gt;&gt;&gt; ssa = ChaskeyPi.ssa([&quot;v0&quot;, &quot;v1&quot;, &quot;v2&quot;, &quot;v3&quot;], &quot;x&quot;)  # doctest: +NORMALIZE_WHITESPACE</span>
 <span class="sd">        &gt;&gt;&gt; header, source = ssa2ccode(ssa, XorDiff)</span>
@@ -672,7 +677,7 @@
     <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span> <span class="k">if</span> <span class="n">num_pairs</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">abs</span><span class="p">(</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">num_pairs</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">pair_samples</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="fast_empirical_weight"><a class="viewcode-back" href="../../../arxpy.smt.verification.html#arxpy.smt.verification.fast_empirical_weight">[docs]</a><span class="k">def</span> <span class="nf">fast_empirical_weight</span><span class="p">(</span><span class="n">ch_found</span><span class="p">,</span> <span class="n">verbose_lvl</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="fast_empirical_weight"><a class="viewcode-back" href="../../../arxpy.smt.verification_differential.html#arxpy.smt.verification_differential.fast_empirical_weight">[docs]</a><span class="k">def</span> <span class="nf">fast_empirical_weight</span><span class="p">(</span><span class="n">ch_found</span><span class="p">,</span> <span class="n">verbose_lvl</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Computes the empirical weight of the model using C code.</span>
 
 <span class="sd">    If ``filename`` is not ``None``, the output will be printed</span>
@@ -684,8 +689,8 @@
 <span class="sd">        &gt;&gt;&gt; from arxpy.differential.difference import XorDiff, RXDiff</span>
 <span class="sd">        &gt;&gt;&gt; from arxpy.differential.characteristic import BvCharacteristic</span>
 <span class="sd">        &gt;&gt;&gt; from arxpy.primitives.chaskey import ChaskeyPi</span>
-<span class="sd">        &gt;&gt;&gt; from arxpy.smt.search import SearchCh</span>
-<span class="sd">        &gt;&gt;&gt; from arxpy.smt.verification import fast_empirical_weight</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.smt.search_differential import SearchCh</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.smt.verification_differential import fast_empirical_weight</span>
 <span class="sd">        &gt;&gt;&gt; ChaskeyPi.set_rounds(2)</span>
 <span class="sd">        &gt;&gt;&gt; ch = BvCharacteristic(ChaskeyPi, XorDiff, [&quot;dv0&quot;, &quot;dv1&quot;, &quot;dv2&quot;, &quot;dv3&quot;])</span>
 <span class="sd">        &gt;&gt;&gt; search_problem = SearchCh(ch)</span>
@@ -705,7 +710,7 @@
 <span class="sd">        True</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">arxpy.smt.search</span> <span class="kn">import</span> <span class="n">_get_smart_print</span>  <span class="c1"># avoid cyclic imports</span>
+    <span class="kn">from</span> <span class="nn">arxpy.smt.search_differential</span> <span class="kn">import</span> <span class="n">_get_smart_print</span>  <span class="c1"># avoid cyclic imports</span>
 
     <span class="n">smart_print</span> <span class="o">=</span> <span class="n">_get_smart_print</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
@@ -877,9 +882,9 @@
 
 <span class="sd">        &gt;&gt;&gt; from arxpy.differential.difference import XorDiff</span>
 <span class="sd">        &gt;&gt;&gt; from arxpy.differential.characteristic import SingleKeyCh</span>
-<span class="sd">        &gt;&gt;&gt; from arxpy.smt.search import SearchSkCh</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.smt.search_differential import SearchSkCh</span>
 <span class="sd">        &gt;&gt;&gt; from arxpy.primitives import speck</span>
-<span class="sd">        &gt;&gt;&gt; from arxpy.smt.verification import _fast_empirical_weight_distribution</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.smt.verification_differential import _fast_empirical_weight_distribution</span>
 <span class="sd">        &gt;&gt;&gt; Speck32 = speck.get_Speck_instance(speck.SpeckInstance.speck_32_64)</span>
 <span class="sd">        &gt;&gt;&gt; Speck32.set_rounds(1)</span>
 <span class="sd">        &gt;&gt;&gt; ch = SingleKeyCh(Speck32, XorDiff)</span>
@@ -891,7 +896,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># similar to _empirical_distribution_weight of characteristic module</span>
 
-    <span class="kn">from</span> <span class="nn">arxpy.smt.search</span> <span class="kn">import</span> <span class="n">_get_smart_print</span>  <span class="c1"># avoid cyclic imports</span>
+    <span class="kn">from</span> <span class="nn">arxpy.smt.search_differential</span> <span class="kn">import</span> <span class="n">_get_smart_print</span>  <span class="c1"># avoid cyclic imports</span>
 
     <span class="n">smart_print</span> <span class="o">=</span> <span class="n">_get_smart_print</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
@@ -1169,7 +1174,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Adrian Ranea
+        &copy; Copyright 2021, Adrián Ranea
 
     </p>
   </div>

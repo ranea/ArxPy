@@ -1,0 +1,6 @@
+arxpy.smt.search\_differential module
+=====================================
+
+.. automodule:: arxpy.smt.search_differential
+   :members:
+   :show-inheritance:

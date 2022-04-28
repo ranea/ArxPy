@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>arxpy.differential.difference &mdash; ArxPy 0.2.alpha documentation</title>
+  <title>arxpy.differential.difference &mdash; ArxPy 0.3 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.2
+                0.3
               </div>
             
           
@@ -481,7 +481,7 @@
     <span class="sd">&quot;&quot;&quot;Represent rotational-XOR (RX) differences.</span>
 
 <span class="sd">    The pair ``(x, (x &lt;&lt;&lt; 1) ^ d)`` has RX difference ``d``.</span>
-<span class="sd">    In other words,  the RX difference of two `Term` ``x`` and ``y``</span>
+<span class="sd">    In other words,  the RX difference of two `Terms` ``x`` and ``y``</span>
 <span class="sd">    is defined as ``(x &lt;&lt;&lt; 1) ^ y``.</span>
 
 <span class="sd">    See `Difference` for more information.</span>
@@ -573,7 +573,8 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-            <span class="c1"># BvShl, Extract</span>
+            <span class="c1"># RX-model of BvAddCte not implemented (approximation with BvAdd too weak)</span>
+            <span class="c1"># RX-model of BvShl and BvLshr not implemented (non-linear w.r.t RX-diffs)</span>
 
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="s2">&quot;rx_derivative&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">op</span><span class="o">.</span><span class="n">rx_derivative</span><span class="p">(</span><span class="n">input_diff</span><span class="p">)</span>
@@ -592,7 +593,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Adrian Ranea
+        &copy; Copyright 2021, Adrián Ranea
 
     </p>
   </div>

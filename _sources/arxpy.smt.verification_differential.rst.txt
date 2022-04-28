@@ -1,0 +1,6 @@
+arxpy.smt.verification\_differential module
+===========================================
+
+.. automodule:: arxpy.smt.verification_differential
+   :members:
+   :show-inheritance:

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>arxpy.primitives.primitives module &mdash; ArxPy 0.2.alpha documentation</title>
+  <title>arxpy.primitives.primitives module &mdash; ArxPy 0.3 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="arxpy.primitives.shacal1 module" href="arxpy.primitives.shacal1.html" />
-    <link rel="prev" title="arxpy.primitives.picipher module" href="arxpy.primitives.picipher.html" /> 
+    <link rel="prev" title="arxpy.primitives.lea module" href="arxpy.primitives.lea.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.2
+                0.3
               </div>
             
           
@@ -174,7 +174,7 @@
 <dl class="py class">
 <dt id="arxpy.primitives.primitives.BvFunction">
 <em class="property">class </em><code class="sig-prename descclassname">arxpy.primitives.primitives.</code><code class="sig-name descname">BvFunction</code><a class="reference internal" href="_modules/arxpy/primitives/primitives.html#BvFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.primitives.BvFunction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Represent (iterated) fixed-width bit-vector functions.</p>
 <p>A <a class="reference internal" href="#arxpy.primitives.primitives.BvFunction" title="arxpy.primitives.primitives.BvFunction"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvFunction</span></code></a> takes fixed-width <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Constant" title="arxpy.bitvector.core.Constant"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Constant</span></code></a> operands and return a
 tuple of fixed-width <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Constant" title="arxpy.bitvector.core.Constant"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Constant</span></code></a>. An iterated bit-vector function
@@ -290,7 +290,7 @@ See <a class="reference internal" href="#arxpy.primitives.primitives.BvFunction"
 <dl class="py class">
 <dt id="arxpy.primitives.primitives.Cipher">
 <em class="property">class </em><code class="sig-prename descclassname">arxpy.primitives.primitives.</code><code class="sig-name descname">Cipher</code><a class="reference internal" href="_modules/arxpy/primitives/primitives.html#Cipher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.primitives.primitives.Cipher" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Represent (iterated) block ciphers.</p>
 <p>A (iterated) block cipher consists of <a class="reference internal" href="#arxpy.primitives.primitives.KeySchedule" title="arxpy.primitives.primitives.KeySchedule"><code class="xref any py py-class docutils literal notranslate"><span class="pre">KeySchedule</span></code></a> function
 that computes round keys from a master key and an <a class="reference internal" href="#arxpy.primitives.primitives.Encryption" title="arxpy.primitives.primitives.Encryption"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Encryption</span></code></a>
@@ -343,7 +343,7 @@ that is, <code class="docutils literal notranslate"><span class="pre">cipher(pla
         <a href="arxpy.primitives.shacal1.html" class="btn btn-neutral float-right" title="arxpy.primitives.shacal1 module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="arxpy.primitives.picipher.html" class="btn btn-neutral float-left" title="arxpy.primitives.picipher module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="arxpy.primitives.lea.html" class="btn btn-neutral float-left" title="arxpy.primitives.lea module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -352,7 +352,7 @@ that is, <code class="docutils literal notranslate"><span class="pre">cipher(pla
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Adrian Ranea
+        &copy; Copyright 2021, Adrián Ranea
 
     </p>
   </div>

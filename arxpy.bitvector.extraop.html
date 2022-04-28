@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>arxpy.bitvector.extraop module &mdash; ArxPy 0.2.alpha documentation</title>
+  <title>arxpy.bitvector.extraop module &mdash; ArxPy 0.3 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.2
+                0.3
               </div>
             
           
@@ -415,7 +415,7 @@ use the operator <code class="docutils literal notranslate"><span class="pre">()
 <dt id="arxpy.bitvector.extraop.make_partial_operation">
 <code class="sig-prename descclassname">arxpy.bitvector.extraop.</code><code class="sig-name descname">make_partial_operation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bv_op</span></em>, <em class="sig-param"><span class="n">fixed_args</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/extraop.html#make_partial_operation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.extraop.make_partial_operation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a new operation based on the given one but with fixed arguments.</p>
-<p>The argument <code class="docutils literal notranslate"><span class="pre">fixed_args</span></code> is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref any docutils literal notranslate"><span class="pre">tuple</span></code></a> with the same length as the
+<p>The argument <code class="docutils literal notranslate"><span class="pre">fixed_args</span></code> is a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref any docutils literal notranslate"><span class="pre">tuple</span></code></a> with the same length as the
 number of operands of the given function, containing <code class="docutils literal notranslate"><span class="pre">None</span></code> or <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Constant" title="arxpy.bitvector.core.Constant"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Constant</span></code></a> elements.
 If <code class="docutils literal notranslate"><span class="pre">fixed_args[i]</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the i-th operand is not fixed;
 otherwise, the i-th operand is replaced with <code class="docutils literal notranslate"><span class="pre">fixed_args[i]</span></code>.</p>
@@ -453,7 +453,7 @@ otherwise, the i-th operand is replaced with <code class="docutils literal notra
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Adrian Ranea
+        &copy; Copyright 2021, Adrián Ranea
 
     </p>
   </div>

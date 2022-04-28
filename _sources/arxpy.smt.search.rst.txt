@@ -1,6 +1,0 @@
-arxpy.smt.search module
-=======================
-
-.. automodule:: arxpy.smt.search
-   :members:
-   :show-inheritance:

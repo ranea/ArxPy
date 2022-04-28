@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>arxpy.smt.types module &mdash; ArxPy 0.2.alpha documentation</title>
+  <title>arxpy.smt.types module &mdash; ArxPy 0.3 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="arxpy.smt.verification module" href="arxpy.smt.verification.html" />
-    <link rel="prev" title="arxpy.smt.search module" href="arxpy.smt.search.html" /> 
+    <link rel="next" title="arxpy.smt.verification_differential module" href="arxpy.smt.verification_differential.html" />
+    <link rel="prev" title="arxpy.smt.search_impossible module" href="arxpy.smt.search_impossible.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.2
+                0.3
               </div>
             
           
@@ -181,7 +181,7 @@
 <li><p><strong>bv</strong> – the bit-vector <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Term</span></code></a> to convert</p></li>
 <li><p><strong>boolean</strong> – if True, boolean pySMT types (e.g., <a class="reference external" href="https://pysmt.readthedocs.io/en/latest/api_ref.html#pysmt.shortcuts.Bool" title="(in pySMT v0.7)"><code class="xref any docutils literal notranslate"><span class="pre">pysmt.shortcuts.Bool</span></code></a>) are used instead of
 bit-vector pySMT types (e.g., <a class="reference external" href="https://pysmt.readthedocs.io/en/latest/api_ref.html#pysmt.shortcuts.BV" title="(in pySMT v0.7)"><code class="xref any docutils literal notranslate"><span class="pre">pysmt.shortcuts.BV</span></code></a>).</p></li>
-<li><p><strong>strict_shift</strong> – if <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.8)"><code class="xref any docutils literal notranslate"><span class="pre">True</span></code></a>, shifts and rotation by non-power-of-two offsets
+<li><p><strong>strict_shift</strong> – if <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.10)"><code class="xref any docutils literal notranslate"><span class="pre">True</span></code></a>, shifts and rotation by non-power-of-two offsets
 are power of two are translated to pySMT’s shifts and
 rotation directly.</p></li>
 <li><p><strong>env</strong> – a <a class="reference external" href="https://pysmt.readthedocs.io/en/latest/api_ref.html#pysmt.environment.Environment" title="(in pySMT v0.7)"><code class="xref any docutils literal notranslate"><span class="pre">pysmt.environment.Environment</span></code></a>; if not specified, a new pySMT environment is created.</p></li>
@@ -229,12 +229,13 @@ and <a class="reference external" href="https://pysmt.readthedocs.io/en/latest/a
 
 <dl class="py function">
 <dt id="arxpy.smt.types.pysmt_model2bv_model">
-<code class="sig-prename descclassname">arxpy.smt.types.</code><code class="sig-name descname">pysmt_model2bv_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">differences</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/types.html#pysmt_model2bv_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.types.pysmt_model2bv_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a <a class="reference external" href="https://pysmt.readthedocs.io/en/latest/api_ref.html#pysmt.solvers.solver.Model" title="(in pySMT v0.7)"><code class="xref any docutils literal notranslate"><span class="pre">pysmt.solvers.solver.Model</span></code></a> into a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref any docutils literal notranslate"><span class="pre">dict</span></code></a> of bit-vector types.</p>
-<p>To return <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Difference</span></code></a> values instead of <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Term</span></code></a> values,
-a list of symbolic differences can be passed as argument.
+<code class="sig-prename descclassname">arxpy.smt.types.</code><code class="sig-name descname">pysmt_model2bv_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">differences</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">masks</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/types.html#pysmt_model2bv_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.types.pysmt_model2bv_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a <a class="reference external" href="https://pysmt.readthedocs.io/en/latest/api_ref.html#pysmt.solvers.solver.Model" title="(in pySMT v0.7)"><code class="xref any docutils literal notranslate"><span class="pre">pysmt.solvers.solver.Model</span></code></a> into a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref any docutils literal notranslate"><span class="pre">dict</span></code></a> of bit-vector types.</p>
+<p>To return <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Difference</span></code></a> (resp. <code class="xref any docutils literal notranslate"><span class="pre">Mask</span></code>) values instead of <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Term</span></code></a> values,
+a list of symbolic differences (resp. masks) can be passed as argument.
 In that case, variables in the model also present in <code class="docutils literal notranslate"><span class="pre">differences</span></code>
-will be added to the bit-vector model as <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Difference</span></code></a> objects.</p>
+(resp. <code class="xref any docutils literal notranslate"><span class="pre">masks</span></code>) will be added to the bit-vector model as <a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Difference</span></code></a>
+(resp. <code class="xref any docutils literal notranslate"><span class="pre">Mask</span></code>) objects.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pysmt</span> <span class="kn">import</span> <span class="n">shortcuts</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.types</span> <span class="kn">import</span> <span class="n">pysmt_model2bv_model</span>  <span class="c1"># pySMT shortcuts</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">env</span> <span class="o">=</span> <span class="n">shortcuts</span><span class="o">.</span><span class="n">reset_env</span><span class="p">()</span>
@@ -260,10 +261,10 @@ will be added to the bit-vector model as <a class="reference internal" href="arx
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="arxpy.smt.verification.html" class="btn btn-neutral float-right" title="arxpy.smt.verification module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="arxpy.smt.verification_differential.html" class="btn btn-neutral float-right" title="arxpy.smt.verification_differential module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="arxpy.smt.search.html" class="btn btn-neutral float-left" title="arxpy.smt.search module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="arxpy.smt.search_impossible.html" class="btn btn-neutral float-left" title="arxpy.smt.search_impossible module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -272,7 +273,7 @@ will be added to the bit-vector model as <a class="reference internal" href="arx
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Adrian Ranea
+        &copy; Copyright 2021, Adrián Ranea
 
     </p>
   </div>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>arxpy.differential.characteristic &mdash; ArxPy 0.2.alpha documentation</title>
+  <title>arxpy.differential.characteristic &mdash; ArxPy 0.3 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.2
+                0.3
               </div>
             
           
@@ -301,7 +301,7 @@
                 <span class="n">der</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diff_type</span><span class="o">.</span><span class="n">derivative</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">expr</span><span class="p">),</span> <span class="n">expr_args</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">def</span> <span class="nf">contains_key_var</span><span class="p">(</span><span class="n">term</span><span class="p">):</span>
-                    <span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">basic</span>
+                    <span class="kn">from</span> <span class="nn">sympy.core</span> <span class="kn">import</span> <span class="n">basic</span>
                     <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">basic</span><span class="o">.</span><span class="n">preorder_traversal</span><span class="p">(</span><span class="n">term</span><span class="p">):</span>
                         <span class="k">if</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">func</span><span class="o">.</span><span class="n">round_keys</span><span class="p">:</span>
                             <span class="k">return</span> <span class="kc">True</span>
@@ -832,7 +832,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Adrian Ranea
+        &copy; Copyright 2021, Adrián Ranea
 
     </p>
   </div>

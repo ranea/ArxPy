@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>arxpy.differential.characteristic module &mdash; ArxPy 0.2.alpha documentation</title>
+  <title>arxpy.differential.characteristic module &mdash; ArxPy 0.3 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.2
+                0.3
               </div>
             
           
@@ -174,7 +174,7 @@
 <dl class="py class">
 <dt id="arxpy.differential.characteristic.ChSignatureType">
 <em class="property">class </em><code class="sig-prename descclassname">arxpy.differential.characteristic.</code><code class="sig-name descname">ChSignatureType</code><a class="reference internal" href="_modules/arxpy/differential/characteristic.html#ChSignatureType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.characteristic.ChSignatureType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
 <p>Represent the different types of signatures available for a characteristic.</p>
 <dl class="py attribute">
 <dt id="arxpy.differential.characteristic.ChSignatureType.Full">
@@ -194,7 +194,7 @@ non-linear operation.</p>
 <dl class="py class">
 <dt id="arxpy.differential.characteristic.BvCharacteristic">
 <em class="property">class </em><code class="sig-prename descclassname">arxpy.differential.characteristic.</code><code class="sig-name descname">BvCharacteristic</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em>, <em class="sig-param"><span class="n">diff_type</span></em>, <em class="sig-param"><span class="n">input_diff_names</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">'d'</span></em>, <em class="sig-param"><span class="n">initial_var2diff</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/characteristic.html#BvCharacteristic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.characteristic.BvCharacteristic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Represent characteristics of bit-vector functions.</p>
 <p>Given a bit-vector function <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.BvFunction" title="arxpy.primitives.primitives.BvFunction"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvFunction</span></code></a> <span class="math notranslate nohighlight">\(f\)</span>,
 a characteristic is a trail of differences obtained by
@@ -269,7 +269,7 @@ that depend on the input difference.</p>
 <dl class="py attribute">
 <dt id="arxpy.differential.characteristic.BvCharacteristic.nonlinear_diffs">
 <code class="sig-name descname">nonlinear_diffs</code><a class="headerlink" href="#arxpy.differential.characteristic.BvCharacteristic.nonlinear_diffs" title="Permalink to this definition">¶</a></dt>
-<dd><p>an <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.OrderedDict" title="(in Python v3.8)"><code class="xref any docutils literal notranslate"><span class="pre">collections.OrderedDict</span></code></a> mapping non-linear symbolic differences
+<dd><p>an <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.OrderedDict" title="(in Python v3.10)"><code class="xref any docutils literal notranslate"><span class="pre">collections.OrderedDict</span></code></a> mapping non-linear symbolic differences
 to their corresponding <a class="reference internal" href="arxpy.differential.derivative.html#arxpy.differential.derivative.Derivative" title="arxpy.differential.derivative.Derivative"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Derivative</span></code></a></p>
 </dd></dl>
 
@@ -291,7 +291,7 @@ with the given output difference.</p>
 <p>This method returns an approximation of the weight of the
 differential probability by sampling a given number
 of input pairs.</p>
-<p>If no correct output pairs are found, <a class="reference external" href="https://docs.python.org/3/library/math.html#math.inf" title="(in Python v3.8)"><code class="xref any docutils literal notranslate"><span class="pre">math.inf</span></code></a> is returned.</p>
+<p>If no correct output pairs are found, <a class="reference external" href="https://docs.python.org/3/library/math.html#math.inf" title="(in Python v3.10)"><code class="xref any docutils literal notranslate"><span class="pre">math.inf</span></code></a> is returned.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Constant</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="n">RXDiff</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">BvCharacteristic</span>
@@ -372,7 +372,7 @@ and the non-linear differences start with the prefix <code class="docutils liter
 <dt id="arxpy.differential.characteristic.SingleKeyCh.empirical_weight">
 <code class="sig-name descname">empirical_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_diff</span></em>, <em class="sig-param"><span class="n">output_diff</span></em>, <em class="sig-param"><span class="n">pair_samples</span></em>, <em class="sig-param"><span class="n">key_samples</span></em>, <em class="sig-param"><span class="n">precision</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">rk_diffs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/characteristic.html#SingleKeyCh.empirical_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.characteristic.SingleKeyCh.empirical_weight" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the empirical weight distribution of a given differential.</p>
-<p>This method returns a <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.8)"><code class="xref any docutils literal notranslate"><span class="pre">collections.Counter</span></code></a> storing the distribution of
+<p>This method returns a <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.10)"><code class="xref any docutils literal notranslate"><span class="pre">collections.Counter</span></code></a> storing the distribution of
 differential probability weights over the given number of keys.</p>
 <p>The weights are rounded to the given number of precision
 digits after the decimal point.</p>
@@ -398,7 +398,7 @@ digits after the decimal point.</p>
 <dl class="py class">
 <dt id="arxpy.differential.characteristic.RelatedKeyCh">
 <em class="property">class </em><code class="sig-prename descclassname">arxpy.differential.characteristic.</code><code class="sig-name descname">RelatedKeyCh</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bv_cipher</span></em>, <em class="sig-param"><span class="n">diff_type</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/differential/characteristic.html#RelatedKeyCh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.differential.characteristic.RelatedKeyCh" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Represent related-key characteristics of block ciphers.</p>
 <p>A related-key characteristic of a <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.Cipher" title="arxpy.primitives.primitives.Cipher"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Cipher</span></code></a> is a pair <a class="reference internal" href="#arxpy.differential.characteristic.BvCharacteristic" title="arxpy.differential.characteristic.BvCharacteristic"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvCharacteristic</span></code></a>,
 one over the <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.KeySchedule" title="arxpy.primitives.primitives.KeySchedule"><code class="xref any py py-class docutils literal notranslate"><span class="pre">KeySchedule</span></code></a> of the cipher, and another one over the
@@ -469,7 +469,7 @@ and the non-linear differences start with the prefix <code class="docutils liter
 <dd><p>Return the empirical weight of a given differential for multiple keys.</p>
 <p>This method returns the differential probability weight for the
 key schedule characteristic (see <a class="reference internal" href="#arxpy.differential.characteristic.BvCharacteristic.empirical_weight" title="arxpy.differential.characteristic.BvCharacteristic.empirical_weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">BvCharacteristic.empirical_weight</span></code></a>)
-and the <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.8)"><code class="xref any docutils literal notranslate"><span class="pre">collections.Counter</span></code></a> storing the distribution of weights for the encryption
+and the <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.10)"><code class="xref any docutils literal notranslate"><span class="pre">collections.Counter</span></code></a> storing the distribution of weights for the encryption
 characteristic (see <a class="reference internal" href="#arxpy.differential.characteristic.SingleKeyCh.empirical_weight" title="arxpy.differential.characteristic.SingleKeyCh.empirical_weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">SingleKeyCh.empirical_weight</span></code></a>).</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">Constant</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
@@ -536,7 +536,7 @@ concatenation of the key schedule and encryption signatures.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Adrian Ranea
+        &copy; Copyright 2021, Adrián Ranea
 
     </p>
   </div>

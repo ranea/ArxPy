@@ -1,0 +1,6 @@
+arxpy.smt.verification\_impossible module
+=========================================
+
+.. automodule:: arxpy.smt.verification_impossible
+   :members:
+   :show-inheritance:

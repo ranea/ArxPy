@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>arxpy.bitvector.core &mdash; ArxPy 0.2.alpha documentation</title>
+  <title>arxpy.bitvector.core &mdash; ArxPy 0.3 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.2
+                0.3
               </div>
             
           
@@ -437,7 +437,24 @@
 
 <div class="viewcode-block" id="Term.class_key"><a class="viewcode-back" href="../../../arxpy.bitvector.core.html#arxpy.bitvector.core.Term.class_key">[docs]</a>    <span class="k">def</span> <span class="nf">class_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the key (identifier) of the class for sorting.&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;subclasses need to override this method&quot;</span><span class="p">)</span></div></div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;subclasses need to override this method&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Term.atoms"><a class="viewcode-back" href="../../../arxpy.bitvector.core.html#arxpy.bitvector.core.Term.atoms">[docs]</a>    <span class="k">def</span> <span class="nf">atoms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">types</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the atoms that form the current object.</span>
+
+<span class="sd">        Similar to SymPy atoms() method, but this method</span>
+<span class="sd">        doesn&#39;t throw an exception when one of the arguments</span>
+<span class="sd">        is of type &#39;int&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">types</span><span class="p">:</span>
+            <span class="n">types</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">t</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="k">else</span> <span class="nb">type</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">types</span><span class="p">])</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">basic</span><span class="o">.</span><span class="n">preorder_traversal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">types</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">types</span><span class="p">)}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">node</span><span class="o">.</span><span class="n">args</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">result</span></div></div>
 
 
 <div class="viewcode-block" id="Constant"><a class="viewcode-back" href="../../../arxpy.bitvector.core.html#arxpy.bitvector.core.Constant">[docs]</a><span class="k">class</span> <span class="nc">Constant</span><span class="p">(</span><span class="n">basic</span><span class="o">.</span><span class="n">Atom</span><span class="p">,</span> <span class="n">Term</span><span class="p">):</span>
@@ -648,7 +665,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Adrian Ranea
+        &copy; Copyright 2021, Adrián Ranea
 
     </p>
   </div>

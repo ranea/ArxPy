@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>arxpy.bitvector.core module &mdash; ArxPy 0.2.alpha documentation</title>
+  <title>arxpy.bitvector.core module &mdash; ArxPy 0.3 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.2
+                0.3
               </div>
             
           
@@ -174,7 +174,7 @@
 <dl class="py class">
 <dt id="arxpy.bitvector.core.Term">
 <em class="property">class </em><code class="sig-prename descclassname">arxpy.bitvector.core.</code><code class="sig-name descname">Term</code><a class="reference internal" href="_modules/arxpy/bitvector/core.html#Term"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.core.Term" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.basic.Basic" title="(in SymPy v1.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sympy.core.basic.Basic</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.basic.Basic" title="(in SymPy v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sympy.core.basic.Basic</span></code></a></p>
 <p>Represent bit-vector terms.</p>
 <p>Bit-vector terms are constants, variables and operations applied to terms.</p>
 <p>Bit-vector terms support many operations with the standard
@@ -223,12 +223,21 @@ See <a class="reference internal" href="arxpy.bitvector.context.html#arxpy.bitve
 <dd><p>Return the key (identifier) of the class for sorting.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt id="arxpy.bitvector.core.Term.atoms">
+<code class="sig-name descname">atoms</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">types</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/bitvector/core.html#Term.atoms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.core.Term.atoms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the atoms that form the current object.</p>
+<p>Similar to SymPy atoms() method, but this method
+doesn’t throw an exception when one of the arguments
+is of type ‘int’.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
 <dt id="arxpy.bitvector.core.Constant">
 <em class="property">class </em><code class="sig-prename descclassname">arxpy.bitvector.core.</code><code class="sig-name descname">Constant</code><a class="reference internal" href="_modules/arxpy/bitvector/core.html#Constant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.core.Constant" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.basic.Atom" title="(in SymPy v1.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sympy.core.basic.Atom</span></code></a>, <a class="reference internal" href="#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.core.Term</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.basic.Atom" title="(in SymPy v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sympy.core.basic.Atom</span></code></a>, <a class="reference internal" href="#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.core.Term</span></code></a></p>
 <p>Represent bit-vector constants.</p>
 <p>Bit-vector constants are interpreted as unsigned integers in base 2,
 that is, a bit-vector <span class="math notranslate nohighlight">\((x_{n-1}, \dots, x_1, x_0)\)</span> represents
@@ -310,7 +319,7 @@ the non-negative integer <span class="math notranslate nohighlight">\(x_0 + 2 x_
 <dl class="py class">
 <dt id="arxpy.bitvector.core.Variable">
 <em class="property">class </em><code class="sig-prename descclassname">arxpy.bitvector.core.</code><code class="sig-name descname">Variable</code><a class="reference internal" href="_modules/arxpy/bitvector/core.html#Variable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.bitvector.core.Variable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.basic.Atom" title="(in SymPy v1.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sympy.core.basic.Atom</span></code></a>, <a class="reference internal" href="#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.core.Term</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.sympy.org/latest/modules/core.html#sympy.core.basic.Atom" title="(in SymPy v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sympy.core.basic.Atom</span></code></a>, <a class="reference internal" href="#arxpy.bitvector.core.Term" title="arxpy.bitvector.core.Term"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.bitvector.core.Term</span></code></a></p>
 <p>Represent bit-vector variables.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -376,7 +385,7 @@ the non-negative integer <span class="math notranslate nohighlight">\(x_0 + 2 x_
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Adrian Ranea
+        &copy; Copyright 2021, Adrián Ranea
 
     </p>
   </div>

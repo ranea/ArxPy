@@ -1,0 +1,756 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.smt.search_impossible module &mdash; ArxPy 0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="arxpy.smt.types module" href="arxpy.smt.types.html" />
+    <link rel="prev" title="arxpy.smt.search_differential module" href="arxpy.smt.search_differential.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="arxpy.html">arxpy package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="arxpy.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="arxpy.bitvector.html">arxpy.bitvector package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.differential.html">arxpy.differential package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="arxpy.primitives.html">arxpy.primitives package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="arxpy.smt.html">arxpy.smt package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="arxpy.smt.html#submodules">Submodules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="arxpy.html">arxpy package</a> &raquo;</li>
+        
+          <li><a href="arxpy.smt.html">arxpy.smt package</a> &raquo;</li>
+        
+      <li>arxpy.smt.search_impossible module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/arxpy.smt.search_impossible.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-arxpy.smt.search_impossible">
+<span id="arxpy-smt-search-impossible-module"></span><h1>arxpy.smt.search_impossible module<a class="headerlink" href="#module-arxpy.smt.search_impossible" title="Permalink to this headline">¶</a></h1>
+<p>Search for impossible differentials (ID) by modeling the search as a SMT problem.</p>
+<dl class="py class">
+<dt id="arxpy.smt.search_impossible.KeySetting">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search_impossible.</code><code class="sig-name descname">KeySetting</code><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#KeySetting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.KeySetting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Represent the different types of ID of block ciphers.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.smt.search_impossible.SearchMode">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search_impossible.</code><code class="sig-name descname">SearchMode</code><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#SearchMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.SearchMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Represent the different options for searching ID</p>
+<dl class="py attribute">
+<dt id="arxpy.smt.search_impossible.SearchMode.FirstID">
+<code class="sig-name descname">FirstID</code><a class="headerlink" href="#arxpy.smt.search_impossible.SearchMode.FirstID" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the first ID found by iteratively searching
+with increasing number of active bits. The ID found is returned
+as a <a class="reference internal" href="#arxpy.smt.search_impossible.IDFound" title="arxpy.smt.search_impossible.IDFound"><code class="xref any py py-class docutils literal notranslate"><span class="pre">IDFound</span></code></a> object. If none is found, <code class="docutils literal notranslate"><span class="pre">None</span></code> is returned.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search_impossible.SearchMode.AllID">
+<code class="sig-name descname">AllID</code><a class="headerlink" href="#arxpy.smt.search_impossible.SearchMode.AllID" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to <a class="reference internal" href="#arxpy.smt.search_impossible.SearchMode.FirstID" title="arxpy.smt.search_impossible.SearchMode.FirstID"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">FirstID</span></code></a>, but the search is not stopped
+after the first ID, and all found ID are printed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.smt.search_impossible.ActivationMode">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search_impossible.</code><code class="sig-name descname">ActivationMode</code><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#ActivationMode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.ActivationMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Represent the different options to consider when activating.</p>
+<dl class="py attribute">
+<dt id="arxpy.smt.search_impossible.ActivationMode.Default">
+<code class="sig-name descname">Default</code><a class="headerlink" href="#arxpy.smt.search_impossible.ActivationMode.Default" title="Permalink to this definition">¶</a></dt>
+<dd><p>no restrictions</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search_impossible.ActivationMode.SingleBit">
+<code class="sig-name descname">SingleBit</code><a class="headerlink" href="#arxpy.smt.search_impossible.ActivationMode.SingleBit" title="Permalink to this definition">¶</a></dt>
+<dd><p>activates at most one bit in each word</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search_impossible.ActivationMode.MSBbit">
+<code class="sig-name descname">MSBbit</code><a class="headerlink" href="#arxpy.smt.search_impossible.ActivationMode.MSBbit" title="Permalink to this definition">¶</a></dt>
+<dd><p>activates at most the MSB in each word</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search_impossible.ActivationMode.Zero">
+<code class="sig-name descname">Zero</code><a class="headerlink" href="#arxpy.smt.search_impossible.ActivationMode.Zero" title="Permalink to this definition">¶</a></dt>
+<dd><p>all words are set to zero</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="arxpy.smt.search_impossible.generate_active_bvlists">
+<code class="sig-prename descclassname">arxpy.smt.search_impossible.</code><code class="sig-name descname">generate_active_bvlists</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">list_width</span></em>, <em class="sig-param"><span class="n">num_active_bits</span></em>, <em class="sig-param"><span class="n">active_bits_mode</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#generate_active_bvlists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.generate_active_bvlists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate all bitvector list with given width, number of active bits and activation mode.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">generate_active_bvlists</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">active_bits_mode</span><span class="o">=</span><span class="n">ActivationMode</span><span class="o">.</span><span class="n">Default</span><span class="p">))</span>
+<span class="go">[[0b01, 0b00], [0b10, 0b00], [0b00, 0b01], [0b00, 0b10]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">generate_active_bvlists</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">active_bits_mode</span><span class="o">=</span><span class="n">ActivationMode</span><span class="o">.</span><span class="n">SingleBit</span><span class="p">))</span>
+<span class="go">[[0b01, 0b00], [0b00, 0b01]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.smt.search_impossible.IDFound">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search_impossible.</code><code class="sig-name descname">IDFound</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ch</span></em>, <em class="sig-param"><span class="n">input_diff_found</span></em>, <em class="sig-param"><span class="n">output_diff_found</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#IDFound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.IDFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represent (non-symbolic) ID found over a <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.BvCharacteristic" title="arxpy.differential.characteristic.BvCharacteristic"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvCharacteristic</span></code></a>.</p>
+<dl class="py attribute">
+<dt id="arxpy.smt.search_impossible.IDFound.ch">
+<code class="sig-name descname">ch</code><a class="headerlink" href="#arxpy.smt.search_impossible.IDFound.ch" title="Permalink to this definition">¶</a></dt>
+<dd><p>the associated symbolic differential characteristic</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search_impossible.IDFound.input_diff">
+<code class="sig-name descname">input_diff</code><a class="headerlink" href="#arxpy.smt.search_impossible.IDFound.input_diff" title="Permalink to this definition">¶</a></dt>
+<dd><p>a list, where the i-th element is a pair containing
+the i-th input symbolic difference and its value</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search_impossible.IDFound.output_diff">
+<code class="sig-name descname">output_diff</code><a class="headerlink" href="#arxpy.smt.search_impossible.IDFound.output_diff" title="Permalink to this definition">¶</a></dt>
+<dd><p>a list, where the i-th element is a pair containing
+the i-th output symbolic difference and its value</p>
+</dd></dl>
+
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.operation</span> <span class="kn">import</span> <span class="n">BvComp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="n">RXDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">BvCharacteristic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.chaskey</span> <span class="kn">import</span> <span class="n">ChaskeyPi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search_impossible</span> <span class="kn">import</span> <span class="n">SearchID</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">BvCharacteristic</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;dv0&quot;</span><span class="p">,</span> <span class="s2">&quot;dv1&quot;</span><span class="p">,</span> <span class="s2">&quot;dv2&quot;</span><span class="p">,</span> <span class="s2">&quot;dv3&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span> <span class="o">=</span> <span class="n">SearchID</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">id_found</span> <span class="o">=</span> <span class="n">search_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">id_found</span><span class="o">.</span><span class="n">input_diff</span>  
+<span class="go">[[XorDiff(dv0), XorDiff(0x00000001)], [XorDiff(dv1), XorDiff(0x00000000)],</span>
+<span class="go">[XorDiff(dv2), XorDiff(0x00000000)], [XorDiff(dv3), XorDiff(0x00000000)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">id_found</span><span class="o">.</span><span class="n">output_diff</span>  
+<span class="go">[[XorDiff(d7), XorDiff(0x00000001)], [XorDiff(d12), XorDiff(0x00000000)],</span>
+<span class="go">[XorDiff(d13), XorDiff(0x00000000)], [XorDiff(d9), XorDiff(0x00000000)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">id_found</span><span class="p">)</span>  
+<span class="go">{&#39;input_diff&#39;: [[dv0, 0x00000001], [dv1, 0x00000000], [dv2, 0x00000000], [dv3, 0x00000000]],</span>
+<span class="go">&#39;output_diff&#39;: [[d7, 0x00000001], [d12, 0x00000000], [d13, 0x00000000], [d9, 0x00000000]]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">BvCharacteristic</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">RXDiff</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;dv0&quot;</span><span class="p">,</span> <span class="s2">&quot;dv1&quot;</span><span class="p">,</span> <span class="s2">&quot;dv2&quot;</span><span class="p">,</span> <span class="s2">&quot;dv3&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span> <span class="o">=</span> <span class="n">SearchID</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">id_found</span> <span class="o">=</span> <span class="n">search_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">id_found</span><span class="o">.</span><span class="n">input_diff</span>  
+<span class="go">[[RXDiff(dv0), RXDiff(0x00000001)], [RXDiff(dv1), RXDiff(0x00000000)],</span>
+<span class="go">[RXDiff(dv2), RXDiff(0x00000000)], [RXDiff(dv3), RXDiff(0x00000000)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">id_found</span><span class="o">.</span><span class="n">output_diff</span>  
+<span class="go">[[RXDiff(d7), RXDiff(0x00000001)], [RXDiff(d12), RXDiff(0x00000000)],</span>
+<span class="go">[RXDiff(d13), RXDiff(0x00000000)], [RXDiff(d9), RXDiff(0x00000000)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">id_found</span><span class="p">)</span>  
+<span class="go">{&#39;input_diff&#39;: [[dv0, 0x00000001], [dv1, 0x00000000], [dv2, 0x00000000], [dv3, 0x00000000]],</span>
+<span class="go">&#39;output_diff&#39;: [[d7, 0x00000001], [d12, 0x00000000], [d13, 0x00000000], [d9, 0x00000000]]}</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.smt.search_impossible.IDFound.check_empirical_weight">
+<code class="sig-name descname">check_empirical_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">verbose_lvl</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#IDFound.check_empirical_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.IDFound.check_empirical_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the empirical weight is <a class="reference external" href="https://docs.python.org/3/library/math.html#math.inf" title="(in Python v3.10)"><code class="xref any docutils literal notranslate"><span class="pre">math.inf</span></code></a>.</p>
+<p>If the empirical weight is not <a class="reference external" href="https://docs.python.org/3/library/math.html#math.inf" title="(in Python v3.10)"><code class="xref any docutils literal notranslate"><span class="pre">math.inf</span></code></a>, an <a class="reference internal" href="arxpy.smt.search_differential.html#arxpy.smt.search_differential.ExactWeightError" title="arxpy.smt.search_differential.ExactWeightError"><code class="xref any py py-exc docutils literal notranslate"><span class="pre">ExactWeightError</span></code></a>
+exception is raised.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">filename</span></code> is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the output will be printed
+to the given file rather than the to stdout.</p>
+<p>The argument <code class="docutils literal notranslate"><span class="pre">verbose_lvl</span></code> can also take the values <code class="docutils literal notranslate"><span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">2</span></code> for a
+more detailed output.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.smt.search_impossible.IDFound.vrepr">
+<code class="sig-name descname">vrepr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#IDFound.vrepr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.IDFound.vrepr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a verbose dictionary-like representation of the ID.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">BvCharacteristic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.chaskey</span> <span class="kn">import</span> <span class="n">ChaskeyPi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search_impossible</span> <span class="kn">import</span> <span class="n">SearchID</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">BvCharacteristic</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;dv0&quot;</span><span class="p">,</span> <span class="s2">&quot;dv1&quot;</span><span class="p">,</span> <span class="s2">&quot;dv2&quot;</span><span class="p">,</span> <span class="s2">&quot;dv3&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span> <span class="o">=</span> <span class="n">SearchID</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">id_found</span> <span class="o">=</span> <span class="n">search_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">id_found</span><span class="o">.</span><span class="n">vrepr</span><span class="p">())</span>  
+<span class="go">{&#39;input_diff&#39;: [[XorDiff(Variable(&#39;dv0&#39;, width=32)), XorDiff(Constant(0b00000000000000000000000000000001, width=32))],</span>
+<span class="go">[XorDiff(Variable(&#39;dv1&#39;, width=32)), XorDiff(Constant(0b00000000000000000000000000000000, width=32))],</span>
+<span class="go">[XorDiff(Variable(&#39;dv2&#39;, width=32)), XorDiff(Constant(0b00000000000000000000000000000000, width=32))],</span>
+<span class="go">[XorDiff(Variable(&#39;dv3&#39;, width=32)), XorDiff(Constant(0b00000000000000000000000000000000, width=32))]],</span>
+<span class="go">&#39;output_diff&#39;: [[XorDiff(Variable(&#39;d7&#39;, width=32)), XorDiff(Constant(0b00000000000000000000000000000001, width=32))],</span>
+<span class="go">[XorDiff(Variable(&#39;d12&#39;, width=32)), XorDiff(Constant(0b00000000000000000000000000000000, width=32))],</span>
+<span class="go">[XorDiff(Variable(&#39;d13&#39;, width=32)), XorDiff(Constant(0b00000000000000000000000000000000, width=32))],</span>
+<span class="go">[XorDiff(Variable(&#39;d9&#39;, width=32)), XorDiff(Constant(0b00000000000000000000000000000000, width=32))]]}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.smt.search_impossible.IDFound.srepr">
+<code class="sig-name descname">srepr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#IDFound.srepr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.IDFound.srepr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a short representation of the ID.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.smt.search_impossible.SkIDFound">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search_impossible.</code><code class="sig-name descname">SkIDFound</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ch</span></em>, <em class="sig-param"><span class="n">input_diff_found</span></em>, <em class="sig-param"><span class="n">output_diff_found</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#SkIDFound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.SkIDFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#arxpy.smt.search_impossible.IDFound" title="arxpy.smt.search_impossible.IDFound"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.smt.search_impossible.IDFound</span></code></a></p>
+<p>Represent (non-symbolic) single-key ID found over a <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.SingleKeyCh" title="arxpy.differential.characteristic.SingleKeyCh"><code class="xref any py py-class docutils literal notranslate"><span class="pre">SingleKeyCh</span></code></a>.</p>
+<p>See also <a class="reference internal" href="#arxpy.smt.search_impossible.IDFound" title="arxpy.smt.search_impossible.IDFound"><code class="xref any py py-class docutils literal notranslate"><span class="pre">IDFound</span></code></a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">SingleKeyCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search_impossible</span> <span class="kn">import</span> <span class="n">SearchSkID</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives</span> <span class="kn">import</span> <span class="n">speck</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span> <span class="o">=</span> <span class="n">speck</span><span class="o">.</span><span class="n">get_Speck_instance</span><span class="p">(</span><span class="n">speck</span><span class="o">.</span><span class="n">SpeckInstance</span><span class="o">.</span><span class="n">speck_32_64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">SingleKeyCh</span><span class="p">(</span><span class="n">Speck32</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span> <span class="o">=</span> <span class="n">SearchSkID</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">id_found</span> <span class="o">=</span> <span class="n">search_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">id_found</span><span class="o">.</span><span class="n">input_diff</span>
+<span class="go">[[XorDiff(dp0), XorDiff(0x0001)], [XorDiff(dp1), XorDiff(0x0000)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">id_found</span><span class="o">.</span><span class="n">output_diff</span>
+<span class="go">[[XorDiff(dx2), XorDiff(0x0001)], [XorDiff(dx4), XorDiff(0x0000)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">id_found</span><span class="p">)</span>
+<span class="go">{&#39;input_diff&#39;: [[dp0, 0x0001], [dp1, 0x0000]], &#39;output_diff&#39;: [[dx2, 0x0001], [dx4, 0x0000]]}</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.smt.search_impossible.SkIDFound.check_empirical_weight">
+<code class="sig-name descname">check_empirical_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">verbose_lvl</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#SkIDFound.check_empirical_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.SkIDFound.check_empirical_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the empirical weight is <a class="reference external" href="https://docs.python.org/3/library/math.html#math.inf" title="(in Python v3.10)"><code class="xref any docutils literal notranslate"><span class="pre">math.inf</span></code></a> for many keys.</p>
+<p>If the empirical weight is not <a class="reference external" href="https://docs.python.org/3/library/math.html#math.inf" title="(in Python v3.10)"><code class="xref any docutils literal notranslate"><span class="pre">math.inf</span></code></a> for some key,
+an <a class="reference internal" href="arxpy.smt.search_differential.html#arxpy.smt.search_differential.ExactWeightError" title="arxpy.smt.search_differential.ExactWeightError"><code class="xref any py py-exc docutils literal notranslate"><span class="pre">ExactWeightError</span></code></a> exception is raised.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">filename</span></code> is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the output will be printed
+to the given file rather than the to stdout.</p>
+<p>The argument <code class="docutils literal notranslate"><span class="pre">verbose_lvl</span></code> can also take the values <code class="docutils literal notranslate"><span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">2</span></code> for a
+more detailed output.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.smt.search_impossible.RkIDFound">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search_impossible.</code><code class="sig-name descname">RkIDFound</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rkch</span></em>, <em class="sig-param"><span class="n">key_input_diff_found</span></em>, <em class="sig-param"><span class="n">enc_input_diff_found</span></em>, <em class="sig-param"><span class="n">enc_output_diff_found</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#RkIDFound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.RkIDFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represent (non-symbolic) related-key ID found over a <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.RelatedKeyCh" title="arxpy.differential.characteristic.RelatedKeyCh"><code class="xref any py py-class docutils literal notranslate"><span class="pre">RelatedKeyCh</span></code></a>.</p>
+<dl class="py attribute">
+<dt id="arxpy.smt.search_impossible.RkIDFound.rkch">
+<code class="sig-name descname">rkch</code><a class="headerlink" href="#arxpy.smt.search_impossible.RkIDFound.rkch" title="Permalink to this definition">¶</a></dt>
+<dd><p>the associated symbolic <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.RelatedKeyCh" title="arxpy.differential.characteristic.RelatedKeyCh"><code class="xref any py py-class docutils literal notranslate"><span class="pre">RelatedKeyCh</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search_impossible.RkIDFound.key_id_found">
+<code class="sig-name descname">key_id_found</code><a class="headerlink" href="#arxpy.smt.search_impossible.RkIDFound.key_id_found" title="Permalink to this definition">¶</a></dt>
+<dd><p>a <a class="reference internal" href="#arxpy.smt.search_impossible.IDFound" title="arxpy.smt.search_impossible.IDFound"><code class="xref any py py-class docutils literal notranslate"><span class="pre">IDFound</span></code></a> denoting the ID over the key schedule</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="arxpy.smt.search_impossible.RkIDFound.enc_id_found">
+<code class="sig-name descname">enc_id_found</code><a class="headerlink" href="#arxpy.smt.search_impossible.RkIDFound.enc_id_found" title="Permalink to this definition">¶</a></dt>
+<dd><p>a <a class="reference internal" href="#arxpy.smt.search_impossible.IDFound" title="arxpy.smt.search_impossible.IDFound"><code class="xref any py py-class docutils literal notranslate"><span class="pre">IDFound</span></code></a> denoting the ID over the encryption</p>
+</dd></dl>
+
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">RelatedKeyCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search_impossible</span> <span class="kn">import</span> <span class="n">SearchRkID</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives</span> <span class="kn">import</span> <span class="n">speck</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span> <span class="o">=</span> <span class="n">speck</span><span class="o">.</span><span class="n">get_Speck_instance</span><span class="p">(</span><span class="n">speck</span><span class="o">.</span><span class="n">SpeckInstance</span><span class="o">.</span><span class="n">speck_32_64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkch</span> <span class="o">=</span> <span class="n">RelatedKeyCh</span><span class="p">(</span><span class="n">Speck32</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span> <span class="o">=</span> <span class="n">SearchRkID</span><span class="p">(</span><span class="n">rkch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkid_found</span> <span class="o">=</span> <span class="n">search_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkid_found</span><span class="o">.</span><span class="n">key_id_found</span><span class="o">.</span><span class="n">input_diff</span>
+<span class="go">[[XorDiff(dmk0), XorDiff(0x0001)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkid_found</span><span class="o">.</span><span class="n">enc_id_found</span><span class="o">.</span><span class="n">input_diff</span>
+<span class="go">[[XorDiff(dp0), XorDiff(0x0000)], [XorDiff(dp1), XorDiff(0x0000)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rkid_found</span><span class="o">.</span><span class="n">enc_id_found</span><span class="o">.</span><span class="n">output_diff</span>
+<span class="go">[[XorDiff(dx2), XorDiff(0x0001)], [XorDiff(dx4), XorDiff(0x0000)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">rkid_found</span><span class="p">)</span>
+<span class="go">{&#39;enc_id_found&#39;: {&#39;input_diff&#39;: [[dp0, 0x0000], [dp1, 0x0000]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dx2, 0x0001], [dx4, 0x0000]]},</span>
+<span class="go"> &#39;key_id_found&#39;: {&#39;input_diff&#39;: [[dmk0, 0x0001]], &#39;output_diff&#39;: []}}</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.smt.search_impossible.RkIDFound.check_empirical_weight">
+<code class="sig-name descname">check_empirical_weight</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">verbose_lvl</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#RkIDFound.check_empirical_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.RkIDFound.check_empirical_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the empirical weight is <a class="reference external" href="https://docs.python.org/3/library/math.html#math.inf" title="(in Python v3.10)"><code class="xref any docutils literal notranslate"><span class="pre">math.inf</span></code></a> for many keys.</p>
+<p>If the empirical weight is not <a class="reference external" href="https://docs.python.org/3/library/math.html#math.inf" title="(in Python v3.10)"><code class="xref any docutils literal notranslate"><span class="pre">math.inf</span></code></a> for some key,
+an <a class="reference internal" href="arxpy.smt.search_differential.html#arxpy.smt.search_differential.ExactWeightError" title="arxpy.smt.search_differential.ExactWeightError"><code class="xref any py py-exc docutils literal notranslate"><span class="pre">ExactWeightError</span></code></a> exception is raised.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">filename</span></code> is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the output will be printed
+to the given file rather than the to stdout.</p>
+<p>The argument <code class="docutils literal notranslate"><span class="pre">verbose_lvl</span></code> can also take the values <code class="docutils literal notranslate"><span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">2</span></code> for a
+more detailed output.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.smt.search_impossible.RkIDFound.vrepr">
+<code class="sig-name descname">vrepr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#RkIDFound.vrepr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.RkIDFound.vrepr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a verbose dictionary-like representation of the ID.</p>
+<p>See also <a class="reference internal" href="#arxpy.smt.search_impossible.IDFound.vrepr" title="arxpy.smt.search_impossible.IDFound.vrepr"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">IDFound.vrepr</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.smt.search_impossible.RkIDFound.srepr">
+<code class="sig-name descname">srepr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#RkIDFound.srepr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.RkIDFound.srepr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a short representation of the ID.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.smt.search_impossible.SearchID">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search_impossible.</code><code class="sig-name descname">SearchID</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ch</span></em>, <em class="sig-param"><span class="n">initial_constraints</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#SearchID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.SearchID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="arxpy.smt.search_differential.html#arxpy.smt.search_differential.SearchCh" title="arxpy.smt.search_differential.SearchCh"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.smt.search_differential.SearchCh</span></code></a></p>
+<p>Represent the problem of finding an ID over a <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.BvCharacteristic" title="arxpy.differential.characteristic.BvCharacteristic"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvCharacteristic</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ch</strong> (<a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.BvCharacteristic" title="arxpy.differential.characteristic.BvCharacteristic"><em>BvCharacteristic</em></a>) – a symbolic characteristic of a <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.BvFunction" title="arxpy.primitives.primitives.BvFunction"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvFunction</span></code></a></p>
+</dd>
+</dl>
+<p>See also <a class="reference internal" href="arxpy.smt.search_differential.html#arxpy.smt.search_differential.SearchCh" title="arxpy.smt.search_differential.SearchCh"><code class="xref any py py-class docutils literal notranslate"><span class="pre">SearchCh</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.bitvector.core</span> <span class="kn">import</span> <span class="n">Variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">BvCharacteristic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search_impossible</span> <span class="kn">import</span> <span class="n">SearchID</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives.chaskey</span> <span class="kn">import</span> <span class="n">ChaskeyPi</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ChaskeyPi</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">BvCharacteristic</span><span class="p">(</span><span class="n">ChaskeyPi</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;dv0&quot;</span><span class="p">,</span> <span class="s2">&quot;dv1&quot;</span><span class="p">,</span> <span class="s2">&quot;dv2&quot;</span><span class="p">,</span> <span class="s2">&quot;dv3&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span> <span class="o">=</span> <span class="n">SearchID</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span><span class="o">.</span><span class="n">formula_size</span><span class="p">()</span>
+<span class="go">142</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span><span class="o">.</span><span class="n">error</span><span class="p">()</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">search_problem</span><span class="o">.</span><span class="n">hrepr</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>
+<span class="go">assert 0x00000000 == ((~(... &lt;&lt; ...) ^ (d0 &lt;&lt; 0x00000001)) &amp; (~(... &lt;&lt; ...) ^ (dv1 &lt;&lt; 0x00000001)) &amp; ((dv0 &lt;&lt; 0x00000001) ^ d0 ^ dv0 ^ dv1))</span>
+<span class="go">assert 0x00000000 == ((~(... &lt;&lt; ...) ^ (d4 &lt;&lt; 0x00000001)) &amp; (~(... &lt;&lt; ...) ^ (dv3 &lt;&lt; 0x00000001)) &amp; ((dv2 &lt;&lt; 0x00000001) ^ d4 ^ dv2 ^ dv3))</span>
+<span class="go">assert 0x00000000 == ((~(... &lt;&lt; ...) ^ (d7 &lt;&lt; 0x00000001)) &amp; (~(... &lt;&lt; ...) ^ ((... ^ ...) &lt;&lt; 0x00000001)) &amp; (((d0 &lt;&lt;&lt; 16) &lt;&lt; 0x00000001) ^ d7 ^ ... ^ ... ^ (... &lt;&lt;&lt; ...)))</span>
+<span class="go">assert 0x00000000 == ((~(... &lt;&lt; ...) ^ (d10 &lt;&lt; 0x00000001)) &amp; (~(... &lt;&lt; ...) ^ (d4 &lt;&lt; 0x00000001)) &amp; (((d0 ^ (... &lt;&lt;&lt; ...)) &lt;&lt; 0x00000001) ^ d10 ^ d4 ^ ... ^ ...))</span>
+<span class="go">assert 0b0 == w</span>
+<span class="go">check-unsat</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.smt.search_impossible.SearchID.hrepr">
+<code class="sig-name descname">hrepr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">full_repr</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#SearchID.hrepr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.SearchID.hrepr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a human readable representing of the SMT problem.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">full_repr</span></code> is False, the short string representation <a class="reference internal" href="arxpy.bitvector.core.html#arxpy.bitvector.core.Term.srepr" title="arxpy.bitvector.core.Term.srepr"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">srepr</span></code></a> is used.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.smt.search_impossible.SearchID.extend">
+<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id_found</span></em>, <em class="sig-param"><span class="n">solver_name</span></em>, <em class="sig-param"><span class="n">check</span></em>, <em class="sig-param"><span class="n">verbose_level</span></em>, <em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#SearchID.extend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.SearchID.extend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extend the ID by appending a characteristic with probability one.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.smt.search_impossible.SearchID.solve">
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">initial_active_bits</em>, <em class="sig-param">solver_name='btor'</em>, <em class="sig-param">search_mode=&lt;SearchMode.FirstID: 1&gt;</em>, <em class="sig-param">input_diff_mode=&lt;ActivationMode.Default: 1&gt;</em>, <em class="sig-param">output_diff_mode=&lt;ActivationMode.Default: 1&gt;</em>, <em class="sig-param">to_extend=False</em>, <em class="sig-param">check=False</em>, <em class="sig-param">verbose_level=0</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#SearchID.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.SearchID.solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve the SMT problem associated  to the search of an ID over a <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.BvCharacteristic" title="arxpy.differential.characteristic.BvCharacteristic"><code class="xref any py py-class docutils literal notranslate"><span class="pre">BvCharacteristic</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initial_active_bits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the initial number of active bits in the input and output</p></li>
+<li><p><strong>solver_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the solver (according to pySMT) to be used</p></li>
+<li><p><strong>search_mode</strong> (<a class="reference internal" href="#arxpy.smt.search_impossible.SearchMode" title="arxpy.smt.search_impossible.SearchMode"><em>SearchMode</em></a>) – one of the search modes available</p></li>
+<li><p><strong>input_diff_mode</strong> (<a class="reference internal" href="#arxpy.smt.search_impossible.ActivationMode" title="arxpy.smt.search_impossible.ActivationMode"><em>ActivationMode</em></a>) – the diff-mode for the input difference</p></li>
+<li><p><strong>output_diff_mode</strong> (<a class="reference internal" href="#arxpy.smt.search_impossible.ActivationMode" title="arxpy.smt.search_impossible.ActivationMode"><em>ActivationMode</em></a>) – the diff-mode for the output difference</p></li>
+<li><p><strong>check</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, <a class="reference internal" href="#arxpy.smt.search_impossible.IDFound.check_empirical_weight" title="arxpy.smt.search_impossible.IDFound.check_empirical_weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">IDFound.check_empirical_weight</span></code></a> will be called
+after an ID is found. If it is not valid, the search will continue.</p></li>
+<li><p><strong>verbose_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – an integer between <code class="docutils literal notranslate"><span class="pre">0</span></code> (no verbose) and <code class="docutils literal notranslate"><span class="pre">3</span></code> (full verbose).</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – if not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the output will be  printed to the given file
+rather than the to stdout.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.smt.search_impossible.SearchSkID">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search_impossible.</code><code class="sig-name descname">SearchSkID</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skch</span></em>, <em class="sig-param"><span class="n">initial_constraints</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#SearchSkID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.SearchSkID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#arxpy.smt.search_impossible.SearchID" title="arxpy.smt.search_impossible.SearchID"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.smt.search_impossible.SearchID</span></code></a></p>
+<p>Represent the problem of finding an single-key ID over a <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.SingleKeyCh" title="arxpy.differential.characteristic.SingleKeyCh"><code class="xref any py py-class docutils literal notranslate"><span class="pre">SingleKeyCh</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>skch</strong> (<a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.SingleKeyCh" title="arxpy.differential.characteristic.SingleKeyCh"><em>SingleKeyCh</em></a>) – a symbolic single-key characteristic of a <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.Cipher" title="arxpy.primitives.primitives.Cipher"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Cipher</span></code></a></p>
+</dd>
+</dl>
+<p>See also <a class="reference internal" href="#arxpy.smt.search_impossible.SearchID" title="arxpy.smt.search_impossible.SearchID"><code class="xref any py py-class docutils literal notranslate"><span class="pre">SearchID</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">SingleKeyCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search_impossible</span> <span class="kn">import</span> <span class="n">SearchSkID</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives</span> <span class="kn">import</span> <span class="n">speck</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span> <span class="o">=</span> <span class="n">speck</span><span class="o">.</span><span class="n">get_Speck_instance</span><span class="p">(</span><span class="n">speck</span><span class="o">.</span><span class="n">SpeckInstance</span><span class="o">.</span><span class="n">speck_32_64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">SingleKeyCh</span><span class="p">(</span><span class="n">Speck32</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span> <span class="o">=</span> <span class="n">SearchSkID</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span><span class="o">.</span><span class="n">formula_size</span><span class="p">()</span>
+<span class="go">35</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span><span class="o">.</span><span class="n">error</span><span class="p">()</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">search_problem</span><span class="o">.</span><span class="n">hrepr</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>
+<span class="go">assert 0x0000 == ((~(... &lt;&lt; ...) ^ (dx1 &lt;&lt; 0x0001)) &amp; (~(... &lt;&lt; ...) ^ ((... &gt;&gt;&gt; ...) &lt;&lt; 0x0001)) &amp; ((dp1 &lt;&lt; 0x0001) ^ dx1 ^ dp1 ^ (... &gt;&gt;&gt; ...)))</span>
+<span class="go">assert 0b0 == w</span>
+<span class="go">check-unsat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">search_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="go">{&#39;input_diff&#39;: [[dp0, 0x0001], [dp1, 0x0000]], &#39;output_diff&#39;: [[dx2, 0x0001], [dx4, 0x0000]]}</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.smt.search_impossible.SearchSkID.extend">
+<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id_found</span></em>, <em class="sig-param"><span class="n">solver_name</span></em>, <em class="sig-param"><span class="n">check</span></em>, <em class="sig-param"><span class="n">verbose_level</span></em>, <em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#SearchSkID.extend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.SearchSkID.extend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extend the ID by appending a characteristic with probability one.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="arxpy.smt.search_impossible.SearchRkID">
+<em class="property">class </em><code class="sig-prename descclassname">arxpy.smt.search_impossible.</code><code class="sig-name descname">SearchRkID</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rkch</span></em>, <em class="sig-param"><span class="n">initial_key_constraints</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">initial_enc_constraints</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#SearchRkID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.SearchRkID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="arxpy.smt.search_differential.html#arxpy.smt.search_differential.SearchRkCh" title="arxpy.smt.search_differential.SearchRkCh"><code class="xref py py-class docutils literal notranslate"><span class="pre">arxpy.smt.search_differential.SearchRkCh</span></code></a></p>
+<p>Represent the problem of finding a related-key ID over a <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.RelatedKeyCh" title="arxpy.differential.characteristic.RelatedKeyCh"><code class="xref any py py-class docutils literal notranslate"><span class="pre">RelatedKeyCh</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rkch</strong> (<a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.RelatedKeyCh" title="arxpy.differential.characteristic.RelatedKeyCh"><em>RelatedKeyCh</em></a>) – a symbolic related-key characteristic of a <a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.Cipher" title="arxpy.primitives.primitives.Cipher"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Cipher</span></code></a></p>
+</dd>
+</dl>
+<p>See also <a class="reference internal" href="#arxpy.smt.search_impossible.SearchID" title="arxpy.smt.search_impossible.SearchID"><code class="xref any py py-class docutils literal notranslate"><span class="pre">SearchID</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.difference</span> <span class="kn">import</span> <span class="n">XorDiff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.differential.characteristic</span> <span class="kn">import</span> <span class="n">RelatedKeyCh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.smt.search_impossible</span> <span class="kn">import</span> <span class="n">SearchRkID</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">arxpy.primitives</span> <span class="kn">import</span> <span class="n">speck</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span> <span class="o">=</span> <span class="n">speck</span><span class="o">.</span><span class="n">get_Speck_instance</span><span class="p">(</span><span class="n">speck</span><span class="o">.</span><span class="n">SpeckInstance</span><span class="o">.</span><span class="n">speck_32_64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Speck32</span><span class="o">.</span><span class="n">set_rounds</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ch</span> <span class="o">=</span> <span class="n">RelatedKeyCh</span><span class="p">(</span><span class="n">Speck32</span><span class="p">,</span> <span class="n">XorDiff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span> <span class="o">=</span> <span class="n">SearchRkID</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">search_problem</span><span class="o">.</span><span class="n">formula_size</span><span class="p">()</span>
+<span class="go">38</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">search_problem</span><span class="o">.</span><span class="n">hrepr</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>
+<span class="go">assert 0b0 == wk</span>
+<span class="go">assert 0x0000 == ((~(... &lt;&lt; ...) ^ (dx1 &lt;&lt; 0x0001)) &amp; (~(... &lt;&lt; ...) ^ ((... &gt;&gt;&gt; ...) &lt;&lt; 0x0001)) &amp; ((dp1 &lt;&lt; 0x0001) ^ dx1 ^ dp1 ^ (... &gt;&gt;&gt; ...)))</span>
+<span class="go">assert 0b0 == w</span>
+<span class="go">check-unsat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">search_problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="go">{&#39;enc_id_found&#39;: {&#39;input_diff&#39;: [[dp0, 0x0000], [dp1, 0x0000]],</span>
+<span class="go">                  &#39;output_diff&#39;: [[dx2, 0x0001], [dx4, 0x0000]]},</span>
+<span class="go"> &#39;key_id_found&#39;: {&#39;input_diff&#39;: [[dmk0, 0x0001]], &#39;output_diff&#39;: []}}</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="arxpy.smt.search_impossible.SearchRkID.hrepr">
+<code class="sig-name descname">hrepr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">full_repr</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#SearchRkID.hrepr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.SearchRkID.hrepr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a human readable representing of the SMT problem.</p>
+<p>See  also <a class="reference internal" href="#arxpy.smt.search_impossible.SearchID.hrepr" title="arxpy.smt.search_impossible.SearchID.hrepr"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">SearchID.hrepr</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="arxpy.smt.search_impossible.SearchRkID.solve">
+<code class="sig-name descname">solve</code><span class="sig-paren">(</span><em class="sig-param">initial_active_bits</em>, <em class="sig-param">solver_name='btor'</em>, <em class="sig-param">search_mode=&lt;SearchMode.FirstID: 1&gt;</em>, <em class="sig-param">key_input_diff_mode=&lt;ActivationMode.Default: 1&gt;</em>, <em class="sig-param">enc_input_diff_mode=&lt;ActivationMode.Default: 1&gt;</em>, <em class="sig-param">enc_output_diff_mode=&lt;ActivationMode.Default: 1&gt;</em>, <em class="sig-param">to_extend=False</em>, <em class="sig-param">check=False</em>, <em class="sig-param">verbose_level=0</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#SearchRkID.solve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.SearchRkID.solve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve the SMT problem associated to the search of an ID over a <a class="reference internal" href="arxpy.differential.characteristic.html#arxpy.differential.characteristic.RelatedKeyCh" title="arxpy.differential.characteristic.RelatedKeyCh"><code class="xref any py py-class docutils literal notranslate"><span class="pre">RelatedKeyCh</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initial_active_bits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the initial number of active bits in the input and output</p></li>
+<li><p><strong>solver_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the solver (according to pySMT) to be used</p></li>
+<li><p><strong>search_mode</strong> (<a class="reference internal" href="#arxpy.smt.search_impossible.SearchMode" title="arxpy.smt.search_impossible.SearchMode"><em>SearchMode</em></a>) – one of the search modes available</p></li>
+<li><p><strong>key_input_diff_mode</strong> (<a class="reference internal" href="#arxpy.smt.search_impossible.ActivationMode" title="arxpy.smt.search_impossible.ActivationMode"><em>ActivationMode</em></a>) – the diff-mode for the master key difference</p></li>
+<li><p><strong>enc_input_diff_mode</strong> (<a class="reference internal" href="#arxpy.smt.search_impossible.ActivationMode" title="arxpy.smt.search_impossible.ActivationMode"><em>ActivationMode</em></a>) – the diff-mode for the plaintext difference</p></li>
+<li><p><strong>enc_output_diff_mode</strong> (<a class="reference internal" href="#arxpy.smt.search_impossible.ActivationMode" title="arxpy.smt.search_impossible.ActivationMode"><em>ActivationMode</em></a>) – the diff-mode for the ciphertext difference</p></li>
+<li><p><strong>check</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, <a class="reference internal" href="#arxpy.smt.search_impossible.IDFound.check_empirical_weight" title="arxpy.smt.search_impossible.IDFound.check_empirical_weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">IDFound.check_empirical_weight</span></code></a> will be called
+after an ID is found. If it is not valid, the search will continue.</p></li>
+<li><p><strong>verbose_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – an integer between <code class="docutils literal notranslate"><span class="pre">0</span></code> (no verbose) and <code class="docutils literal notranslate"><span class="pre">3</span></code> (full verbose).</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – if not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the output will be  printed to the given file
+rather than the to stdout.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="arxpy.smt.search_impossible.round_based_search_ID">
+<code class="sig-prename descclassname">arxpy.smt.search_impossible.</code><code class="sig-name descname">round_based_search_ID</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cipher</span></em>, <em class="sig-param"><span class="n">diff_type</span></em>, <em class="sig-param"><span class="n">initial_active_bits</span></em>, <em class="sig-param"><span class="n">solver_name</span></em>, <em class="sig-param"><span class="n">start_round</span></em>, <em class="sig-param"><span class="n">end_round</span></em>, <em class="sig-param"><span class="n">search_mode</span></em>, <em class="sig-param"><span class="n">input_diff_mode</span></em>, <em class="sig-param"><span class="n">output_diff_mode</span></em>, <em class="sig-param"><span class="n">check</span></em>, <em class="sig-param"><span class="n">verbose_level</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">to_extend</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#round_based_search_ID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.round_based_search_ID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find single-key impossible differentials over multiple rounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cipher</strong> (<a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.Cipher" title="arxpy.primitives.primitives.Cipher"><em>Cipher</em></a>) – an (iterated) cipher</p></li>
+<li><p><strong>diff_type</strong> (<a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><em>Difference</em></a>) – a type of difference</p></li>
+<li><p><strong>initial_active_bits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the initial number of active bits for starting the iterative search</p></li>
+<li><p><strong>solver_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the solver (according to pySMT) to be used</p></li>
+<li><p><strong>start_round</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the minimum number of rounds to consider</p></li>
+<li><p><strong>end_round</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum number of rounds to consider</p></li>
+<li><p><strong>search_mode</strong> (<a class="reference internal" href="#arxpy.smt.search_impossible.SearchMode" title="arxpy.smt.search_impossible.SearchMode"><em>SearchMode</em></a>) – one of the search modes available</p></li>
+<li><p><strong>input_diff_mode</strong> – (ActivationMode): the diff-mode for the input difference</p></li>
+<li><p><strong>output_diff_mode</strong> – (ActivationMode): the diff-mode for the output difference</p></li>
+<li><p><strong>check</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, <a class="reference internal" href="arxpy.smt.search_differential.html#arxpy.smt.search_differential.ChFound.check_empirical_weight" title="arxpy.smt.search_differential.ChFound.check_empirical_weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">check_empirical_weight</span></code></a> will be called after an ID is found.</p></li>
+<li><p><strong>verbose_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – an integer between <code class="docutils literal notranslate"><span class="pre">0</span></code> (no verbose) and <code class="docutils literal notranslate"><span class="pre">3</span></code> (full verbose).</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – if not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the output will be  printed to the given file
+rather than the to stdout.</p></li>
+<li><p><strong>from arxpy.differential.difference import XorDiff</strong><strong>, </strong><strong>RXDiff</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
+<li><p><strong>from arxpy.smt.search_impossible import round_based_search_ID</strong><strong>, </strong><strong>KeySetting</strong><strong>, </strong><strong>SearchMode</strong><strong>, </strong><strong>ActivationMode</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
+<li><p><strong>from arxpy.primitives import speck</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
+<li><p><strong>Speck32 = speck.get_Speck_instance</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
+<li><p><strong>round_based_search_ID</strong><strong>(</strong><strong>Speck32</strong><strong>, </strong><strong>XorDiff</strong><strong>, </strong><strong>2</strong><strong>, </strong><strong>&quot;btor&quot;</strong><strong>, </strong><strong>1</strong><strong>, </strong><strong>2</strong><strong>, </strong><strong>SearchMode.FirstID</strong><strong>,</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
+<li><p><strong>ActivationMode.Default</strong><strong>, </strong><strong>ActivationMode.Default</strong><strong>, </strong><strong>False</strong><strong>, </strong><strong>0</strong><strong>, </strong><strong>None</strong><strong>)  </strong><strong># doctest</strong> (<em>..</em>) – +ELLIPSIS</p></li>
+<li><p><strong>rounds</strong> (<em>Num</em>) – 1</p></li>
+<li><p><strong>found</strong> (<em>ID</em>) – </p></li>
+<li><p><strong>0000 -&gt; 0001 0000</strong> (<em>0001</em>) – </p></li>
+<li><p><strong>&lt;BLANKLINE&gt;</strong> – </p></li>
+<li><p><strong>rounds</strong> – 2</p></li>
+<li><p><strong>found</strong> – </p></li>
+<li><p><strong>0000 -&gt; 0001 0000</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="arxpy.smt.search_impossible.round_based_search_RkID">
+<code class="sig-prename descclassname">arxpy.smt.search_impossible.</code><code class="sig-name descname">round_based_search_RkID</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cipher</span></em>, <em class="sig-param"><span class="n">diff_type</span></em>, <em class="sig-param"><span class="n">initial_active_bits</span></em>, <em class="sig-param"><span class="n">solver_name</span></em>, <em class="sig-param"><span class="n">start_round</span></em>, <em class="sig-param"><span class="n">end_round</span></em>, <em class="sig-param"><span class="n">search_mode</span></em>, <em class="sig-param"><span class="n">key_input_diff_mode</span></em>, <em class="sig-param"><span class="n">enc_input_diff_mode</span></em>, <em class="sig-param"><span class="n">enc_output_diff_mode</span></em>, <em class="sig-param"><span class="n">check</span></em>, <em class="sig-param"><span class="n">verbose_level</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">to_extend</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/arxpy/smt/search_impossible.html#round_based_search_RkID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#arxpy.smt.search_impossible.round_based_search_RkID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find related-key impossible differentials over multiple rounds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cipher</strong> (<a class="reference internal" href="arxpy.primitives.primitives.html#arxpy.primitives.primitives.Cipher" title="arxpy.primitives.primitives.Cipher"><em>Cipher</em></a>) – an (iterated) cipher</p></li>
+<li><p><strong>diff_type</strong> (<a class="reference internal" href="arxpy.differential.difference.html#arxpy.differential.difference.Difference" title="arxpy.differential.difference.Difference"><em>Difference</em></a>) – a type of difference</p></li>
+<li><p><strong>initial_active_bits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the initial number of active bits for starting the iterative search</p></li>
+<li><p><strong>solver_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – the name of the solver (according to pySMT) to be used</p></li>
+<li><p><strong>start_round</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the minimum number of rounds to consider</p></li>
+<li><p><strong>end_round</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the maximum number of rounds to consider</p></li>
+<li><p><strong>search_mode</strong> (<a class="reference internal" href="#arxpy.smt.search_impossible.SearchMode" title="arxpy.smt.search_impossible.SearchMode"><em>SearchMode</em></a>) – one of the search modes available</p></li>
+<li><p><strong>key_input_diff_mode</strong> – (ActivationMode): the diff-mode for the master key difference</p></li>
+<li><p><strong>enc_input_diff_mode</strong> – (ActivationMode): the diff-mode for the plaintext difference</p></li>
+<li><p><strong>enc_output_diff_mode</strong> – (ActivationMode): the diff-mode for the ciphertext difference</p></li>
+<li><p><strong>check</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, <a class="reference internal" href="arxpy.smt.search_differential.html#arxpy.smt.search_differential.ChFound.check_empirical_weight" title="arxpy.smt.search_differential.ChFound.check_empirical_weight"><code class="xref any py py-meth docutils literal notranslate"><span class="pre">check_empirical_weight</span></code></a> will be called after an ID is found.</p></li>
+<li><p><strong>verbose_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – an integer between <code class="docutils literal notranslate"><span class="pre">0</span></code> (no verbose) and <code class="docutils literal notranslate"><span class="pre">3</span></code> (full verbose).</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – if not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the output will be  printed to the given file
+rather than the to stdout.</p></li>
+<li><p><strong>from arxpy.differential.difference import XorDiff</strong><strong>, </strong><strong>RXDiff</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
+<li><p><strong>from arxpy.smt.search_impossible import round_based_search_RkID</strong><strong>, </strong><strong>KeySetting</strong><strong>, </strong><strong>SearchMode</strong><strong>, </strong><strong>ActivationMode</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
+<li><p><strong>from arxpy.primitives import speck</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
+<li><p><strong>Speck32 = speck.get_Speck_instance</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
+<li><p><strong>round_based_search_RkID</strong><strong>(</strong><strong>Speck32</strong><strong>, </strong><strong>XorDiff</strong><strong>, </strong><strong>2</strong><strong>, </strong><strong>&quot;btor&quot;</strong><strong>, </strong><strong>1</strong><strong>, </strong><strong>2</strong><strong>, </strong><strong>SearchMode.FirstID</strong><strong>, </strong><strong>ActivationMode.Default</strong><strong>,</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
+<li><p><strong>ActivationMode.Default</strong><strong>, </strong><strong>ActivationMode.Default</strong><strong>, </strong><strong>False</strong><strong>, </strong><strong>0</strong><strong>, </strong><strong>None</strong><strong>)  </strong><strong># doctest</strong> (<em>..</em>) – +ELLIPSIS</p></li>
+<li><p><strong>rounds</strong> (<em>Num</em>) – 1</p></li>
+<li><p><strong>found</strong> (<em>ID</em>) – </p></li>
+<li><p><strong>K</strong> – 0001 -&gt;  | E: 0000 0000 -&gt; 0001 0000</p></li>
+<li><p><strong>&lt;BLANKLINE&gt;</strong> – </p></li>
+<li><p><strong>rounds</strong> – 2</p></li>
+<li><p><strong>found</strong> – </p></li>
+<li><p><strong>K</strong> – 0001 0000 -&gt;  | E: 0000 0000 -&gt; 0001 0000</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="arxpy.smt.types.html" class="btn btn-neutral float-right" title="arxpy.smt.types module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="arxpy.smt.search_differential.html" class="btn btn-neutral float-left" title="arxpy.smt.search_differential module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, Adrián Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

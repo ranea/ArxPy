@@ -1,0 +1,6 @@
+arxpy.smt.search\_impossible module
+===================================
+
+.. automodule:: arxpy.smt.search_impossible
+   :members:
+   :show-inheritance:

@@ -1,0 +1,509 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>arxpy.smt.verification_impossible &mdash; ArxPy 0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ArxPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../arxpy.html">arxpy package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ArxPy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>arxpy.smt.verification_impossible</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for arxpy.smt.verification_impossible</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Verify impossible differentials found by the SMT solver.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="kn">from</span> <span class="nn">arxpy.bitvector</span> <span class="kn">import</span> <span class="n">core</span>
+<span class="kn">from</span> <span class="nn">arxpy.smt.verification_differential</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ssa2ccode</span><span class="p">,</span> <span class="n">relatedssa2ccode</span><span class="p">,</span> <span class="n">compile_run_empirical_weight</span>
+<span class="p">)</span>
+
+
+<span class="n">MAX_WEIGHT</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># pairs = 10 * (2**(MAX_WEIGHT), MW = 20, pairs = 10**7</span>
+<span class="n">KEY_SAMPLES</span> <span class="o">=</span> <span class="mi">256</span>  <span class="c1"># total complexity 2^{30}</span>
+
+
+<div class="viewcode-block" id="fast_empirical_weight"><a class="viewcode-back" href="../../../arxpy.smt.verification_impossible.html#arxpy.smt.verification_impossible.fast_empirical_weight">[docs]</a><span class="k">def</span> <span class="nf">fast_empirical_weight</span><span class="p">(</span><span class="n">id_found</span><span class="p">,</span> <span class="n">verbose_lvl</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes the empirical weight of the model using C code.</span>
+
+<span class="sd">    If ``filename`` is not ``None``, the output will be printed</span>
+<span class="sd">    to the given file rather than the to stdout.</span>
+
+<span class="sd">    The argument ``verbose_lvl`` can take an integer between</span>
+<span class="sd">    ``0`` (no verbose) and ``3`` (full verbose).</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.differential.difference import XorDiff, RXDiff</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.differential.characteristic import BvCharacteristic</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.primitives.chaskey import ChaskeyPi</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.smt.search_impossible import SearchID</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.smt.verification_impossible import fast_empirical_weight</span>
+<span class="sd">        &gt;&gt;&gt; ChaskeyPi.set_rounds(2)</span>
+<span class="sd">        &gt;&gt;&gt; ch = BvCharacteristic(ChaskeyPi, XorDiff, [&quot;dv0&quot;, &quot;dv1&quot;, &quot;dv2&quot;, &quot;dv3&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; search_problem = SearchID(ch)</span>
+<span class="sd">        &gt;&gt;&gt; id_found = search_problem.solve(2)</span>
+<span class="sd">        &gt;&gt;&gt; fast_empirical_weight(id_found)</span>
+<span class="sd">        inf</span>
+<span class="sd">        &gt;&gt;&gt; ch = BvCharacteristic(ChaskeyPi, RXDiff, [&quot;dv0&quot;, &quot;dv1&quot;, &quot;dv2&quot;, &quot;dv3&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; search_problem = SearchID(ch)</span>
+<span class="sd">        &gt;&gt;&gt; id_found = search_problem.solve(2)</span>
+<span class="sd">        &gt;&gt;&gt; fast_empirical_weight(id_found)</span>
+<span class="sd">        inf</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">arxpy.smt.search_differential</span> <span class="kn">import</span> <span class="n">_get_smart_print</span>  <span class="c1"># avoid cyclic imports</span>
+
+    <span class="n">smart_print</span> <span class="o">=</span> <span class="n">_get_smart_print</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="n">smart_print</span><span class="p">(</span><span class="s2">&quot;Symbolic characteristic:&quot;</span><span class="p">)</span>
+        <span class="n">smart_print</span><span class="p">(</span><span class="n">id_found</span><span class="o">.</span><span class="n">ch</span><span class="p">)</span>
+        <span class="n">smart_print</span><span class="p">(</span><span class="s2">&quot;ID found:&quot;</span><span class="p">)</span>
+        <span class="n">smart_print</span><span class="p">(</span><span class="n">id_found</span><span class="p">)</span>
+        <span class="n">smart_print</span><span class="p">()</span>
+
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">id_found</span><span class="o">.</span><span class="n">ch</span><span class="o">.</span><span class="n">nonlinear_diffs</span><span class="o">.</span><span class="n">items</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+    <span class="n">ssa</span> <span class="o">=</span> <span class="n">id_found</span><span class="o">.</span><span class="n">ch</span><span class="o">.</span><span class="n">ssa</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">])</span>
+    <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">])</span>
+
+    <span class="c1"># fixing duplicate var problem</span>
+    <span class="n">var2diffval</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">diff_var</span><span class="p">,</span> <span class="n">diff_value</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="n">id_found</span><span class="o">.</span><span class="n">input_diff</span><span class="p">,</span> <span class="n">id_found</span><span class="o">.</span><span class="n">output_diff</span><span class="p">):</span>
+        <span class="n">var2diffval</span><span class="p">[</span><span class="n">diff_var</span><span class="o">.</span><span class="n">val</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff_value</span><span class="o">.</span><span class="n">val</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">])):</span>
+        <span class="n">var_j</span> <span class="o">=</span> <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+        <span class="n">index_out</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">var_j</span> <span class="ow">in</span> <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;input_vars&quot;</span><span class="p">]:</span>
+            <span class="n">new_var</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">var_j</span><span class="p">)(</span><span class="n">var_j</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_o&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index_out</span><span class="p">),</span> <span class="n">var_j</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+            <span class="n">index_out</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">new_var</span><span class="p">,</span> <span class="n">var_j</span><span class="p">])</span>
+            <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_var</span>
+            <span class="n">var2diffval</span><span class="p">[</span><span class="n">new_var</span><span class="p">]</span> <span class="o">=</span> <span class="n">var2diffval</span><span class="p">[</span><span class="n">var_j</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">])):</span>
+            <span class="k">if</span> <span class="n">var_j</span> <span class="o">==</span> <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]:</span>
+                <span class="n">new_var</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">var_j</span><span class="p">)(</span><span class="n">var_j</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_o&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index_out</span><span class="p">),</span> <span class="n">var_j</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+                <span class="n">index_out</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">new_var</span><span class="p">,</span> <span class="n">var_j</span><span class="p">])</span>
+                <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_var</span>
+                <span class="n">var2diffval</span><span class="p">[</span><span class="n">new_var</span><span class="p">]</span> <span class="o">=</span> <span class="n">var2diffval</span><span class="p">[</span><span class="n">var_j</span><span class="p">]</span>
+
+    <span class="n">ccode</span> <span class="o">=</span> <span class="n">ssa2ccode</span><span class="p">(</span><span class="n">ssa</span><span class="p">,</span> <span class="n">id_found</span><span class="o">.</span><span class="n">ch</span><span class="o">.</span><span class="n">diff_type</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">smart_print</span><span class="p">(</span><span class="s2">&quot;  - ssa:&quot;</span><span class="p">,</span> <span class="n">ssa</span><span class="p">)</span>  <span class="c1"># pprint.pformat(ssa, width=100))</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="n">smart_print</span><span class="p">(</span><span class="n">ccode</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">smart_print</span><span class="p">(</span><span class="n">ccode</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">smart_print</span><span class="p">()</span>
+
+    <span class="n">input_diff_c</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">xreplace</span><span class="p">(</span><span class="n">var2diffval</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;input_vars&quot;</span><span class="p">]]</span>
+    <span class="n">output_diff_c</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">xreplace</span><span class="p">(</span><span class="n">var2diffval</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">]]</span>
+
+    <span class="k">if</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">smart_print</span><span class="p">(</span><span class="s2">&quot;  - checking </span><span class="si">{}</span><span class="s2"> -&gt; </span><span class="si">{}</span><span class="s2"> pairs 2**</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="s1">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff_c</span><span class="p">]),</span> <span class="s1">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">output_diff_c</span><span class="p">]),</span>
+            <span class="n">MAX_WEIGHT</span><span class="p">))</span>
+
+    <span class="n">input_diff_c</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff_c</span><span class="p">]</span>
+    <span class="n">output_diff_c</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">output_diff_c</span><span class="p">]</span>
+
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">))</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff_c</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">input_diff_c</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">))</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">output_diff_c</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_diff_c</span><span class="p">)</span>
+
+    <span class="n">current_empirical_weight</span> <span class="o">=</span> <span class="n">compile_run_empirical_weight</span><span class="p">(</span>
+        <span class="n">ccode</span><span class="p">,</span>
+        <span class="s2">&quot;_libver&quot;</span> <span class="o">+</span> <span class="n">id_found</span><span class="o">.</span><span class="n">ch</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+        <span class="n">input_diff_c</span><span class="p">,</span>
+        <span class="n">output_diff_c</span><span class="p">,</span>
+        <span class="n">MAX_WEIGHT</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">smart_print</span><span class="p">(</span><span class="s2">&quot;  - empirical weight: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current_empirical_weight</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">current_empirical_weight</span> <span class="o">==</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">current_empirical_weight</span></div>
+
+
+<span class="k">def</span> <span class="nf">_fast_empirical_weight_distribution</span><span class="p">(</span><span class="n">ch_found</span><span class="p">,</span> <span class="n">cipher</span><span class="p">,</span> <span class="n">rk_dict_diffs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                        <span class="n">verbose_lvl</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        &gt;&gt;&gt; from arxpy.differential.difference import XorDiff</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.differential.characteristic import SingleKeyCh</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.smt.search_impossible import SearchSkID</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.primitives import speck</span>
+<span class="sd">        &gt;&gt;&gt; from arxpy.smt.verification_impossible import _fast_empirical_weight_distribution</span>
+<span class="sd">        &gt;&gt;&gt; Speck32 = speck.get_Speck_instance(speck.SpeckInstance.speck_32_64)</span>
+<span class="sd">        &gt;&gt;&gt; Speck32.set_rounds(1)</span>
+<span class="sd">        &gt;&gt;&gt; ch = SingleKeyCh(Speck32, XorDiff)</span>
+<span class="sd">        &gt;&gt;&gt; search_problem = SearchSkID(ch)</span>
+<span class="sd">        &gt;&gt;&gt; id_found = search_problem.solve(2)</span>
+<span class="sd">        &gt;&gt;&gt; _fast_empirical_weight_distribution(id_found, Speck32)</span>
+<span class="sd">        Counter({inf: 256})</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">rk_dict_diffs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;rk_dict_diffs must be None&quot;</span><span class="p">)</span>
+
+    <span class="kn">from</span> <span class="nn">arxpy.smt.search_differential</span> <span class="kn">import</span> <span class="n">_get_smart_print</span>  <span class="c1"># avoid cyclic imports</span>
+
+    <span class="n">smart_print</span> <span class="o">=</span> <span class="n">_get_smart_print</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="c1"># if rk_dict_diffs is not None:</span>
+    <span class="c1">#     assert &quot;nonlinear_diffs&quot; in rk_dict_diffs and &quot;output_diff&quot; in rk_dict_diffs</span>
+
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="n">smart_print</span><span class="p">(</span><span class="s2">&quot;Symbolic characteristic:&quot;</span><span class="p">)</span>
+        <span class="n">smart_print</span><span class="p">(</span><span class="n">ch_found</span><span class="o">.</span><span class="n">ch</span><span class="p">)</span>
+        <span class="n">smart_print</span><span class="p">(</span><span class="s2">&quot;ID found:&quot;</span><span class="p">)</span>
+        <span class="n">smart_print</span><span class="p">(</span><span class="n">ch_found</span><span class="p">)</span>
+        <span class="c1"># if rk_dict_diffs is not None:</span>
+        <span class="c1">#     smart_print(&quot;rk_dict_diffs:&quot;, rk_dict_diffs)</span>
+        <span class="n">smart_print</span><span class="p">()</span>
+
+    <span class="c1"># if rk_dict_diffs is not None:</span>
+    <span class="c1">#     rk_var = [var.val for var, _ in rk_dict_diffs[&quot;output_diff&quot;]]</span>
+    <span class="c1"># else:</span>
+    <span class="n">rk_var</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">width</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cipher</span><span class="o">.</span><span class="n">key_schedule</span><span class="o">.</span><span class="n">output_widths</span><span class="p">):</span>
+        <span class="n">rk_var</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;k&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">width</span><span class="p">))</span>
+
+    <span class="n">var2diffval</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">diff_var</span><span class="p">,</span> <span class="n">diff_value</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="n">ch_found</span><span class="o">.</span><span class="n">input_diff</span><span class="p">,</span> <span class="n">ch_found</span><span class="o">.</span><span class="n">output_diff</span><span class="p">):</span>
+        <span class="n">var2diffval</span><span class="p">[</span><span class="n">diff_var</span><span class="o">.</span><span class="n">val</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff_value</span><span class="o">.</span><span class="n">val</span>
+    <span class="c1"># if rk_dict_diffs is not None:</span>
+    <span class="c1">#     for var, diff in rk_dict_diffs[&quot;output_diff&quot;]:</span>
+    <span class="c1">#         var2diffval[var.val] = diff.val</span>
+
+    <span class="c1"># for each related-key pair, we associated a pair of ssa</span>
+    <span class="n">rkey2pair_ssa</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">KEY_SAMPLES</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">key_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">KEY_SAMPLES</span><span class="p">):</span>
+        <span class="n">master_key</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">width</span> <span class="ow">in</span> <span class="n">cipher</span><span class="o">.</span><span class="n">key_schedule</span><span class="o">.</span><span class="n">input_widths</span><span class="p">:</span>
+            <span class="n">master_key</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">width</span><span class="p">),</span> <span class="n">width</span><span class="p">))</span>
+        <span class="n">rk_val</span> <span class="o">=</span> <span class="n">cipher</span><span class="o">.</span><span class="n">key_schedule</span><span class="p">(</span><span class="o">*</span><span class="n">master_key</span><span class="p">)</span>
+        <span class="c1"># if rk_dict_diffs is not None:</span>
+        <span class="c1">#     rk_other_val = tuple([d.get_pair_element(r) for r, (_, d) in zip(rk_val, rk_dict_diffs[&quot;output_diff&quot;])])</span>
+        <span class="c1"># else:</span>
+        <span class="n">rk_other_val</span> <span class="o">=</span> <span class="n">rk_val</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">rk_var</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">rk_other_val</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">rk</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">)</span> <span class="k">for</span> <span class="n">rk</span> <span class="ow">in</span> <span class="n">rk_val</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">rk</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">)</span> <span class="k">for</span> <span class="n">rk</span> <span class="ow">in</span> <span class="n">rk_other_val</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">replace_roundkeys</span><span class="p">(</span><span class="n">var2val</span><span class="p">):</span>
+            <span class="n">new_ssa</span> <span class="o">=</span> <span class="n">ch_found</span><span class="o">.</span><span class="n">ch</span><span class="o">.</span><span class="n">ssa</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">new_ssa</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">new_ssa</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">])</span>
+            <span class="n">new_ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">new_ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">expr</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ch_found</span><span class="o">.</span><span class="n">ch</span><span class="o">.</span><span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">]):</span>
+                <span class="n">new_ssa</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">expr</span><span class="o">.</span><span class="n">xreplace</span><span class="p">(</span><span class="n">var2val</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="n">new_ssa</span>
+
+        <span class="n">pair_ssa</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">index_pair</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">current_rk_val</span> <span class="o">=</span> <span class="n">rk_val</span> <span class="k">if</span> <span class="n">index_pair</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">rk_other_val</span>
+            <span class="n">rkvar2rkval</span> <span class="o">=</span> <span class="p">{</span><span class="n">var</span><span class="p">:</span> <span class="n">val</span> <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">rk_var</span><span class="p">,</span> <span class="n">current_rk_val</span><span class="p">)}</span>
+            <span class="n">ssa</span> <span class="o">=</span> <span class="n">replace_roundkeys</span><span class="p">(</span><span class="n">rkvar2rkval</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">])):</span>
+                <span class="n">var_j</span> <span class="o">=</span> <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">index_out</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="n">var_j</span> <span class="ow">in</span> <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;input_vars&quot;</span><span class="p">]:</span>
+                    <span class="n">new_var</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">var_j</span><span class="p">)(</span><span class="n">var_j</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_o&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index_out</span><span class="p">),</span> <span class="n">var_j</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+                    <span class="n">index_out</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">new_var</span><span class="p">,</span> <span class="n">var_j</span><span class="p">])</span>
+                    <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_var</span>
+                    <span class="n">var2diffval</span><span class="p">[</span><span class="n">new_var</span><span class="p">]</span> <span class="o">=</span> <span class="n">var2diffval</span><span class="p">[</span><span class="n">var_j</span><span class="p">]</span>
+
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">])):</span>
+                    <span class="k">if</span> <span class="n">var_j</span> <span class="o">==</span> <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]:</span>
+                        <span class="n">new_var</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">var_j</span><span class="p">)(</span><span class="n">var_j</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_o&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index_out</span><span class="p">),</span> <span class="n">var_j</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+                        <span class="n">index_out</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;assignments&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">new_var</span><span class="p">,</span> <span class="n">var_j</span><span class="p">])</span>
+                        <span class="n">ssa</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_var</span>
+                        <span class="n">var2diffval</span><span class="p">[</span><span class="n">new_var</span><span class="p">]</span> <span class="o">=</span> <span class="n">var2diffval</span><span class="p">[</span><span class="n">var_j</span><span class="p">]</span>
+
+            <span class="n">pair_ssa</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ssa</span><span class="p">)</span>
+
+        <span class="n">rkey2pair_ssa</span><span class="p">[</span><span class="n">key_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">pair_ssa</span>
+
+    <span class="c1"># for each related-key pair, we associated their weight</span>
+    <span class="n">rkey2subch_ew</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">KEY_SAMPLES</span><span class="p">)]</span>
+
+    <span class="c1"># start multiprocessing</span>
+    <span class="k">with</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">KEY_SAMPLES</span><span class="p">):</span>
+            <span class="n">ssa1</span> <span class="o">=</span> <span class="n">rkey2pair_ssa</span><span class="p">[</span><span class="n">key_index</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">ssa2</span> <span class="o">=</span> <span class="n">rkey2pair_ssa</span><span class="p">[</span><span class="n">key_index</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">key_index</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="n">smart_print</span><span class="p">(</span><span class="s2">&quot;  - related-key pair index&quot;</span><span class="p">,</span> <span class="n">key_index</span><span class="p">)</span>
+                    <span class="n">smart_print</span><span class="p">(</span><span class="s2">&quot;  - ssa1:&quot;</span><span class="p">,</span> <span class="n">ssa1</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">ssa1</span> <span class="o">==</span> <span class="n">ssa2</span><span class="p">:</span>
+                        <span class="n">smart_print</span><span class="p">(</span><span class="s2">&quot;  - ssa2: (same as ssa1)&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">smart_print</span><span class="p">(</span><span class="s2">&quot;  - ssa2:&quot;</span><span class="p">,</span> <span class="n">ssa2</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">ssa1</span> <span class="o">==</span> <span class="n">ssa2</span><span class="p">:</span>
+                <span class="n">ccode</span> <span class="o">=</span> <span class="n">ssa2ccode</span><span class="p">(</span><span class="n">ssa1</span><span class="p">,</span> <span class="n">ch_found</span><span class="o">.</span><span class="n">ch</span><span class="o">.</span><span class="n">diff_type</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ccode</span> <span class="o">=</span> <span class="n">relatedssa2ccode</span><span class="p">(</span><span class="n">ssa1</span><span class="p">,</span> <span class="n">ssa2</span><span class="p">,</span> <span class="n">ch_found</span><span class="o">.</span><span class="n">ch</span><span class="o">.</span><span class="n">diff_type</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">key_index</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">debug</span><span class="p">:</span>
+                <span class="n">smart_print</span><span class="p">(</span><span class="n">ccode</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">smart_print</span><span class="p">(</span><span class="n">ccode</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">smart_print</span><span class="p">()</span>
+
+            <span class="n">input_diff_c</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">xreplace</span><span class="p">(</span><span class="n">var2diffval</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ssa1</span><span class="p">[</span><span class="s2">&quot;input_vars&quot;</span><span class="p">]]</span>
+            <span class="n">output_diff_c</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">xreplace</span><span class="p">(</span><span class="n">var2diffval</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ssa1</span><span class="p">[</span><span class="s2">&quot;output_vars&quot;</span><span class="p">]]</span>
+
+            <span class="k">if</span> <span class="n">key_index</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">smart_print</span><span class="p">(</span><span class="s2">&quot;  - rk</span><span class="si">{}</span><span class="s2"> | checking </span><span class="si">{}</span><span class="s2"> -&gt; </span><span class="si">{}</span><span class="s2"> with pairs 2**</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">key_index</span><span class="p">,</span>
+                    <span class="s1">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff_c</span><span class="p">]),</span> <span class="s1">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">output_diff_c</span><span class="p">]),</span>
+                    <span class="n">MAX_WEIGHT</span><span class="p">))</span>
+
+            <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">))</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff_c</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">input_diff_c</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">core</span><span class="o">.</span><span class="n">Constant</span><span class="p">))</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">output_diff_c</span><span class="p">),</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_diff_c</span><span class="p">)</span>
+
+            <span class="n">input_diff_c</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">input_diff_c</span><span class="p">]</span>
+            <span class="n">output_diff_c</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">output_diff_c</span><span class="p">]</span>
+
+            <span class="n">rkey2subch_ew</span><span class="p">[</span><span class="n">key_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span>
+                <span class="n">compile_run_empirical_weight</span><span class="p">,</span>
+                <span class="p">(</span>
+                    <span class="n">ccode</span><span class="p">,</span>
+                    <span class="s2">&quot;_libver&quot;</span> <span class="o">+</span> <span class="n">ch_found</span><span class="o">.</span><span class="n">ch</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+                    <span class="n">input_diff_c</span><span class="p">,</span>
+                    <span class="n">output_diff_c</span><span class="p">,</span>
+                    <span class="n">MAX_WEIGHT</span><span class="p">,</span>
+                    <span class="kc">False</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="c1"># wait until all have been compiled and run</span>
+        <span class="c1"># and replace the Async object by the result</span>
+        <span class="k">for</span> <span class="n">key_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">KEY_SAMPLES</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rkey2subch_ew</span><span class="p">[</span><span class="n">key_index</span><span class="p">],</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">AsyncResult</span><span class="p">):</span>
+                <span class="n">rkey2subch_ew</span><span class="p">[</span><span class="n">key_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">rkey2subch_ew</span><span class="p">[</span><span class="n">key_index</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">key_index</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">smart_print</span><span class="p">(</span><span class="s2">&quot;  - rk</span><span class="si">{}</span><span class="s2"> | empirical weight: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">key_index</span><span class="p">,</span> <span class="n">rkey2subch_ew</span><span class="p">[</span><span class="n">key_index</span><span class="p">]))</span>
+
+    <span class="c1"># end multiprocessing</span>
+
+    <span class="n">empirical_weight_distribution</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">()</span>
+    <span class="n">all_rkey_weights</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">key_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">KEY_SAMPLES</span><span class="p">):</span>
+        <span class="n">rkey_weight</span> <span class="o">=</span> <span class="n">rkey2subch_ew</span><span class="p">[</span><span class="n">key_index</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">precision</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">weight</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rkey_weight</span><span class="p">)</span> <span class="k">if</span> <span class="n">rkey_weight</span> <span class="o">!=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span> <span class="k">else</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">weight</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">rkey_weight</span><span class="p">,</span> <span class="n">precision</span><span class="p">)</span>
+
+        <span class="n">all_rkey_weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rkey_weight</span><span class="p">)</span>
+        <span class="n">empirical_weight_distribution</span><span class="p">[</span><span class="n">weight</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">smart_print</span><span class="p">(</span><span class="s2">&quot;- distribution empirical weights: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">empirical_weight_distribution</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">verbose_lvl</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">smart_print</span><span class="p">(</span><span class="s2">&quot;- list empirical weights:&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">all_rkey_weights</span> <span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">empirical_weight_distribution</span>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, Adrián Ranea
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
