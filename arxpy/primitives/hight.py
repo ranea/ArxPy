@@ -8,26 +8,18 @@ from arxpy.primitives.primitives import KeySchedule, Encryption, Cipher
 class HightKeySchedule(KeySchedule):
     """Key schedule function."""
 
-    rounds = 32
+    rounds = 34  # key whitening seen as a round
     input_widths = [8 for _ in range(16)]
-    output_widths = [8 for _ in range(8 + 4 * 32)]
+    output_widths = [8 for _ in range(4 * 34)]
 
     @classmethod
     def set_rounds(cls, new_rounds):
-        assert new_rounds >= 2
         cls.rounds = new_rounds
-        cls.output_widths = [8 for _ in range(8 + 4 * cls.rounds)]
+        cls.output_widths = [8 for _ in range(4 * cls.rounds)]
 
     @classmethod
     def eval(cls, *mk):
         mk = list(reversed(mk))  # mk[i] = mki
-
-        wk = [None for _ in range(8)]
-        for i in range(8):
-            if i <= 3:
-                wk[i] = mk[i + 12]
-            else:
-                wk[i] = mk[i - 4]
 
         d = [
             0x5a, 0x6d, 0x36, 0x1b, 0x0d, 0x06, 0x03, 0x41,
@@ -48,25 +40,47 @@ class HightKeySchedule(KeySchedule):
             0x74, 0x3a, 0x5d, 0x2e, 0x57, 0x6b, 0x35, 0x5a
         ]
         d = [Constant(d_i, 8) for d_i in d]
-        sk = [None for _ in range(4*cls.rounds)]
-        for i in range(8):
-            for j in range(8):
-                if 16 * i + j >= 4*cls.rounds:
-                    continue
-                sk[16 * i + j] = mk[(j - i) % 8] + d[16 * i + j]
 
-            for j in range(8):
-                if 16 * i + j + 8 >= 4*cls.rounds:
-                    continue
-                sk[16 * i + j + 8] = mk[((j - i) % 8) + 8] + d[16 * i + j + 8]
+        def sk_round_i(round_i):
+            assert round_i <= 31
+            sk = []
+            for i in range(8):
+                for j in range(8):
+                    if 4*round_i <= 16 * i + j < 4*round_i + 4:
+                        sk.append(mk[(j - i) % 8] + d[16 * i + j])
+                    elif 4*round_i <= 16 * i + j + 8 < 4*round_i + 4:
+                        sk.append(mk[((j - i) % 8) + 8] + d[16 * i + j + 8])
+            return sk
 
-        return wk + sk
+        rk = []
+        for r in range(cls.rounds):
+            if hasattr(cls, "skip_rounds") and r in cls.skip_rounds:
+                rk.extend(mk[:4])  # cte outputs not supported
+                continue
+
+            if r == 0:
+                wk0, wk1, wk2, wk3 = [mk[i + 12] for i in range(4)]
+                rk.extend([wk0, wk1, wk2, wk3])
+
+            elif r < cls.rounds - 1:
+                sk0, sk1, sk2, sk3 = sk_round_i(r - 1)
+                rk.extend([sk0, sk1, sk2, sk3])
+
+            else:
+                assert r == cls.rounds - 1
+                if r == 33:
+                    wk4, wk5, wk6, wk7 = [mk[i - 4] for i in range(4, 8)]
+                    rk.extend([wk4, wk5, wk6, wk7])
+                else:
+                    sk0, sk1, sk2, sk3 = sk_round_i(r - 1)
+                    rk.extend([sk0, sk1, sk2, sk3])
+        return rk
 
 
 class HightEncryption(Encryption):
     """Encryption function."""
 
-    rounds = 32
+    rounds = 34
     input_widths = [8 for _ in range(8)]
     output_widths = [8 for _ in range(8)]
     round_keys = None
@@ -76,63 +90,83 @@ class HightEncryption(Encryption):
         cls.rounds = new_rounds
 
     @classmethod
-    def eval(cls, *p):  # p7,...,p0
-        wk = cls.round_keys[:8]
-        sk = cls.round_keys[8:]
+    def initial_transformation(cls, p, wk3, wk2, wk1, wk0):
+        x = [None for _ in range(len(p))]
+        x[0] = p[0] + wk0
+        x[1] = p[1]
+        x[2] = p[2] ^ wk1
+        x[3] = p[3]
+        x[4] = p[4] + wk2
+        x[5] = p[5]
+        x[6] = p[6] ^ wk3
+        x[7] = p[7]
+        return x
 
-        # initial transformation
-        x = list(reversed(p))
-        x[0] += wk[0]
-        x[2] ^= wk[1]
-        x[4] += wk[2]
-        x[6] ^= wk[3]
-
+    @classmethod
+    def round_function(cls, x, sk3, sk2, sk1, sk0):  # SK4i+3,SK4i+2,SK4i+1,SK4i
         def f0(bv):
             return ROL(bv, 1) ^ ROL(bv, 2) ^ ROL(bv, 7)
 
         def f1(bv):
             return ROL(bv, 3) ^ ROL(bv, 4) ^ ROL(bv, 6)
 
-        y = [None for _ in range(8)]
+        # there is a typo in Section 2.4 of Hight paper;  using Fig. 3 instead
+        y = [None for _ in range(len(x))]
+        y[1] = x[0]
+        y[3] = x[2]
+        y[5] = x[4]
+        y[7] = x[6]
+        y[0] = x[7] ^ (f0(x[6]) + sk3)
+        y[2] = x[1] + (f1(x[0]) ^ sk0)  # sk2
+        y[4] = x[3] ^ (f0(x[2]) + sk1)
+        y[6] = x[5] + (f1(x[4]) ^ sk2)  # sk0
+        return y
 
-        for i in range(cls.rounds - 1):
-            y[0] = x[7] ^ (f0(x[6]) + sk[4 * i + 3])
-            y[1] = x[0]
-            y[2] = x[1] + (f1(x[0]) ^ sk[4 * i])
-            y[3] = x[2]
-            y[4] = x[3] ^ (f0(x[2]) + sk[4 * i + 1])
-            y[5] = x[4]
-            y[6] = x[5] + (f1(x[4]) ^ sk[4 * i + 2])
-            y[7] = x[6]
+    @classmethod
+    def final_transformation(cls, x, wk7, wk6, wk5, wk4):
+        c = [None for _ in range(len(x))]
+        c[0] = x[1] + wk4
+        c[1] = x[2]
+        c[2] = x[3] ^ wk5
+        c[3] = x[4]
+        c[4] = x[5] + wk6
+        c[5] = x[6]
+        c[6] = x[7] ^ wk7
+        c[7] = x[0]
+        return c
 
-            x = y[:]
+    @classmethod
+    def eval(cls, *p):  # p7,...,p0
+        x = list(reversed(p))
+        cls.round_inputs = []
+        for r in range(cls.rounds):  # due to round_inputs, better all logic in for loop
+            cls.round_inputs.append(x)
+            if hasattr(cls, "skip_rounds") and r in cls.skip_rounds:
+                continue
 
-        y[0] = x[0]
-        y[1] = x[1] + (f1(x[0]) ^ sk[-4])
-        y[2] = x[2]
-        y[3] = x[3] ^ (f0(x[2]) + sk[-3])
-        y[4] = x[4]
-        y[5] = x[5] + (f1(x[4]) ^ sk[-2])
-        y[6] = x[6]
-        y[7] = x[7] ^ (f0(x[6]) + sk[-1])
+            if r == 0:
+                wk0, wk1, wk2, wk3 = cls.round_keys[4*r: 4*r + 4]
+                x = cls.initial_transformation(x, wk3, wk2, wk1, wk0)
+            elif r < cls.rounds - 1:
+                sk0, sk1, sk2, sk3 = cls.round_keys[4*r: 4*r + 4]
+                x = cls.round_function(x, sk3, sk2, sk1, sk0)
+            else:
+                assert r == cls.rounds - 1
+                if r == 33:
+                    wk4, wk5, wk6, wk7 = cls.round_keys[4*r: 4*r + 4]
+                    x = cls.final_transformation(x, wk7, wk6, wk5, wk4)
+                else:
+                    sk0, sk1, sk2, sk3 = cls.round_keys[4*r: 4*r + 4]
+                    x = cls.round_function(x, sk3, sk2, sk1, sk0)
 
-        x = y[:]
-
-        # final transformation
-        c = x[:]
-        if cls.rounds == 32:
-            c[0] = x[0] + wk[4]
-            c[2] = x[2] ^ wk[5]
-            c[4] = x[4] + wk[6]
-            c[6] = x[6] ^ wk[7]
-
-        return list(reversed(c))
+        return list(reversed(x))
 
 
 class HightCipher(Cipher):
     key_schedule = HightKeySchedule
     encryption = HightEncryption
-    rounds = 32
+    rounds = 34
+    max_rounds = 34
 
     @classmethod
     def set_rounds(cls, new_rounds):
@@ -141,11 +175,16 @@ class HightCipher(Cipher):
         cls.encryption.set_rounds(new_rounds)
 
     @classmethod
+    def set_skip_rounds(cls, skip_rounds):
+        cls.encryption.skip_rounds = skip_rounds
+        cls.key_schedule.skip_rounds = skip_rounds
+
+    @classmethod
     def test(cls):
         """Test Hight with official test vectors."""
         # https://tools.ietf.org/html/draft-kisa-hight-00#section-5
         old_rounds = cls.rounds
-        cls.set_rounds(32)
+        cls.set_rounds(34)
 
         plaintext = (0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
         key = (0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,

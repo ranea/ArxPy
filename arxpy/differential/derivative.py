@@ -571,7 +571,7 @@ class RXDA(Derivative):
             >>> errors
             [0.415, 0.415, 0.165, 0.04, 0.04, 0.0087, 0.0087, 0.0009, 0.0009, 0.0009, 0.0009, 0.0004]
 
-        As opposed to `XDCA`, the exact weight in `RXDA` is bigger.
+        As opposed to `XDAC`, the exact weight in `RXDA` is bigger.
         """
         n = self.input_diff[0].val.width
         k = self.__class__.precision

@@ -10,23 +10,19 @@ from arxpy.bitvector.operation import Concat, BvComp
 
 from arxpy.differential.difference import XorDiff
 
-from arxpy.smt.search import DerMode, ChSearchMode, _get_smart_print
-from arxpy.smt.tests.test_search import test_search_ch_skch
+from arxpy.smt.search_differential import DerMode, ChSearchMode, _get_smart_print
+from arxpy.smt.tests.test_search_differential import test_search_ch_skch
 
 from arxpy.primitives.chaskey import ChaskeyPi
-from arxpy.primitives.picipher import PiPermutation
 
 from arxpy.primitives import speck
 from arxpy.primitives import simon
-from arxpy.primitives import simeck
 from arxpy.primitives.hight import HightCipher
 from arxpy.primitives.lea import LeaCipher
 from arxpy.primitives.shacal1 import Shacal1Cipher
 from arxpy.primitives.shacal2 import Shacal2Cipher
-from arxpy.primitives.feal import FealCipher
 from arxpy.primitives.tea import TeaCipher
 from arxpy.primitives.xtea import XteaCipher
-from arxpy.primitives import cham
 # from arxpy.primitives.threefish import ThreefishCipher
 
 
@@ -46,22 +42,16 @@ BvFunction = collections.namedtuple('BVF', ['function', 'rounds'])
 
 Speck32 = speck.get_Speck_instance(speck.SpeckInstance.speck_32_64)
 Simon32 = simon.get_Simon_instance(simon.SimonInstance.simon_32_64)
-Simeck32 = simeck.get_Simeck_instance(simeck.SimeckInstance.simeck_32_64)
-Cham64 = cham.get_Cham_instance(cham.ChamInstance.cham_64_128)
 
 
 BV_FUNCTIONS = [
     BvFunction(ChaskeyPi, 1),
-    BvFunction(PiPermutation, 1),  # optimal finds too many ch
     BvFunction(Speck32.key_schedule, 5),
     BvFunction(Simon32.key_schedule, 10),  # linear ks
-    BvFunction(Simeck32.key_schedule, 4),
-    BvFunction(Cham64.key_schedule, 10),  # linear ks
     BvFunction(HightCipher.key_schedule, HightCipher.rounds - 1),
     BvFunction(LeaCipher.key_schedule, 2),
     BvFunction(Shacal1Cipher.key_schedule, 19),
     BvFunction(Shacal2Cipher.key_schedule, 18),  # r=19, m=Optimal takes long time
-    BvFunction(FealCipher.key_schedule, 1),
     BvFunction(TeaCipher.key_schedule, 1),
     BvFunction(XteaCipher.key_schedule, XteaCipher.key_schedule.rounds - 1),
     # BvFunction(ThreefishCipher.key_schedule, ?),  # huge block size

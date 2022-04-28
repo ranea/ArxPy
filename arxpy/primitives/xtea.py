@@ -23,11 +23,16 @@ class XteaKeySchedule(KeySchedule):
         delta = Constant(0x9E3779B9, 32)
         k = []
         for i in range(cls.rounds):
-            if i % 2 == 0:
-                k.append(s + mk[int(s & Constant(3, 32))])
-                s += delta
+            if hasattr(cls, "skip_rounds") and i in cls.skip_rounds:
+                k.append(mk[0])  # cte outputs not supported
             else:
-                k.append(s + mk[int((s >> Constant(11, 32)) & Constant(3, 32))])
+                if i % 2 == 0:
+                    k.append(s + mk[int(s & Constant(3, 32))])
+                    # s += delta
+                else:
+                    k.append(s + mk[int((s >> Constant(11, 32)) & Constant(3, 32))])
+            if i % 2 == 0:
+                s += delta
         return k
 
 
@@ -48,8 +53,13 @@ class XteaEncryption(Encryption):
         v0 = x
         v1 = y
         k = cls.round_keys
+        cls.round_inputs = []
         for i in range(cls.rounds):
+            cls.round_inputs.append([v0, v1])
+            if hasattr(cls, "skip_rounds") and i in cls.skip_rounds:
+                continue
             v0, v1 = v1, v0 + ((((v1 << Constant(4, 32)) ^ (v1 >> Constant(5, 32))) + v1) ^ k[i])
+        cls.round_inputs.append([v0, v1])
 
         return v0, v1
 
@@ -65,6 +75,12 @@ class XteaCipher(Cipher):
         cls.rounds = new_rounds
         cls.encryption.set_rounds(new_rounds)
         cls.key_schedule.set_rounds(new_rounds)
+
+    @classmethod
+    def set_skip_rounds(cls, skip_rounds):
+        assert isinstance(skip_rounds, (list, tuple))
+        cls.encryption.skip_rounds = skip_rounds
+        cls.key_schedule.skip_rounds = skip_rounds
 
     @classmethod
     def test(cls):

@@ -10,6 +10,7 @@ from arxpy.bitvector import operation
 from arxpy.bitvector import extraop
 
 from arxpy.differential import difference
+# from arxpy.linear import mask
 
 
 def _is_power_of_2(x):
@@ -230,7 +231,7 @@ def bv2pysmt(bv, boolean=False, strict_shift=False, env=None):
                 else:
                     raise NotImplementedError("(doit) " + msg)
 
-    elif isinstance(bv, difference.Difference):
+    elif isinstance(bv, difference.Difference) or isinstance(bv, mask.Mask):
         pysmt_bv = bv2pysmt(bv.val, boolean, strict_shift, env)
 
     if pysmt_bv is not None:
@@ -278,13 +279,14 @@ def pysmt2bv(ps):
         raise NotImplementedError(msg)
 
 
-def pysmt_model2bv_model(model, differences=None):
+def pysmt_model2bv_model(model, differences=None, masks=None):
     """Convert a `pysmt.solvers.solver.Model` into a `dict` of bit-vector types.
 
-    To return `Difference` values instead of `Term` values,
-    a list of symbolic differences can be passed as argument.
+    To return `Difference` (resp. `Mask`) values instead of `Term` values,
+    a list of symbolic differences (resp. masks) can be passed as argument.
     In that case, variables in the model also present in ``differences``
-    will be added to the bit-vector model as `Difference` objects.
+    (resp. `masks`) will be added to the bit-vector model as `Difference`
+    (resp. `Mask`) objects.
 
         >>> from pysmt import shortcuts
         >>> from arxpy.smt.types import pysmt_model2bv_model  # pySMT shortcuts
@@ -307,6 +309,13 @@ def pysmt_model2bv_model(model, differences=None):
     else:
         name2diff = {}
 
+    if masks is not None:
+        name2mask = {}
+        for m in masks:
+            name2diff[m.val.name] = m
+    else:
+        name2mask = {}
+
     bv_model = {}
     for var, value in model:
         bv_var = pysmt2bv(var)
@@ -315,5 +324,8 @@ def pysmt_model2bv_model(model, differences=None):
             if bv_var.name in name2diff:
                 bv_var = name2diff[bv_var.name]
                 bv_value = type(bv_var)(bv_value)
+            elif bv_var.name in name2mask:
+                bv_var = name2mask[bv_var.name]
+                bv_value = mask.Mask(bv_value)
         bv_model[bv_var] = bv_value
     return bv_model

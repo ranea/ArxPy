@@ -19,7 +19,7 @@ from arxpy.differential import difference
 from arxpy.differential import derivative
 from arxpy.differential import characteristic
 from arxpy.smt import types
-from arxpy.smt import verification
+from arxpy.smt import verification_differential
 
 
 # default arguments for checking empirical weights
@@ -202,7 +202,7 @@ class ChFound(object):
         >>> from arxpy.differential.difference import XorDiff, RXDiff
         >>> from arxpy.differential.characteristic import BvCharacteristic
         >>> from arxpy.primitives.chaskey import ChaskeyPi
-        >>> from arxpy.smt.search import SearchCh
+        >>> from arxpy.smt.search_differential import SearchCh
         >>> ChaskeyPi.set_rounds(1)
         >>> ch = BvCharacteristic(ChaskeyPi, XorDiff, ["dv0", "dv1", "dv2", "dv3"])
         >>> search_problem = SearchCh(ch)
@@ -276,6 +276,11 @@ class ChFound(object):
         self.nonlinear_diffs = [[d, diff_model[d]] for d in self.ch.nonlinear_diffs]
         self.der_weights = [[w, model[w]] for w in der_weights if "tmp" not in w.name]
 
+        if hasattr(self.ch.func, "round_inputs"):
+            self.round_inputs = []
+            for round_input in self.ch.func.round_inputs:
+                self.round_inputs.append([self.ch._var2diff[d].xreplace(diff_model) for d in round_input])
+
         self.emp_weight = None
         self._diff_model = diff_model
         self._exact_weight = None
@@ -294,10 +299,10 @@ class ChFound(object):
             assert not isinstance(exact_der_weight, core.Term)
             exact_weight += exact_der_weight
 
-        if self.ch.diff_type == difference.XorDiff and int(exact_weight) > int(self.ch_weight):
-            raise ValueError("exact weight {} should be lower than ch.weight {}".format(exact_weight, self.ch_weight))
-        elif self.ch.diff_type == difference.RXDiff and int(exact_weight) < int(self.ch_weight):
-            raise ValueError("exact weight {} should be higher than ch.weight {}".format(exact_weight, self.ch_weight))
+        # if self.ch.diff_type == difference.XorDiff and int(exact_weight) > int(self.ch_weight):
+        #     raise ValueError("exact weight {} should be lower than ch.weight {}".format(exact_weight, self.ch_weight))
+        # elif self.ch.diff_type == difference.RXDiff and int(exact_weight) < int(self.ch_weight):
+        #     raise ValueError("exact weight {} should be higher than ch.weight {}".format(exact_weight, self.ch_weight))
 
         self._exact_weight = exact_weight
 
@@ -343,7 +348,7 @@ class ChFound(object):
 
         if pair_samples > current_max_pairs and not weak_check:
             assert len(self.ch.nonlinear_diffs) > 0
-            emp_weight = verification.fast_empirical_weight(self, verbose_lvl=verbose_lvl, filename=filename)
+            emp_weight = verification_differential.fast_empirical_weight(self, verbose_lvl=verbose_lvl, filename=filename)
         elif not weak_check or (weak_check and exact_weight == 0):
             if verbose_lvl >= 2:
                 smart_print("- checking {} -> {} with {} pair samples".format(
@@ -389,7 +394,7 @@ class ChFound(object):
 
         if key_samples * pair_samples > current_max_pairs and not weak_check:
             assert len(self.ch.nonlinear_diffs) != 0
-            emp_weight_dist = verification._fast_empirical_weight_distribution(self, cipher, rk_dict_diffs,
+            emp_weight_dist = verification_differential._fast_empirical_weight_distribution(self, cipher, rk_dict_diffs,
                                                                                verbose_lvl=verbose_lvl, filename=filename)
         elif not weak_check or (weak_check and exact_weight == 0):
             if verbose_lvl >= 2:
@@ -484,6 +489,8 @@ class ChFound(object):
             dict_ch['emp_weight'] = DictItem(self.emp_weight)
         if len(self.free_diffs) > 0:
             dict_ch['free_diffs'] = DictItem(self.free_diffs)
+        if hasattr(self.ch.func, "round_inputs"):
+            dict_ch['round_inputs'] = DictItem(self.round_inputs)
 
         return dict_ch
 
@@ -496,7 +503,7 @@ class ChFound(object):
             >>> from arxpy.differential.difference import XorDiff
             >>> from arxpy.differential.characteristic import BvCharacteristic
             >>> from arxpy.primitives.chaskey import ChaskeyPi
-            >>> from arxpy.smt.search import SearchCh
+            >>> from arxpy.smt.search_differential import SearchCh
             >>> ChaskeyPi.set_rounds(1)
             >>> ch = BvCharacteristic(ChaskeyPi, XorDiff, ["dv0", "dv1", "dv2", "dv3"])
             >>> search_problem = SearchCh(ch)
@@ -522,6 +529,13 @@ class ChFound(object):
         """
         return str(self._to_dict(vrepr=True))
 
+    def srepr(self):
+        """Return a short representation of the characteristic."""
+        assert len(self.free_diffs) == 0
+        input_diff = ' '.join([x.val.hex()[2:] if x.val.width >= 8 else x.val.bin()[2:] for _, x in self.input_diff])
+        output_diff = ' '.join([x.val.hex()[2:] if x.val.width >= 8 else x.val.bin()[2:] for _, x in self.output_diff])
+        return "(weight {}) {} -> {}".format(int(self.ch_weight), input_diff, output_diff)
+
 
 class SkChFound(ChFound):
     """Represent (non-symbolic) single-key characteristics found.
@@ -532,7 +546,7 @@ class SkChFound(ChFound):
 
         >>> from arxpy.differential.difference import XorDiff
         >>> from arxpy.differential.characteristic import SingleKeyCh
-        >>> from arxpy.smt.search import SearchSkCh
+        >>> from arxpy.smt.search_differential import SearchSkCh
         >>> from arxpy.primitives import speck
         >>> Speck32 = speck.get_Speck_instance(speck.SpeckInstance.speck_32_64)
         >>> Speck32.set_rounds(1)
@@ -590,7 +604,7 @@ class RkChFound(object):
 
         >>> from arxpy.differential.difference import XorDiff
         >>> from arxpy.differential.characteristic import RelatedKeyCh
-        >>> from arxpy.smt.search import SearchRkCh
+        >>> from arxpy.smt.search_differential import SearchRkCh
         >>> from arxpy.primitives.lea import LeaCipher
         >>> LeaCipher.set_rounds(1)
         >>> rkch = RelatedKeyCh(LeaCipher, XorDiff)
@@ -662,7 +676,6 @@ class RkChFound(object):
         """
         smart_print = _get_smart_print(filename)
         try:
-            # TODO: (v2) append all output_diff (both name and value) if variable missing in verification
             output_diff = []
             for i, (diff_name, diff_expr) in enumerate(self.rkch.key_schedule_ch.output_diff):
                 output_diff.append([diff_expr, self.key_ch_found.output_diff[i][1]] )
@@ -697,6 +710,10 @@ class RkChFound(object):
         See also `ChFound.vrepr`.
         """
         return str(self._to_dict(vrepr=True))
+
+    def srepr(self):
+        """Return a short representation of the characteristic."""
+        return "K: {} | E: {}".format(self.key_ch_found.srepr(), self.enc_ch_found.srepr())
 
 
 class SearchCh(object):
@@ -780,7 +797,7 @@ class SearchCh(object):
         if not self.ch.nonlinear_diffs:
             constraints = []
             ch_weight = core.Variable(self.weight_prefix, 1)
-            constraints.append(operation.BvComp(ch_weight, 0))
+            constraints.append(operation.BvComp(ch_weight, core.Constant(0, ch_weight.width)))
             self.constraints.extend(constraints)
             self.ch_weight = ch_weight
             self.der_weights = []
@@ -793,7 +810,7 @@ class SearchCh(object):
                 constraints.append(der.has_probability_one(diff))
 
             ch_weight = core.Variable(self.weight_prefix, 1)
-            constraints.append(operation.BvComp(ch_weight, 0))
+            constraints.append(operation.BvComp(ch_weight, core.Constant(0, ch_weight.width)))
 
             self.constraints.extend(constraints)
             self.ch_weight = ch_weight
@@ -807,7 +824,7 @@ class SearchCh(object):
                 constraints.append(der.is_possible(diff))
 
             ch_weight = core.Variable(self.weight_prefix, 1)
-            constraints.append(operation.BvComp(ch_weight, 0))
+            constraints.append(operation.BvComp(ch_weight, core.Constant(0, ch_weight.width)))
 
             self.constraints.extend(constraints)
             self.ch_weight = ch_weight
@@ -1000,7 +1017,7 @@ class SearchCh(object):
             target_weight = initial_weight
 
             while target_weight < upper_bound:
-                eq_weight = operation.BvComp(self.ch_weight, target_weight)
+                eq_weight = operation.BvComp(self.ch_weight, core.Constant(target_weight, self.ch_weight.width))
                 if verbose_level >= 1:
                     smart_print(_get_time(), "| Solving", eq_weight)
                 satisfiable = solver.solve([bv2pysmt(eq_weight, boolean=True)])
@@ -1037,7 +1054,7 @@ class SearchCh(object):
                 if verbose_level >= 1:
                     smart_print("Added assertion:", self.ch_weight < orig_upper_bound)
 
-            for _ in MAX_CH_FOUND:
+            for _ in range(MAX_CH_FOUND):
                 if last_ch_found is not None:
                     candidate_sig = last_ch_found.signature(characteristic.ChSignatureType.Full)
                     # disable simplification due to recursion error
@@ -1085,24 +1102,27 @@ class SearchCh(object):
 
         if search_mode in [search_mode_class.Optimal, search_mode_class.OptimalDifferential,
                            search_mode_class.FirstChValid, search_mode_class.AllOptimal]:
-            def iterate_ch(upper_bound):
-                solver.push()
+            solver.push()
 
-                min_exact_weight = math.inf
+            target_weight = initial_weight
+
+            if search_mode in [search_mode_class.Optimal, search_mode_class.AllOptimal]:
+                signature_type = characteristic.ChSignatureType.Full
+            elif search_mode in [search_mode_class.FirstChValid, search_mode_class.OptimalDifferential]:
+                signature_type = characteristic.ChSignatureType.InputOutput
+
+            ch_sig = self.ch.signature(signature_type)
+
+            solver.add_assertion(bv2pysmt(
+                operation.BvComp(self.ch_weight, core.Constant(target_weight, self.ch_weight.width)), boolean=True))
+
+            # yield must be hidden in closure so that the method is only a generator
+            # when return_generator is True
+            def iterate_results():
+                nonlocal target_weight, upper_bound
                 last_ch_found = None
                 best_ch_found = None
-                target_weight = initial_weight
-
-                if search_mode in [search_mode_class.Optimal, search_mode_class.AllOptimal]:
-                    signature_type = characteristic.ChSignatureType.Full
-                elif search_mode in [search_mode_class.FirstChValid, search_mode_class.OptimalDifferential]:
-                    signature_type = characteristic.ChSignatureType.InputOutput
-
-                ch_sig = self.ch.signature(signature_type)
-
-                solver.add_assertion(bv2pysmt(
-                    operation.BvComp(self.ch_weight, target_weight), boolean=True))
-
+                min_exact_weight = math.inf
                 while target_weight < upper_bound:
                     if last_ch_found is not None:
                         candidate_sig = last_ch_found.signature(signature_type)
@@ -1114,7 +1134,7 @@ class SearchCh(object):
                         if verbose_level >= 3:
                             smart_print("Added assertion:", c)
                     if verbose_level >= 1:
-                        smart_print(_get_time(), "| Solving", operation.BvComp(self.ch_weight, target_weight))
+                        smart_print(_get_time(), "| Solving", operation.BvComp(self.ch_weight, core.Constant(target_weight, self.ch_weight.width)))
 
                     satisfiable = solver.solve()
 
@@ -1148,7 +1168,7 @@ class SearchCh(object):
                                         smart_print(last_ch_found.vrepr())
                         else:
                             if verbose_level >= 1:
-                                smart_print(_get_time(), "| Found worse characteristic (not checked)")
+                                smart_print(_get_time(), "| Found worse characteristic (not checked)", last_ch_found.srepr())
                                 if verbose_level >= 2:
                                     smart_print(last_ch_found.vrepr())
 
@@ -1156,7 +1176,6 @@ class SearchCh(object):
                             if return_generator:
                                 yield last_ch_found
                             elif search_mode == search_mode_class.FirstChValid:
-                                solver.exit()
                                 return last_ch_found
                             elif search_mode in [search_mode_class.Optimal, search_mode_class.OptimalDifferential]:
                                 new_upper_bound = self._new_upper_bound(last_ch_found, upper_bound)
@@ -1183,7 +1202,7 @@ class SearchCh(object):
                         last_ch_found = None
                         solver.push()
                         solver.add_assertion(bv2pysmt(
-                            operation.BvComp(self.ch_weight, target_weight), boolean=True))
+                            operation.BvComp(self.ch_weight, core.Constant(target_weight, self.ch_weight.width)), boolean=True))
 
                 solver.exit()
 
@@ -1195,10 +1214,10 @@ class SearchCh(object):
                     return
 
             if return_generator:
-                return iterate_ch(upper_bound)
+                return iterate_results()
             else:
                 try:
-                    next(iterate_ch(upper_bound))
+                    next(iterate_results())
                 except StopIteration as result:
                     solver.exit()
                     return result.value
@@ -1244,7 +1263,7 @@ class SearchCh(object):
             ch_sig = self.ch.signature(signature_type)
 
             solver.add_assertion(bv2pysmt(
-                operation.BvComp(self.ch_weight, target_weight), boolean=True))
+                operation.BvComp(self.ch_weight, core.Constant(target_weight, self.ch_weight.width)), boolean=True))
 
             while target_weight < upper_bound:
                 if last_ch_found is not None:
@@ -1258,7 +1277,7 @@ class SearchCh(object):
                         smart_print("Added assertion:", c)
                 if verbose_level >= 1 and last_ch_found is None:
                     # only print the target_weight for the 1st characteristic
-                    smart_print(_get_time(), "| Solving", operation.BvComp(self.ch_weight, target_weight))
+                    smart_print(_get_time(), "| Solving", operation.BvComp(self.ch_weight, core.Constant(target_weight, self.ch_weight.width)))
 
                 satisfiable = solver.solve()
 
@@ -1309,7 +1328,6 @@ class SearchCh(object):
                                 sum_weights(diff2weight[in_out_diff], exact_weight)
                             ))
 
-                    # TODO: (v2) store dictionary in folder
 
                     newtopdiff = tuple(sorted(diff2weight.items(), key=lambda x: x[1])[:10])
 
@@ -1349,7 +1367,7 @@ class SearchCh(object):
                     last_ch_found = None
                     solver.push()
                     solver.add_assertion(bv2pysmt(
-                        operation.BvComp(self.ch_weight, target_weight), boolean=True))
+                        operation.BvComp(self.ch_weight, core.Constant(target_weight, self.ch_weight.width)), boolean=True))
 
             solver.exit()
 
@@ -1371,7 +1389,7 @@ class SearchCh(object):
         formula = env.formula_manager.And(*assertions)
         return env.sizeo.get_size(formula, measure)
 
-    def hrepr(self, full_repr=False):
+    def hrepr(self, full_repr=False, minimize_constraint=True):
         """Return a human readable representing of the SMT problem.
 
         If ``full_repr`` is False, the short string representation `srepr` is used.
@@ -1383,7 +1401,8 @@ class SearchCh(object):
             else:
                 s = c.srepr()
             representation.append("assert " + s)
-        representation.append("minimize {}".format(self.ch_weight))
+        if minimize_constraint:
+            representation.append("minimize {}".format(self.ch_weight))
         return "\n".join(representation)
 
     def error(self):
@@ -1438,7 +1457,7 @@ class SearchSkCh(SearchCh):
 
         >>> from arxpy.differential.difference import XorDiff
         >>> from arxpy.differential.characteristic import SingleKeyCh
-        >>> from arxpy.smt.search import SearchSkCh
+        >>> from arxpy.smt.search_differential import SearchSkCh
         >>> from arxpy.primitives import speck
         >>> Speck32 = speck.get_Speck_instance(speck.SpeckInstance.speck_32_64)
         >>> Speck32.set_rounds(1)
@@ -1495,7 +1514,7 @@ class SearchRkCh(object):
 
         >>> from arxpy.differential.difference import XorDiff
         >>> from arxpy.differential.characteristic import RelatedKeyCh
-        >>> from arxpy.smt.search import SearchRkCh
+        >>> from arxpy.smt.search_differential import SearchRkCh
         >>> from arxpy.primitives.lea import LeaCipher
         >>> LeaCipher.set_rounds(1)
         >>> rkch = RelatedKeyCh(LeaCipher, XorDiff)
@@ -1535,13 +1554,12 @@ class SearchRkCh(object):
         assert wk3_tmp_4rev == Reverse((((... & ...) + (... & ...)) & ~(... | ...)) | ((... & ... & (... >> ...)) - ((... + ...) & (... | ...))))
         assert wk3 == (((PopCountDiff((... & ...) | (... << ...), (... & ...) ^ ... ^ ...)) :: 0b000) - (0b00 :: ((0b0 :: PopCount(...)) + (PopCount(...) :: 0b0))))
         assert wk == (((0b0 :: wk0) + (0b0 :: wk1) + (0b0 :: wk2) + (0b00 :: wk3))[:3])
-        minimize wk
         assert 0x00000000 == ((~(... << ...) ^ (dx2 << 0x00000001)) & (~(... << ...) ^ ((... ^ ...) << 0x00000001)) & (((dp0 ^ (... <<< ...)) << 0x00000001) ^ dx2 ^ dp0 ^ (... <<< ...) ^ dp1 ^ (... <<< ...)))
         assert 0x00000000 == ((~(... << ...) ^ (dx6 << 0x00000001)) & (~(... << ...) ^ ((... ^ ...) << 0x00000001)) & (((dp1 ^ (... <<< ...)) << 0x00000001) ^ dx6 ^ dp1 ^ (... <<< ...) ^ dp2 ^ (... <<< ...)))
         assert 0x00000000 == ((~(... << ...) ^ (dx10 << 0x00000001)) & (~(... << ...) ^ ((... ^ ...) << 0x00000001)) & (((dp2 ^ (... <<< ...)) << 0x00000001) ^ dx10 ^ dp2 ^ (... <<< ...) ^ dp3 ^ (... <<< ...)))
         assert w0w1w2 == (PopCountSum3(~((dx10 ^ ~...) & (~... ^ ... ^ ...))[30:], ~((dx2 ^ ~...) & (~... ^ ... ^ ...))[30:], ~((dx6 ^ ~...) & (~... ^ ... ^ ...))[30:]))
         assert w == w0w1w2
-        minimize w
+        minimize wk, w
         >>> rkch_found = search_problem.solve(0, 0, solver_name="btor")
         >>> rkch_found.key_ch_found.ch_weight, rkch_found.enc_ch_found.ch_weight
         (0b0000000, 0b0000000)
@@ -1575,17 +1593,21 @@ class SearchRkCh(object):
         """
         return self.key_schedule_problem.formula_size(measure) + self.encryption_problem.formula_size(measure)
 
-    def hrepr(self, full_repr=False):
+    def hrepr(self, full_repr=False, minimize_constraint=True):
         """Return a human readable representing of the SMT problem.
 
         See  also `SearchCh.hrepr`.
         """
-        key_hrepr = self.key_schedule_problem.hrepr(full_repr)
-        enc_hrepr = self.encryption_problem.hrepr(full_repr)
-        return key_hrepr + "\n" + enc_hrepr
+        key_hrepr = self.key_schedule_problem.hrepr(full_repr, minimize_constraint=False)
+        enc_hrepr = self.encryption_problem.hrepr(full_repr, minimize_constraint=False)
+        representation = key_hrepr + "\n" + enc_hrepr
+        if minimize_constraint:
+            representation += "\nminimize {}, {}".format(
+                self.key_schedule_problem.ch_weight, self.encryption_problem.ch_weight)
+        return representation
 
     def solve(self, initial_ew, initial_kw, solver_name="btor", search_mode=RkChSearchMode.OptimalMinSum,
-              check=False, verbose_level=0, filename=None):
+              check=False, verbose_level=0, filename=None, return_generator=False):
         """Solve the SMT problem associated to the search a valid `RelatedKeyCh`.
 
         Args:
@@ -1607,14 +1629,17 @@ class SearchRkCh(object):
         assert isinstance(search_mode, RkChSearchMode)
 
         return self._incremental_solve(initial_ew, initial_kw, solver_name, search_mode, check,
-                                       verbose_level, filename)
+                                       verbose_level, filename, return_generator)
 
     # noinspection PyPep8
     def _incremental_solve(self, initial_ew, initial_kw, solver_name, search_mode, check,
-                           verbose_level, filename):
+                           verbose_level, filename, return_generator):
         strict_shift = True if solver_name == "btor" else False
         bv2pysmt = functools.partial(types.bv2pysmt, env=self._env, strict_shift=strict_shift)
         smart_print = _get_smart_print(filename)
+
+        if return_generator and search_mode != RkChSearchMode.AllValid:
+            raise ValueError("return_generator only supports AllValid search mode")
 
         kp = self.key_schedule_problem
         ep = self.encryption_problem
@@ -1630,103 +1655,110 @@ class SearchRkCh(object):
                                  ep.ch.input_diff, ep.ch.nonlinear_diffs.keys()):
             differences_in_model.append(d)
 
-        with self._env.factory.Solver(name=solver_name, logic=logics.QF_BV) as solver:
-            for c in kp.constraints:
-                solver.add_assertion(bv2pysmt(c, boolean=True))
+        solver =  self._env.factory.Solver(name=solver_name, logic=logics.QF_BV)
 
-            for c in ep.constraints:
-                solver.add_assertion(bv2pysmt(c, boolean=True))
+        for c in kp.constraints:
+            solver.add_assertion(bv2pysmt(c, boolean=True))
 
-            key_max_error = kp.error()
-            key_orig_upper_bound = sum(kp.ch.func.input_widths) + math.ceil(key_max_error)
-            key_upper_bound = min(key_orig_upper_bound, kp.ch_max_weight + 1)
+        for c in ep.constraints:
+            solver.add_assertion(bv2pysmt(c, boolean=True))
 
-            enc_max_error = ep.error()
-            enc_orig_upper_bound = sum(ep.ch.func.input_widths) + math.ceil(enc_max_error)
-            enc_upper_bound = min(enc_orig_upper_bound, ep.ch_max_weight + 1)
+        key_max_error = kp.error()
+        key_orig_upper_bound = sum(kp.ch.func.input_widths) + math.ceil(key_max_error)
+        key_upper_bound = min(key_orig_upper_bound, kp.ch_max_weight + 1)
 
-            if verbose_level >= 1:
-                smart_print("Key schedule ch. upper bound: {}, max error: {}".format(
-                    key_upper_bound, key_max_error
-                ))
-                smart_print("Encryption ch. upper bound: {}, max error: {}\n".format(
-                    enc_upper_bound, enc_max_error
-                ))
+        enc_max_error = ep.error()
+        enc_orig_upper_bound = sum(ep.ch.func.input_widths) + math.ceil(enc_max_error)
+        enc_upper_bound = min(enc_orig_upper_bound, ep.ch_max_weight + 1)
 
-            if search_mode in [RkChSearchMode.FirstMinSum,
-                               RkChSearchMode.FirstValidKeyMinEnc,
-                               RkChSearchMode.FirstFixEncMinKey]:
+        if verbose_level >= 1:
+            smart_print("Key schedule ch. upper bound: {}, max error: {}".format(
+                key_upper_bound, key_max_error
+            ))
+            smart_print("Encryption ch. upper bound: {}, max error: {}\n".format(
+                enc_upper_bound, enc_max_error
+            ))
 
-                if search_mode == RkChSearchMode.FirstMinSum:
-                    target_weight = int(initial_ew) + int(initial_kw)
-                    upper_bound = min(
-                        enc_upper_bound + key_upper_bound,
-                        kp.ch_max_weight + ep.ch_max_weight + 1  # to not count +1 twice
-                    )
-                    get_assertion = lambda tw: operation.BvComp(sum_weights(kp.ch_weight, ep.ch_weight), tw)
-                elif search_mode == RkChSearchMode.FirstValidKeyMinEnc:
-                    target_weight = initial_ew
-                    upper_bound = enc_upper_bound
-                    if key_orig_upper_bound <= kp.ch_max_weight:
-                        solver.add_assertion(bv2pysmt(kp.ch_weight < key_orig_upper_bound))
-                        if verbose_level >= 1:
-                            smart_print("Added assertion:", kp.ch_weight < key_orig_upper_bound)
-                    get_assertion = lambda tw: operation.BvComp(ep.ch_weight, tw)
-                elif search_mode == RkChSearchMode.FirstFixEncMinKey:
-                    target_weight = initial_kw
-                    upper_bound = key_upper_bound
-                    solver.add_assertion(bv2pysmt(
-                        operation.BvComp(ep.ch_weight, initial_ew), boolean=True))
-                    if verbose_level >= 1:
-                        smart_print("Added assertion:", operation.BvComp(ep.ch_weight, initial_ew))
-                    get_assertion = lambda tw: operation.BvComp(kp.ch_weight, tw)
+        if search_mode in [RkChSearchMode.FirstMinSum,
+                           RkChSearchMode.FirstValidKeyMinEnc,
+                           RkChSearchMode.FirstFixEncMinKey]:
 
-                while target_weight < upper_bound:
-                    assertion = get_assertion(target_weight)
-                    if verbose_level >= 1:
-                        smart_print(_get_time(), "| Solving", assertion)
-                    satisfiable = solver.solve([bv2pysmt(assertion, boolean=True)])
-
-                    if satisfiable:
-                        model = types.pysmt_model2bv_model(solver.get_model(), differences_in_model)
-                        if search_mode == RkChSearchMode.FirstMinSum:
-                            assert sum_weights(model[kp.ch_weight], model[ep.ch_weight]) == target_weight
-                        elif search_mode == RkChSearchMode.FirstValidKeyMinEnc:
-                            assert model[ep.ch_weight] == target_weight
-                        elif search_mode == RkChSearchMode.FirstFixEncMinKey:
-                            assert model[kp.ch_weight] == target_weight
-
-                        rkch_found = RkChFound(self.rkch, self.key_schedule_problem, self.encryption_problem, model)
-
-                        if check:
-                            try:
-                                rkch_found.check_empirical_weight(verbose_level, filename)
-                            except ExactWeightError:
-                                rkch_found.key_ch_found.emp_weight = math.inf
-                                rkch_found.enc_ch_found.emp_weight = math.inf
-
-                        return rkch_found
-                    else:
-                        target_weight += 1
-                else:
-                    if verbose_level >= 1:
-                        smart_print(_get_time(), "| Unsatisfiable")
-                    return None
-
-            if search_mode == RkChSearchMode.AllValid:
-                last_rkch_found = None
-                rkch_sig = self.rkch.signature(characteristic.ChSignatureType.Full)
-
+            if search_mode == RkChSearchMode.FirstMinSum:
+                target_weight = int(initial_ew) + int(initial_kw)
+                upper_bound = min(
+                    enc_upper_bound + key_upper_bound,
+                    kp.ch_max_weight + ep.ch_max_weight + 1  # to not count +1 twice
+                )
+                get_assertion = lambda tw: operation.BvComp(sum_weights(kp.ch_weight, ep.ch_weight),
+                                                            core.Constant(tw, sum_weights(kp.ch_weight, ep.ch_weight).width))
+            elif search_mode == RkChSearchMode.FirstValidKeyMinEnc:
+                target_weight = initial_ew
+                upper_bound = enc_upper_bound
                 if key_orig_upper_bound <= kp.ch_max_weight:
                     solver.add_assertion(bv2pysmt(kp.ch_weight < key_orig_upper_bound))
                     if verbose_level >= 1:
                         smart_print("Added assertion:", kp.ch_weight < key_orig_upper_bound)
-                if enc_orig_upper_bound <= ep.ch_max_weight:
-                    solver.add_assertion(bv2pysmt(ep.ch_weight < enc_orig_upper_bound))
-                    if verbose_level >= 1:
-                        smart_print("Added assertion:", ep.ch_weight < enc_orig_upper_bound)
+                get_assertion = lambda tw: operation.BvComp(ep.ch_weight,
+                                                            core.Constant(tw, ep.ch_weight.width))
+            elif search_mode == RkChSearchMode.FirstFixEncMinKey:
+                target_weight = initial_kw
+                upper_bound = key_upper_bound
+                solver.add_assertion(bv2pysmt(
+                    operation.BvComp(ep.ch_weight, initial_ew), boolean=True))
+                if verbose_level >= 1:
+                    smart_print("Added assertion:", operation.BvComp(ep.ch_weight, initial_ew))
+                get_assertion = lambda tw: operation.BvComp(kp.ch_weight,
+                                                            core.Constant(tw, kp.ch_weight.width))
 
-                for _ in MAX_CH_FOUND:
+            while target_weight < upper_bound:
+                assertion = get_assertion(target_weight)
+                if verbose_level >= 1:
+                    smart_print(_get_time(), "| Solving", assertion)
+                satisfiable = solver.solve([bv2pysmt(assertion, boolean=True)])
+
+                if satisfiable:
+                    model = types.pysmt_model2bv_model(solver.get_model(), differences_in_model)
+                    if search_mode == RkChSearchMode.FirstMinSum:
+                        assert sum_weights(model[kp.ch_weight], model[ep.ch_weight]) == target_weight
+                    elif search_mode == RkChSearchMode.FirstValidKeyMinEnc:
+                        assert model[ep.ch_weight] == target_weight
+                    elif search_mode == RkChSearchMode.FirstFixEncMinKey:
+                        assert model[kp.ch_weight] == target_weight
+
+                    rkch_found = RkChFound(self.rkch, self.key_schedule_problem, self.encryption_problem, model)
+
+                    if check:
+                        try:
+                            rkch_found.check_empirical_weight(verbose_level, filename)
+                        except ExactWeightError:
+                            rkch_found.key_ch_found.emp_weight = math.inf
+                            rkch_found.enc_ch_found.emp_weight = math.inf
+
+                    solver.exit()
+                    return rkch_found
+                else:
+                    target_weight += 1
+            else:
+                if verbose_level >= 1:
+                    smart_print(_get_time(), "| Unsatisfiable")
+                solver.exit()
+                return None
+
+        if search_mode == RkChSearchMode.AllValid:
+            rkch_sig = self.rkch.signature(characteristic.ChSignatureType.Full)
+
+            if key_orig_upper_bound <= kp.ch_max_weight:
+                solver.add_assertion(bv2pysmt(kp.ch_weight < key_orig_upper_bound))
+                if verbose_level >= 1:
+                    smart_print("Added assertion:", kp.ch_weight < key_orig_upper_bound)
+            if enc_orig_upper_bound <= ep.ch_max_weight:
+                solver.add_assertion(bv2pysmt(ep.ch_weight < enc_orig_upper_bound))
+                if verbose_level >= 1:
+                    smart_print("Added assertion:", ep.ch_weight < enc_orig_upper_bound)
+
+            def iterate_results():
+                last_rkch_found = None
+                for _ in range(MAX_CH_FOUND):
                     if last_rkch_found is not None:
                         candidate_sig = last_rkch_found.signature(characteristic.ChSignatureType.Full)
                         # disable simplification due to recursion error
@@ -1758,10 +1790,12 @@ class SearchRkCh(object):
                                         smart_print(last_rkch_found.vrepr())
 
                         if valid_ch:
-                            smart_print(_get_time(), "| Found characteristic")
-                            smart_print(last_rkch_found)
-                            if verbose_level >= 2:
-                                smart_print(last_rkch_found.vrepr())
+                            if not return_generator or verbose_level >= 1:
+                                smart_print(_get_time(), "| Found characteristic:", last_rkch_found.srepr())
+                                if verbose_level >= 2:
+                                    smart_print(last_rkch_found.vrepr())
+                            if return_generator:
+                                yield last_rkch_found
                     else:
                         if verbose_level >= 1:
                             if last_rkch_found is not None:
@@ -1771,186 +1805,198 @@ class SearchRkCh(object):
                         smart_print()
                         return
 
+            if return_generator:
+                return iterate_results()
+            else:
+                try:
+                    next(iterate_results())
+                except StopIteration as result:
+                    solver.exit()
+                    return
+
+        if search_mode in [RkChSearchMode.OptimalMinSum,
+                           RkChSearchMode.OptimalMinSumDifferential,
+                           RkChSearchMode.OptimalValidKeyMinEnc,
+                           RkChSearchMode.OptimalValidKeyMinEncDifferential,
+                           RkChSearchMode.OptimalFixEncMinKey,
+                           RkChSearchMode.OptimalFixEncMinKeyDifferential,
+                           RkChSearchMode.FirstMinSumValid,
+                           RkChSearchMode.FirstFixEncMinKeyValid,
+                           RkChSearchMode.FirstValidKeyMinEncValid,
+                           RkChSearchMode.AllOptimalMinSum]:
+            min_exact_weight = math.inf
+            best_rkch_found = None
+            last_rkch_found = None
+            signature_type = None
+
             if search_mode in [RkChSearchMode.OptimalMinSum,
                                RkChSearchMode.OptimalMinSumDifferential,
-                               RkChSearchMode.OptimalValidKeyMinEnc,
-                               RkChSearchMode.OptimalValidKeyMinEncDifferential,
-                               RkChSearchMode.OptimalFixEncMinKey,
-                               RkChSearchMode.OptimalFixEncMinKeyDifferential,
                                RkChSearchMode.FirstMinSumValid,
-                               RkChSearchMode.FirstFixEncMinKeyValid,
-                               RkChSearchMode.FirstValidKeyMinEncValid,
                                RkChSearchMode.AllOptimalMinSum]:
-                min_exact_weight = math.inf
-                best_rkch_found = None
-                last_rkch_found = None
-                signature_type = None
-
-                if search_mode in [RkChSearchMode.OptimalMinSum,
-                                   RkChSearchMode.OptimalMinSumDifferential,
-                                   RkChSearchMode.FirstMinSumValid,
-                                   RkChSearchMode.AllOptimalMinSum]:
-                    target_weight = int(initial_ew) + int(initial_kw)
-                    upper_bound = min(
-                        enc_upper_bound + key_upper_bound,
-                        kp.ch_max_weight + ep.ch_max_weight + 1  # + 1, not + 2
-                    )
-                    if search_mode in [RkChSearchMode.OptimalMinSum, RkChSearchMode.AllOptimalMinSum]:
-                        signature_type = characteristic.ChSignatureType.Full
-                    elif search_mode in [RkChSearchMode.OptimalMinSumDifferential, RkChSearchMode.FirstMinSumValid]:
-                        signature_type = characteristic.ChSignatureType.InputOutput
-                    else:
-                        raise ValueError("invalid search_mode")
-                    rkch_sig = self.rkch.signature(signature_type)
-
-                    get_assertion = lambda tw: operation.BvComp(sum_weights(kp.ch_weight, ep.ch_weight), tw)
-                    get_sig = lambda rkf: rkf.signature(signature_type)
-                    get_sig_str = lambda rkf: rkf.signature(signature_type, return_str=True)
-                    get_exact_weight = lambda rkf: rkf.key_ch_found.get_exact_weight() + rkf.enc_ch_found.get_exact_weight()
-                    if search_mode == RkChSearchMode.AllOptimalMinSum:
-                        get_upper_bound = lambda rkf, pub: pub
-                    else:
-                        get_upper_bound = lambda rkf, pub: min(
-                            kp._new_upper_bound(rkf.key_ch_found, key_upper_bound) +
-                            ep._new_upper_bound(rkf.enc_ch_found, enc_upper_bound),
-                            pub
-                        )
-
-                elif search_mode in [RkChSearchMode.OptimalValidKeyMinEnc,
-                                     RkChSearchMode.OptimalValidKeyMinEncDifferential,
-                                     RkChSearchMode.FirstValidKeyMinEncValid]:
-                    target_weight = initial_ew
-                    upper_bound = enc_upper_bound
-                    if key_orig_upper_bound <= kp.ch_max_weight:
-                        solver.add_assertion(bv2pysmt(kp.ch_weight < key_orig_upper_bound))
-                        if verbose_level >= 1:
-                            smart_print("Added assertion:", kp.ch_weight < key_orig_upper_bound)
-                    if search_mode == RkChSearchMode.OptimalValidKeyMinEnc:
-                        signature_type = characteristic.ChSignatureType.Full
-                    else:
-                        signature_type = characteristic.ChSignatureType.InputOutput
-                    rkch_sig = self.rkch.encryption_ch.signature(signature_type)
-
-                    get_assertion = lambda tw: operation.BvComp(ep.ch_weight, tw)
-                    get_sig = lambda rkf: rkf.enc_ch_found.signature(signature_type)
-                    get_sig_str = lambda rkf: rkf.enc_ch_found.signature(signature_type, return_str=True)
-                    get_exact_weight = lambda rkf: rkf.enc_ch_found.get_exact_weight()
-                    get_upper_bound = lambda rkf, pub: ep._new_upper_bound(rkf.enc_ch_found, pub)
-
-                elif search_mode in [RkChSearchMode.OptimalFixEncMinKey,
-                                     RkChSearchMode.OptimalFixEncMinKeyDifferential,
-                                     RkChSearchMode.FirstFixEncMinKeyValid]:
-                    target_weight = initial_kw
-                    upper_bound = key_upper_bound
-                    solver.add_assertion(bv2pysmt(
-                        operation.BvComp(ep.ch_weight, initial_ew), boolean=True))
-                    if verbose_level >= 1:
-                        smart_print("Added assertion:", operation.BvComp(ep.ch_weight, initial_ew))
-
-                    if search_mode == RkChSearchMode.OptimalFixEncMinKey:
-                        signature_type = characteristic.ChSignatureType.Full
-                    else:
-                        signature_type = characteristic.ChSignatureType.InputOutput
-                    rkch_sig = self.rkch.key_schedule_ch.signature(signature_type)
-
-                    get_assertion = lambda tw: operation.BvComp(kp.ch_weight, tw)
-                    get_sig = lambda rkf: rkf.key_ch_found.signature(signature_type)
-                    get_sig_str = lambda rkf: rkf.key_ch_found.signature(signature_type, return_str=True)
-                    get_exact_weight = lambda rkf: rkf.key_ch_found.get_exact_weight()
-                    get_upper_bound = lambda rkf, pub: kp._new_upper_bound(rkf.key_ch_found, pub)
+                target_weight = int(initial_ew) + int(initial_kw)
+                upper_bound = min(
+                    enc_upper_bound + key_upper_bound,
+                    kp.ch_max_weight + ep.ch_max_weight + 1  # + 1, not + 2
+                )
+                if search_mode in [RkChSearchMode.OptimalMinSum, RkChSearchMode.AllOptimalMinSum]:
+                    signature_type = characteristic.ChSignatureType.Full
+                elif search_mode in [RkChSearchMode.OptimalMinSumDifferential, RkChSearchMode.FirstMinSumValid]:
+                    signature_type = characteristic.ChSignatureType.InputOutput
                 else:
-                    raise ValueError("invalid search mode: {}".format(search_mode))
+                    raise ValueError("invalid search_mode")
+                rkch_sig = self.rkch.signature(signature_type)
 
-                solver.push()
-                solver.add_assertion(bv2pysmt(get_assertion(target_weight), boolean=True))
+                get_assertion = lambda tw: operation.BvComp(sum_weights(kp.ch_weight, ep.ch_weight), tw)
+                get_sig = lambda rkf: rkf.signature(signature_type)
+                get_sig_str = lambda rkf: rkf.signature(signature_type, return_str=True)
+                get_exact_weight = lambda rkf: rkf.key_ch_found.get_exact_weight() + rkf.enc_ch_found.get_exact_weight()
+                if search_mode == RkChSearchMode.AllOptimalMinSum:
+                    get_upper_bound = lambda rkf, pub: pub
+                else:
+                    get_upper_bound = lambda rkf, pub: min(
+                        kp._new_upper_bound(rkf.key_ch_found, key_upper_bound) +
+                        ep._new_upper_bound(rkf.enc_ch_found, enc_upper_bound),
+                        pub
+                    )
 
-                while target_weight < upper_bound:
-                    if last_rkch_found is not None:
-                        candidate_sig = get_sig(last_rkch_found)
-                        assert len(candidate_sig) > 0
-                        c = ~operation.BvComp(rkch_sig[0], candidate_sig[0])
-                        for i in range(1, len(rkch_sig)):
-                            c |= ~operation.BvComp(rkch_sig[i], candidate_sig[i])
-                        solver.add_assertion(bv2pysmt(c, boolean=True))
-                        if verbose_level >= 3:
-                            smart_print("Added assertion:", c)
+            elif search_mode in [RkChSearchMode.OptimalValidKeyMinEnc,
+                                 RkChSearchMode.OptimalValidKeyMinEncDifferential,
+                                 RkChSearchMode.FirstValidKeyMinEncValid]:
+                target_weight = initial_ew
+                upper_bound = enc_upper_bound
+                if key_orig_upper_bound <= kp.ch_max_weight:
+                    solver.add_assertion(bv2pysmt(kp.ch_weight < key_orig_upper_bound))
                     if verbose_level >= 1:
-                        smart_print(_get_time(), "| Solving", get_assertion(target_weight))
-                    satisfiable = solver.solve()
+                        smart_print("Added assertion:", kp.ch_weight < key_orig_upper_bound)
+                if search_mode == RkChSearchMode.OptimalValidKeyMinEnc:
+                    signature_type = characteristic.ChSignatureType.Full
+                else:
+                    signature_type = characteristic.ChSignatureType.InputOutput
+                rkch_sig = self.rkch.encryption_ch.signature(signature_type)
 
-                    if satisfiable:
-                        model = types.pysmt_model2bv_model(solver.get_model(), differences_in_model)
+                get_assertion = lambda tw: operation.BvComp(ep.ch_weight, tw)
+                get_sig = lambda rkf: rkf.enc_ch_found.signature(signature_type)
+                get_sig_str = lambda rkf: rkf.enc_ch_found.signature(signature_type, return_str=True)
+                get_exact_weight = lambda rkf: rkf.enc_ch_found.get_exact_weight()
+                get_upper_bound = lambda rkf, pub: ep._new_upper_bound(rkf.enc_ch_found, pub)
 
-                        last_rkch_found = RkChFound(self.rkch, self.key_schedule_problem, self.encryption_problem, model)
+            elif search_mode in [RkChSearchMode.OptimalFixEncMinKey,
+                                 RkChSearchMode.OptimalFixEncMinKeyDifferential,
+                                 RkChSearchMode.FirstFixEncMinKeyValid]:
+                target_weight = initial_kw
+                upper_bound = key_upper_bound
+                solver.add_assertion(bv2pysmt(
+                    operation.BvComp(ep.ch_weight, initial_ew), boolean=True))
+                if verbose_level >= 1:
+                    smart_print("Added assertion:", operation.BvComp(ep.ch_weight, initial_ew))
 
-                        exact_weight = get_exact_weight(last_rkch_found)
+                if search_mode == RkChSearchMode.OptimalFixEncMinKey:
+                    signature_type = characteristic.ChSignatureType.Full
+                else:
+                    signature_type = characteristic.ChSignatureType.InputOutput
+                rkch_sig = self.rkch.key_schedule_ch.signature(signature_type)
 
-                        valid_ch = True
+                get_assertion = lambda tw: operation.BvComp(kp.ch_weight, tw)
+                get_sig = lambda rkf: rkf.key_ch_found.signature(signature_type)
+                get_sig_str = lambda rkf: rkf.key_ch_found.signature(signature_type, return_str=True)
+                get_exact_weight = lambda rkf: rkf.key_ch_found.get_exact_weight()
+                get_upper_bound = lambda rkf, pub: kp._new_upper_bound(rkf.key_ch_found, pub)
+            else:
+                raise ValueError("invalid search mode: {}".format(search_mode))
 
-                        if exact_weight < min_exact_weight:
-                            if check:
-                                try:
-                                    last_rkch_found.check_empirical_weight(verbose_level, filename)
-                                except ExactWeightError:
-                                    valid_ch = False
-                                    if verbose_level >= 1:
-                                        smart_print(_get_time(), "| Found invalid characteristic")
-                                        if verbose_level >= 2:
-                                            smart_print(last_rkch_found.vrepr())
+            solver.push()
+            solver.add_assertion(bv2pysmt(get_assertion(target_weight), boolean=True))
 
-                            if valid_ch:
-                                best_rkch_found = last_rkch_found
-                                min_exact_weight = exact_weight
+            while target_weight < upper_bound:
+                if last_rkch_found is not None:
+                    candidate_sig = get_sig(last_rkch_found)
+                    assert len(candidate_sig) > 0
+                    c = ~operation.BvComp(rkch_sig[0], candidate_sig[0])
+                    for i in range(1, len(rkch_sig)):
+                        c |= ~operation.BvComp(rkch_sig[i], candidate_sig[i])
+                    solver.add_assertion(bv2pysmt(c, boolean=True))
+                    if verbose_level >= 3:
+                        smart_print("Added assertion:", c)
+                if verbose_level >= 1:
+                    smart_print(_get_time(), "| Solving", get_assertion(target_weight))
+                satisfiable = solver.solve()
+
+                if satisfiable:
+                    model = types.pysmt_model2bv_model(solver.get_model(), differences_in_model)
+
+                    last_rkch_found = RkChFound(self.rkch, self.key_schedule_problem, self.encryption_problem, model)
+
+                    exact_weight = get_exact_weight(last_rkch_found)
+
+                    valid_ch = True
+
+                    if exact_weight < min_exact_weight:
+                        if check:
+                            try:
+                                last_rkch_found.check_empirical_weight(verbose_level, filename)
+                            except ExactWeightError:
+                                valid_ch = False
                                 if verbose_level >= 1:
-                                    smart_print(_get_time(), "| Found better characteristic")
-                                    smart_print(last_rkch_found)
+                                    smart_print(_get_time(), "| Found invalid characteristic")
                                     if verbose_level >= 2:
                                         smart_print(last_rkch_found.vrepr())
-                        else:
-                            if verbose_level >= 1:
-                                smart_print(_get_time(), "| Found worse characteristic (not checked)")
-                                if verbose_level >= 2:
-                                    smart_print(last_rkch_found.vrepr())
 
                         if valid_ch:
-                            if search_mode in [RkChSearchMode.FirstMinSumValid,
-                                               RkChSearchMode.FirstValidKeyMinEncValid,
-                                               RkChSearchMode.FirstFixEncMinKeyValid]:
-                                return last_rkch_found
-                            else:
-                                new_upper_bound = get_upper_bound(last_rkch_found, upper_bound)
-                                if int(exact_weight) == 0 or target_weight >= upper_bound:
-                                    break
-                                if new_upper_bound != upper_bound and verbose_level >= 1:
-                                    smart_print("New upper bound:", new_upper_bound)
-                                upper_bound = new_upper_bound
+                            best_rkch_found = last_rkch_found
+                            min_exact_weight = exact_weight
+                            if verbose_level >= 1:
+                                smart_print(_get_time(), "| Found better characteristic")
+                                smart_print(last_rkch_found)
+                                if verbose_level >= 2:
+                                    smart_print(last_rkch_found.vrepr())
                     else:
                         if verbose_level >= 1:
-                            if last_rkch_found is not None:
-                                smart_print(_get_time(), "| No more characteristics found")
-                            else:
-                                smart_print(_get_time(), "| No characteristic found")
-                            if verbose_level >= 3 and last_rkch_found is not None:
-                                smart_print("Removed assertions")
-                            smart_print()
+                            smart_print(_get_time(), "| Found worse characteristic (not checked)")
+                            if verbose_level >= 2:
+                                smart_print(last_rkch_found.vrepr())
 
-                        solver.pop()
-
-                        target_weight += 1
-                        last_rkch_found = None
-                        solver.push()
-                        solver.add_assertion(bv2pysmt(get_assertion(target_weight), boolean=True))
-
-                if best_rkch_found is not None:
-                    return best_rkch_found
+                    if valid_ch:
+                        if search_mode in [RkChSearchMode.FirstMinSumValid,
+                                           RkChSearchMode.FirstValidKeyMinEncValid,
+                                           RkChSearchMode.FirstFixEncMinKeyValid]:
+                            solver.exit()
+                            return last_rkch_found
+                        else:
+                            new_upper_bound = get_upper_bound(last_rkch_found, upper_bound)
+                            if int(exact_weight) == 0 or target_weight >= upper_bound:
+                                break
+                            if new_upper_bound != upper_bound and verbose_level >= 1:
+                                smart_print("New upper bound:", new_upper_bound)
+                            upper_bound = new_upper_bound
                 else:
                     if verbose_level >= 1:
-                        smart_print(_get_time(), "| No valid characteristic found")
-                    return None
+                        if last_rkch_found is not None:
+                            smart_print(_get_time(), "| No more characteristics found")
+                        else:
+                            smart_print(_get_time(), "| No characteristic found")
+                        if verbose_level >= 3 and last_rkch_found is not None:
+                            smart_print("Removed assertions")
+                        smart_print()
+
+                    solver.pop()
+
+                    target_weight += 1
+                    last_rkch_found = None
+                    solver.push()
+                    solver.add_assertion(bv2pysmt(get_assertion(target_weight), boolean=True))
+
+            solver.exit()
+            if best_rkch_found is not None:
+                return best_rkch_found
+            else:
+                if verbose_level >= 1:
+                    smart_print(_get_time(), "| No valid characteristic found")
+                return None
 
 
 def round_based_search_SkCh(cipher, diff_type, initial_weight, solver_name, start_round, end_round,
-                            der_mode, search_mode, check, verbose_level, filename):
+                            der_mode, search_mode, check, verbose_level, filename,
+                            fix_input_diff=None, fix_output_diff=None, fix_round_inputs=None, return_best=None):
     """Find valid single-key characteristics over consecutive rounds.
 
     Args:
@@ -1971,35 +2017,23 @@ def round_based_search_SkCh(cipher, diff_type, initial_weight, solver_name, star
     See also `SearchSkCh.solve`.
 
         >>> from arxpy.differential.difference import XorDiff
-        >>> from arxpy.smt.search import SkChSearchMode, DerMode, round_based_search_SkCh
+        >>> from arxpy.smt.search_differential import SkChSearchMode, DerMode, round_based_search_SkCh
         >>> from arxpy.primitives import speck
         >>> Speck32 = speck.get_Speck_instance(speck.SpeckInstance.speck_32_64)
         >>> round_based_search_SkCh(Speck32, XorDiff, 0, "btor", 1, 2,
         ...                         DerMode.Default, SkChSearchMode.Optimal, True, 0, None)  # doctest:+ELLIPSIS
         Num rounds: 1
         Best characteristic found:
-        {'ch_weight': 0,
-         'der_weights': [[w0, 0]],
-         'emp_weight': Counter({0: 256}),
-         'exact_weight': 0,
-         'input_diff': [[dp0, ...], [dp1, ...]],
-         'nonlinear_diffs': [[dx1, ...]],
-         'output_diff': [[dx2, ...], [dx4, ...]]}
+        (weight 0) ... -> ...
         <BLANKLINE>
         Num rounds: 2
         Best characteristic found:
-        {'ch_weight': 1,
-         'der_weights': [[w0w1, 1]],
-         'emp_weight': ...,
-         'exact_weight': 1,
-         'input_diff': [[dp0, ...], [dp1, ...]],
-         'nonlinear_diffs': [[dx1, ...], [dx6, ...]],
-         'output_diff': [[dx7, ...], [dx9, ...]]}
-        <BLANKLINE>
+        (weight 1) ... -> ...
 
     """
     assert start_round <= end_round
     assert search_mode not in [SkChSearchMode.AllValid, SkChSearchMode.AllOptimal]
+    assert verbose_level >= 0
 
     smart_print = _get_smart_print(filename)
 
@@ -2017,12 +2051,31 @@ def round_based_search_SkCh(cipher, diff_type, initial_weight, solver_name, star
         smart_print("\tcheck:", check)
         smart_print("\tverbose_level:", verbose_level)
         smart_print("\tfilename:", filename)
+        if fix_input_diff is not None:
+            smart_print("\tfix_input_diff:", fix_input_diff)
+        if fix_output_diff is not None:
+            smart_print("\tfix_enc_output_diff:", fix_output_diff)
+        if fix_round_inputs is not None:
+            smart_print("\tfix_round_inputs:", fix_round_inputs)
+        if return_best is not None:
+            smart_print("\treturn best:", return_best)
+        if hasattr(cipher.encryption, "skip_rounds"):
+            smart_print("\tencryption skip_rounds ({}): {}".format(
+                len(cipher.encryption.skip_rounds), cipher.encryption.skip_rounds))
+        if hasattr(cipher.key_schedule, "skip_rounds"):
+            smart_print("\tkey_schedule skip_rounds ({}): {}".format(
+                len(cipher.key_schedule.skip_rounds), cipher.key_schedule.skip_rounds))
         smart_print()
+
+    best = None
 
     for num_rounds in range(start_round, end_round + 1):
         cipher.set_rounds(num_rounds)
 
-        smart_print("Num rounds:", num_rounds)
+        if verbose_level >= 0:
+            if num_rounds != start_round:
+                smart_print()
+            smart_print("Num rounds:", num_rounds)
 
         ch = characteristic.SingleKeyCh(cipher, diff_type)
 
@@ -2030,7 +2083,31 @@ def round_based_search_SkCh(cipher, diff_type, initial_weight, solver_name, star
             smart_print("Characteristic:")
             smart_print(ch)
 
-        problem = SearchSkCh(skch=ch, der_mode=der_mode, allow_zero_input_diff=initial_weight > 0)
+        allow_zero_input_diff = initial_weight > 0
+
+        initial_constraints = []
+        if fix_input_diff is not None:
+            allow_zero_input_diff = True
+            assert len(fix_input_diff) == len(ch.input_diff)
+            for i in range(len(ch.input_diff)):
+                val = ch.input_diff[i].val
+                initial_constraints.append(operation.BvComp(val, fix_input_diff[i]))
+        if fix_output_diff is not None:
+            assert len(fix_output_diff) == len(ch.output_diff)
+            for i in range(len(ch.output_diff)):
+                val = ch.output_diff[i][1].val
+                initial_constraints.append(operation.BvComp(val, fix_output_diff[i]))
+        if fix_round_inputs:
+            for fix_list_diff, index_round_state in fix_round_inputs:
+                if index_round_state == 0:
+                    allow_zero_input_diff = True
+                if verbose_level >= 1:
+                    smart_print("fixing round_inputs[{}] = {}".format(index_round_state, ch.func.round_inputs[index_round_state]))
+                for i in range(len(fix_list_diff)):
+                    val = ch.func.round_inputs[index_round_state][i]
+                    initial_constraints.append(operation.BvComp(val, fix_list_diff[i]))
+
+        problem = SearchSkCh(skch=ch, der_mode=der_mode, allow_zero_input_diff=allow_zero_input_diff, initial_constraints=initial_constraints)
 
         if verbose_level >= 2:
             smart_print("SMT problem (size {}):".format(problem.formula_size()))
@@ -2046,26 +2123,36 @@ def round_based_search_SkCh(cipher, diff_type, initial_weight, solver_name, star
             prefix = ""
 
         if ch_found is None:
-            smart_print(prefix + "No characteristic found")
-            return
+            if verbose_level >= 0:
+                smart_print(prefix + "No characteristic found")
+            break
         else:
+            best = num_rounds, ch_found
             if search_mode == SkChSearchMode.TopDifferentials:
                 ch_found, top_differentials = ch_found
             initial_weight = int(ch_found.ch_weight)
-            smart_print(prefix + "Best characteristic found:")
-            smart_print(ch_found)
-            if verbose_level >= 3:
-                smart_print(ch_found.vrepr())
-            if search_mode == SkChSearchMode.TopDifferentials:
-                smart_print("Best differentials found:")
-                smart_print(top_differentials)
-            smart_print()
+            if verbose_level >= 0:
+                smart_print(prefix + "Best characteristic found:")
+                if verbose_level == 0:
+                    smart_print(ch_found.srepr())
+                else:
+                    smart_print(ch_found)
+                if verbose_level >= 3:
+                    smart_print(ch_found.vrepr())
+
+                if search_mode == SkChSearchMode.TopDifferentials:
+                    smart_print("Best differentials found:")
+                    smart_print(top_differentials)
+
+    if return_best:
+        return best
 
 
 def round_based_search_RkCh(cipher, diff_type, initial_ew, initial_kw, solver_name,
                             start_round, end_round, key_der_mode, enc_der_mode, allow_zero_enc_input_diff,
                             search_mode, check, verbose_level, filename,
-                            allow_zero_key_input_diff=False):  # for RXDiff
+                            allow_zero_key_input_diff=False,  # for RXDiff
+                            fix_key_input_diff=None, fix_enc_input_diff=None, fix_enc_output_diff=None, fix_enc_round_inputs=None, return_best=None):  # for RXDiff
     """Find valid related-key characteristics over consecutive rounds.
 
     Args:
@@ -2092,7 +2179,7 @@ def round_based_search_RkCh(cipher, diff_type, initial_ew, initial_kw, solver_na
     See also `SearchRkCh.solve`.
 
         >>> from arxpy.differential.difference import XorDiff, RXDiff
-        >>> from arxpy.smt.search import RkChSearchMode, DerMode, round_based_search_RkCh
+        >>> from arxpy.smt.search_differential import RkChSearchMode, DerMode, round_based_search_RkCh
         >>> from arxpy.primitives import speck
         >>> Speck32 = speck.get_Speck_instance(speck.SpeckInstance.speck_32_64)
         >>> round_based_search_RkCh(Speck32, XorDiff, 0, 0, "btor",
@@ -2100,79 +2187,26 @@ def round_based_search_RkCh(cipher, diff_type, initial_ew, initial_kw, solver_na
         ...                         RkChSearchMode.OptimalMinSum, True, 0, None)  # doctest:+ELLIPSIS
         Num rounds: 4
         Best related-key characteristic found:
-        {'enc_ch_found': {'ch_weight': 0,
-                          'der_weights': [[w0w1w2, 0], [w3, 0]],
-                          'emp_weight': Counter({0: 256}),
-                          'exact_weight': 0,
-                          'input_diff': [[dp0, ...], [dp1, ...]],
-                          'nonlinear_diffs': [[dx1, ...], [dx6, ...], [dx11, ...], [dx16, ...]],
-                          'output_diff': [[dx17, ...], [dx19, ...]]},
-         'key_ch_found': {'ch_weight': 0,
-                          'der_weights': [[wk0wk1wk2, 0]],
-                          'emp_weight': 0.0,
-                          'exact_weight': 0,
-                          'input_diff': [[dmk0, ...], [dmk1, ...], [dmk2, ...], [dmk3, ...]],
-                          'nonlinear_diffs': [[dk1, ...], [dk5, ...], [dk10, ...]],
-                          'output_diff': [[dmk3, ...], [dk3, ...], [dk8, ...], [dk13, ...]]}}
+        K: (weight 0) ... -> ... | E: (weight 0) ... -> ...
         <BLANKLINE>
         Num rounds: 5
         Best related-key characteristic found:
-        {'enc_ch_found': {'ch_weight': 1,
-                          'der_weights': [[w0w1w2, 0], [w3w4, 1]],
-                          'emp_weight': ...,
-                          'exact_weight': 1,
-                          'input_diff': [[dp0, ...], [dp1, ...]],
-                          'nonlinear_diffs': [[dx1, ...], [dx6, ...], [dx11, ...], [dx16, ...], [dx21, ...]],
-                          'output_diff': [[dx22, ...], [dx24, ...]]},
-         'key_ch_found': {'ch_weight': 0,
-                          'der_weights': [[wk0wk1wk2, 0], [wk3, 0]],
-                          'emp_weight': 0.0,
-                          'exact_weight': 0,
-                          'input_diff': [[dmk0, ...], [dmk1, ...], [dmk2, ...], [dmk3, ...]],
-                          'nonlinear_diffs': [[dk1, ...], [dk5, ...], [dk10, ...], [dk15, ...]],
-                          'output_diff': [[dmk3, ...], [dk3, ...], [dk8, ...], [dk13, ...], [dk18, ...]]}}
-        <BLANKLINE>
+        K: (weight 0) ... -> ... | E: (weight 1) ... -> ...
         >>> round_based_search_RkCh(Speck32, RXDiff, 0, 0, "btor",
         ...                         2, 3, DerMode.Default, DerMode.Default, True,
         ...                         RkChSearchMode.FirstMinSumValid, True, 0, None, True)  # doctest:+ELLIPSIS
         Num rounds: 2
         Best related-key characteristic found:
-        {'enc_ch_found': {'ch_weight': 2,
-                          'der_weights': [[w0, ...], [w1, ...]],
-                          'emp_weight': ...,
-                          'exact_weight': 2.829986944784033,
-                          'input_diff': [[dp0, ...], [dp1, ...]],
-                          'nonlinear_diffs': [[dx1, ...], [dx6, ...]],
-                          'output_diff': [[dx7, ...], [dx9, ...]]},
-         'key_ch_found': {'ch_weight': 1,
-                          'der_weights': [[wk0, ...]],
-                          'emp_weight': ...,
-                          'exact_weight': 1.4149934723920166,
-                          'input_diff': [[dmk0, ...], [dmk1, ...]],
-                          'nonlinear_diffs': [[dk1, ...]],
-                          'output_diff': [[dmk1, ...], [dk3, ...]]}}
+        K: (weight 1) ... -> ... | E: (weight 2) ... -> ...
         <BLANKLINE>
         Num rounds: 3
         Best related-key characteristic found:
-        {'enc_ch_found': {'ch_weight': 4,
-                          'der_weights': [[w0, ...], [w1, ...], [w2, ...]],
-                          'emp_weight': ...,
-                          'exact_weight': 4.24498041717605,
-                          'input_diff': [[dp0, ...], [dp1, ...]],
-                          'nonlinear_diffs': [[dx1, ...], [dx6, ...], [dx11, ...]],
-                          'output_diff': [[dx12, ...], [dx14, ...]]},
-         'key_ch_found': {'ch_weight': 2,
-                          'der_weights': [[wk0, ...], [wk1, ...]],
-                          'emp_weight': ...,
-                          'exact_weight': 2.829986944784033,
-                          'input_diff': [[dmk0, ...], [dmk1, ...], [dmk2, ...]],
-                          'nonlinear_diffs': [[dk1, ...], [dk5, ...]],
-                          'output_diff': [[dmk2, ...], [dk3, ...], [dk8, ...]]}}
-        <BLANKLINE>
+        K: (weight 2) ... -> ... | E: (weight 4) ... -> ...
 
     """
     assert start_round <= end_round
     assert search_mode != RkChSearchMode.AllValid
+    assert verbose_level >= 0
 
     smart_print = _get_smart_print(filename)
 
@@ -2193,12 +2227,35 @@ def round_based_search_RkCh(cipher, diff_type, initial_ew, initial_kw, solver_na
         smart_print("\tcheck:", check)
         smart_print("\tverbose_level:", verbose_level)
         smart_print("\tfilename:", filename)
+        if allow_zero_key_input_diff:
+            smart_print("\tallow_zero_key_input_diff:", allow_zero_key_input_diff)
+        if fix_key_input_diff is not None:
+            smart_print("\tfix_key_input_diff:", fix_key_input_diff)
+        if fix_enc_input_diff is not None:
+            smart_print("\tfix_enc_input_diff:", fix_enc_input_diff)
+        if fix_enc_output_diff is not None:
+            smart_print("\tfix_enc_output_diff:", fix_enc_output_diff)
+        if fix_enc_round_inputs is not None:
+            smart_print("\tfix_enc_round_inputs:", fix_enc_round_inputs)
+        if return_best is not None:
+            smart_print("\treturn_best:", return_best)
+        if hasattr(cipher.encryption, "skip_rounds"):
+            smart_print("\tencryption skip_rounds ({}): {}".format(
+                len(cipher.encryption.skip_rounds), cipher.encryption.skip_rounds))
+        if hasattr(cipher.key_schedule, "skip_rounds"):
+            smart_print("\tkey_schedule skip_rounds ({}): {}".format(
+                len(cipher.key_schedule.skip_rounds), cipher.key_schedule.skip_rounds))
         smart_print()
+
+    best = None
 
     for num_rounds in range(start_round, end_round + 1):
         cipher.set_rounds(num_rounds)
 
-        smart_print("Num rounds:", num_rounds)
+        if verbose_level >= 0:
+            if num_rounds != start_round:
+                smart_print()
+            smart_print("Num rounds:", num_rounds)
 
         ch = characteristic.RelatedKeyCh(cipher, diff_type)
 
@@ -2206,9 +2263,41 @@ def round_based_search_RkCh(cipher, diff_type, initial_ew, initial_kw, solver_na
             smart_print("Characteristic:")
             smart_print(ch)
 
+        initial_key_constraints = []
+        if fix_key_input_diff is not None:
+            assert len(fix_key_input_diff) == len(ch.key_schedule_ch.input_diff)
+            allow_zero_key_input_diff = True
+            for i in range(len(ch.key_schedule_ch.input_diff)):
+                val = ch.key_schedule_ch.input_diff[i].val
+                initial_key_constraints.append(operation.BvComp(val, fix_key_input_diff[i]))
+
+        initial_enc_constraints = []
+        if fix_enc_input_diff is not None:
+            assert len(fix_enc_input_diff) == len(ch.encryption_ch.input_diff)
+            allow_zero_enc_input_diff = True
+            for i in range(len(ch.encryption_ch.input_diff)):
+                val = ch.encryption_ch.input_diff[i].val
+                initial_enc_constraints.append(operation.BvComp(val, fix_enc_input_diff[i]))
+        if fix_enc_output_diff is not None:
+            assert len(fix_enc_output_diff) == len(ch.encryption_ch.output_diff)
+            for i in range(len(fix_enc_output_diff)):
+                val = ch.encryption_ch.output_diff[i][1].val
+                initial_enc_constraints.append(operation.BvComp(val, fix_enc_output_diff[i]))
+        if fix_enc_round_inputs is not None:
+            for fix_list_diff, index_round_state in fix_enc_round_inputs:
+                if index_round_state == 0:
+                    allow_zero_enc_input_diff = True
+                if verbose_level >= 1:
+                    smart_print("fixing round_inputs[{}] = {}".format(index_round_state, ch.encryption_ch.func.round_inputs[index_round_state]))
+                for i in range(len(fix_list_diff)):
+                    val = ch.encryption_ch.func.round_inputs[index_round_state][i]
+                    initial_enc_constraints.append(operation.BvComp(val, fix_list_diff[i]))
+
         problem = SearchRkCh(rkch=ch, key_der_mode=key_der_mode, enc_der_mode=enc_der_mode,
                              allow_zero_enc_input_diff=allow_zero_enc_input_diff,
-                             allow_zero_key_input_diff=allow_zero_key_input_diff)
+                             allow_zero_key_input_diff=allow_zero_key_input_diff,
+                             initial_enc_constraints=initial_enc_constraints,
+                             initial_key_constraints=initial_key_constraints,)
 
         if verbose_level >= 2:
             smart_print("SMT problem (size {}):".format(problem.formula_size()))
@@ -2224,13 +2313,21 @@ def round_based_search_RkCh(cipher, diff_type, initial_ew, initial_kw, solver_na
             prefix = ""
 
         if rkch_found is None:
-            smart_print(prefix + "No related-key characteristic found")
-            return
+            if verbose_level >= 0:
+                smart_print(prefix + "No related-key characteristic found")
+            break
         else:
+            best = num_rounds, rkch_found
             initial_ew = int(rkch_found.enc_ch_found.ch_weight)
             initial_kw = int(rkch_found.key_ch_found.ch_weight)
-            smart_print(prefix + "Best related-key characteristic found:")
-            smart_print(rkch_found)
-            if verbose_level >= 3:
-                smart_print(rkch_found.vrepr())
-            smart_print()
+            if verbose_level >= 0:
+                smart_print(prefix + "Best related-key characteristic found:")
+                if verbose_level == 0:
+                    smart_print(rkch_found.srepr())
+                else:
+                    smart_print(rkch_found)
+                if verbose_level >= 3:
+                    smart_print(rkch_found.vrepr())
+
+    if return_best:
+        return best

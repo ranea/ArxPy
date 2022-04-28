@@ -10,25 +10,21 @@ from arxpy.bitvector.operation import Concat, BvComp
 
 from arxpy.differential.difference import XorDiff
 
-from arxpy.smt.search import (
+from arxpy.smt.search_differential import (
     DerMode, SkChSearchMode, RkChSearchMode,
     round_based_search_SkCh, round_based_search_RkCh,
     _get_smart_print
 )
-from arxpy.smt.tests.test_search import test_search_ch_skch, test_search_related_key_ch
+from arxpy.smt.tests.test_search_differential import test_search_ch_skch, test_search_related_key_ch
 
 from arxpy.primitives import speck
 from arxpy.primitives import simon
-from arxpy.primitives import simeck
 from arxpy.primitives.hight import HightCipher
 from arxpy.primitives.lea import LeaCipher
 from arxpy.primitives.shacal1 import Shacal1Cipher
 from arxpy.primitives.shacal2 import Shacal2Cipher
-from arxpy.primitives.feal import FealCipher
 from arxpy.primitives.tea import TeaCipher
 from arxpy.primitives.xtea import XteaCipher
-from arxpy.primitives.multi2 import Multi2Cipher
-from arxpy.primitives import cham
 # from arxpy.primitives.threefish import ThreefishCipher
 
 
@@ -48,24 +44,18 @@ BlockCipher = collections.namedtuple('BlockCipher', ['cipher', 'sk_rounds', 'rk_
 
 Speck32 = speck.get_Speck_instance(speck.SpeckInstance.speck_32_64)
 Simon32 = simon.get_Simon_instance(simon.SimonInstance.simon_32_64)
-Simeck32 = simeck.get_Simeck_instance(simeck.SimeckInstance.simeck_32_64)
-Cham64 = cham.get_Cham_instance(cham.ChamInstance.cham_64_128)
 
 
 
 BLOCK_CIPHERS = [
     BlockCipher(Speck32, 1, 4),
     BlockCipher(Simon32, 1, 4),
-    BlockCipher(Simeck32, 1, 4),
-    BlockCipher(Cham64, 4, 6),
     BlockCipher(HightCipher, 2, None),  # for rk_rounds=7, ExactWeightError is raised
     BlockCipher(LeaCipher, 2, 1),
     BlockCipher(Shacal1Cipher, 1, 16),
     BlockCipher(Shacal2Cipher, 1, None),  # for rk_rounds=18, ExactWeightError is raised
-    BlockCipher(FealCipher, 3, 1),
     BlockCipher(TeaCipher, 1, TeaCipher.rounds - 1),
     BlockCipher(XteaCipher, 1, 8),
-    BlockCipher(Multi2Cipher, 2, 2),
     # BlockCipher(ThreefishCipher, ?, ?),  # huge block size
 ]
 

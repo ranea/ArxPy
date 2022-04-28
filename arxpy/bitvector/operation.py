@@ -832,7 +832,8 @@ class BvShl(Operation):
 
         if isinstance(x, core.Constant) and isinstance(y, core.Constant):
             return core.Constant(doit(int(x), int(y), x.width), x.width)
-        elif isinstance(y, core.Constant) and y >= x.width:
+        # y >= x.width doesn't evaluate even if y is a Constant
+        elif isinstance(y, core.Constant) and int(y) >= x.width:
             return zero
         elif x == zero or y == zero:
             return x
@@ -840,7 +841,7 @@ class BvShl(Operation):
                 and isinstance(y, core.Constant):
             # prevent out of bound
             r = min(x.args[0].width, int(x.args[1]) + int(y))
-            return BvShl(x.args[0], r)
+            return BvShl(x.args[0], core.Constant(r, x.width))
 
 
 class BvLshr(Operation):
@@ -885,14 +886,14 @@ class BvLshr(Operation):
 
         if isinstance(x, core.Constant) and isinstance(y, core.Constant):
             return core.Constant(doit(int(x), int(y)), x.width)
-        elif isinstance(y, core.Constant) and y >= x.width:
+        elif isinstance(y, core.Constant) and int(y) >= x.width:
             return zero
         elif x == zero or y == zero:
             return x
         elif isinstance(x, BvLshr) and isinstance(x.args[1], core.Constant) \
                 and isinstance(y, core.Constant):
             r = min(x.args[0].width, int(x.args[1]) + int(y))
-            return BvLshr(x.args[0], r)
+            return BvLshr(x.args[0], core.Constant(r, x.width))
 
 
 class RotateLeft(Operation):

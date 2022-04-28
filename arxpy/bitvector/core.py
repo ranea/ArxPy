@@ -288,6 +288,23 @@ class Term(basic.Basic):
         """Return the key (identifier) of the class for sorting."""
         raise NotImplementedError("subclasses need to override this method")
 
+    def atoms(self, *types):
+        """Returns the atoms that form the current object.
+
+        Similar to SymPy atoms() method, but this method
+        doesn't throw an exception when one of the arguments
+        is of type 'int'.
+        """
+        if types:
+            types = tuple(
+                [t if isinstance(t, type) else type(t) for t in types])
+        nodes = basic.preorder_traversal(self)
+        if types:
+            result = {node for node in nodes if isinstance(node, types)}
+        else:
+            result = {node for node in nodes if not isinstance(node, int) and not node.args}
+        return result
+
 
 class Constant(basic.Atom, Term):
     """Represent bit-vector constants.

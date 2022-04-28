@@ -58,6 +58,15 @@ class Shacal1KeySchedule(KeySchedule):
             for i in range(cls.rounds):
                 rk[i] += get_constant(i)
 
+        for i in range(cls.rounds):
+            if hasattr(cls, "skip_rounds") and i in cls.skip_rounds:
+                if i < N:
+                    rk[i] = W[0]
+                elif N <= i < 16:
+                    pass  # rk[i] = 0
+                else:
+                    rk[i] = W[0]
+
         return rk[:N] + rk[16:cls.rounds]
 
 
@@ -104,7 +113,11 @@ class Shacal1Encryption(Encryption):
 
     @classmethod
     def eval(cls, A, B, C, D, E):
+        cls.round_inputs = []
         for i in range(cls.rounds):
+            cls.round_inputs.append([A, B, C, D, E])
+            if hasattr(cls, "skip_rounds") and i in cls.skip_rounds:
+                continue
             A, B, C, D, E = cls.round_function(A, B, C, D, E, i)
 
         return A, B, C, D, E
@@ -120,6 +133,11 @@ class Shacal1Cipher(Cipher):
         cls.rounds = new_rounds
         cls.key_schedule.set_rounds(new_rounds)
         cls.encryption.set_rounds(new_rounds)
+
+    @classmethod
+    def set_skip_rounds(cls, skip_rounds):
+        cls.encryption.skip_rounds = skip_rounds
+        cls.key_schedule.skip_rounds = skip_rounds
 
     # noinspection SpellCheckingInspection
     @classmethod

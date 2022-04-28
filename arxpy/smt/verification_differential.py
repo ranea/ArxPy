@@ -29,7 +29,7 @@ def bv2ccode(bv):
 
         >>> from arxpy.bitvector.core import Constant, Variable
         >>> from arxpy.bitvector.operation import RotateLeft
-        >>> from arxpy.smt.verification import bv2ccode
+        >>> from arxpy.smt.verification_differential import bv2ccode
         >>> x, y = Variable("x", 8), Variable("y", 8)
         >>> bv2ccode(x | y)
         'x | y'
@@ -86,7 +86,6 @@ def bv2ccode(bv):
 
     from arxpy.primitives.simon import SimonRF
     from arxpy.primitives.shacal1 import BvIf, BvMaj
-    from arxpy.primitives.multi2 import BvOr as Multi2BvOr
 
     if isinstance(bv, SimonRF):
         #  ((x <<< a) & (x <<< b)) ^ (x <<< c)
@@ -107,6 +106,11 @@ def bv2ccode(bv):
     elif isinstance(bv, Multi2BvOr):
         x, y = bv.args
         return "{} | {}".format(x, y)
+
+    from arxpy.linear.correlation import BvIdentity
+
+    if isinstance(bv, BvIdentity):
+        return "{}".format(bv.args[0])
 
     else:
         raise ValueError("invalid operation: {}".format(type(bv)))
@@ -168,7 +172,7 @@ def ssa2ccode(ssa, diff_type):
 
         >>> from arxpy.differential.difference import XorDiff, RXDiff
         >>> from arxpy.primitives.chaskey import ChaskeyPi
-        >>> from arxpy.smt.verification import ssa2ccode
+        >>> from arxpy.smt.verification_differential import ssa2ccode
         >>> ChaskeyPi.set_rounds(1)
         >>> ssa = ChaskeyPi.ssa(["v0", "v1", "v2", "v3"], "x")  # doctest: +NORMALIZE_WHITESPACE
         >>> header, source = ssa2ccode(ssa, XorDiff)
@@ -332,7 +336,7 @@ def relatedssa2ccode(ssa1, ssa2, diff_type):
 
         >>> from arxpy.differential.difference import XorDiff
         >>> from arxpy.primitives.chaskey import ChaskeyPi
-        >>> from arxpy.smt.verification import relatedssa2ccode
+        >>> from arxpy.smt.verification_differential import relatedssa2ccode
         >>> ChaskeyPi.set_rounds(1)
         >>> ssa1 = ChaskeyPi.ssa(["v0", "v1", "v2", "v3"], "x")  # doctest: +NORMALIZE_WHITESPACE
         >>> ssa2 = dict(ssa1)
@@ -481,7 +485,7 @@ def compile_run_empirical_weight(ccode, module_name, input_diff, output_diff, ta
 
         >>> from arxpy.differential.difference import XorDiff, RXDiff
         >>> from arxpy.primitives.chaskey import ChaskeyPi
-        >>> from arxpy.smt.verification import ssa2ccode, compile_run_empirical_weight
+        >>> from arxpy.smt.verification_differential import ssa2ccode, compile_run_empirical_weight
         >>> ChaskeyPi.set_rounds(1)
         >>> ssa = ChaskeyPi.ssa(["v0", "v1", "v2", "v3"], "x")  # doctest: +NORMALIZE_WHITESPACE
         >>> header, source = ssa2ccode(ssa, XorDiff)
@@ -533,8 +537,8 @@ def fast_empirical_weight(ch_found, verbose_lvl=0, debug=False, filename=None):
         >>> from arxpy.differential.difference import XorDiff, RXDiff
         >>> from arxpy.differential.characteristic import BvCharacteristic
         >>> from arxpy.primitives.chaskey import ChaskeyPi
-        >>> from arxpy.smt.search import SearchCh
-        >>> from arxpy.smt.verification import fast_empirical_weight
+        >>> from arxpy.smt.search_differential import SearchCh
+        >>> from arxpy.smt.verification_differential import fast_empirical_weight
         >>> ChaskeyPi.set_rounds(2)
         >>> ch = BvCharacteristic(ChaskeyPi, XorDiff, ["dv0", "dv1", "dv2", "dv3"])
         >>> search_problem = SearchCh(ch)
@@ -554,7 +558,7 @@ def fast_empirical_weight(ch_found, verbose_lvl=0, debug=False, filename=None):
         True
 
     """
-    from arxpy.smt.search import _get_smart_print  # avoid cyclic imports
+    from arxpy.smt.search_differential import _get_smart_print  # avoid cyclic imports
 
     smart_print = _get_smart_print(filename)
 
@@ -726,9 +730,9 @@ def _fast_empirical_weight_distribution(ch_found, cipher, rk_dict_diffs=None,
 
         >>> from arxpy.differential.difference import XorDiff
         >>> from arxpy.differential.characteristic import SingleKeyCh
-        >>> from arxpy.smt.search import SearchSkCh
+        >>> from arxpy.smt.search_differential import SearchSkCh
         >>> from arxpy.primitives import speck
-        >>> from arxpy.smt.verification import _fast_empirical_weight_distribution
+        >>> from arxpy.smt.verification_differential import _fast_empirical_weight_distribution
         >>> Speck32 = speck.get_Speck_instance(speck.SpeckInstance.speck_32_64)
         >>> Speck32.set_rounds(1)
         >>> ch = SingleKeyCh(Speck32, XorDiff)
@@ -740,7 +744,7 @@ def _fast_empirical_weight_distribution(ch_found, cipher, rk_dict_diffs=None,
     """
     # similar to _empirical_distribution_weight of characteristic module
 
-    from arxpy.smt.search import _get_smart_print  # avoid cyclic imports
+    from arxpy.smt.search_differential import _get_smart_print  # avoid cyclic imports
 
     smart_print = _get_smart_print(filename)
 

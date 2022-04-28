@@ -150,7 +150,7 @@ class BvCharacteristic(object):
                 der = self.diff_type.derivative(type(expr), expr_args)
             else:
                 def contains_key_var(term):
-                    from sympy import basic
+                    from sympy.core import basic
                     for sub in basic.preorder_traversal(term):
                         if sub in func.round_keys:
                             return True

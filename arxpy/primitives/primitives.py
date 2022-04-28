@@ -1,5 +1,6 @@
 """Represent symmetric primitives."""
 import collections
+import warnings
 
 from arxpy.bitvector import context
 from arxpy.bitvector import core
@@ -133,15 +134,22 @@ class BvFunction(object):
                     vars_needed.add(arg)
             else:
                 to_delete.append((var, expr))
-                # raise ValueError("assignment {} <- {} is redundant in \n{}".format(var, expr, ssa_dict))
 
-        if len(to_delete) > 0:
-            import warnings
+        input_vars_not_used = [v for v in input_vars if v not in vars_needed]
+        if input_vars_not_used:
+            warnings.warn("found unused input vars {} in \n{}".format(input_vars_not_used, ssa_dict))
+
+        if to_delete:
             warnings.warn("removing redundant assignments {} in \n{}".format(to_delete, ssa_dict))
             ssa_dict["assignments"] = list(ssa_dict["assignments"])
             for assignment in to_delete:
                 ssa_dict["assignments"].remove(assignment)
             ssa_dict["assignments"] = tuple(ssa_dict["assignments"])
+
+        if hasattr(cls, "round_keys") and cls.round_keys is not None:
+            rk_not_used = [k for k in cls.round_keys if k not in vars_needed]
+            if rk_not_used:
+                warnings.warn("found round keys {} not used in {}\n{}".format(rk_not_used, cls.__name__, ssa_dict))
 
         return ssa_dict
 

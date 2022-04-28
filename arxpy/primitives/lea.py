@@ -32,6 +32,9 @@ class LeaKeySchedule(KeySchedule):
         ]
 
         for i in range(cls.rounds):
+            if hasattr(cls, "skip_rounds") and i in cls.skip_rounds:
+                round_keys[i] = k0, k0, k0, k0, k0, k0
+                continue
             T0 = ROL(T0 + ROL(delta[i % 4], i), 1)
             T1 = ROL(T1 + ROL(delta[i % 4], (i + 1)), 3)
             T2 = ROL(T2 + ROL(delta[i % 4], (i + 2)), 6)
@@ -61,7 +64,11 @@ class LeaEncryption(Encryption):
         for i, k in enumerate(cls.round_keys):
             rk[i // 6][i % 6] = k
 
+        cls.round_inputs = []
         for i in range(cls.rounds):
+            cls.round_inputs.append([x0, x1, x2, x3])
+            if hasattr(cls, "skip_rounds") and i in cls.skip_rounds:
+                continue
             k0, k1, k2, k3, k4, k5 = rk[i]
             tmp = x0
             x0 = ROL((x0 ^ k0) + (x1 ^ k1), 9)
@@ -82,6 +89,11 @@ class LeaCipher(Cipher):
         cls.rounds = new_rounds
         cls.key_schedule.set_rounds(new_rounds)
         cls.encryption.set_rounds(new_rounds)
+
+    @classmethod
+    def set_skip_rounds(cls, skip_rounds):
+        cls.encryption.skip_rounds = skip_rounds
+        cls.key_schedule.skip_rounds = skip_rounds
 
     @classmethod
     def test(cls):

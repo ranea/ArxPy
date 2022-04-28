@@ -330,7 +330,7 @@ class RXDiff(Difference):
     """Represent rotational-XOR (RX) differences.
 
     The pair ``(x, (x <<< 1) ^ d)`` has RX difference ``d``.
-    In other words,  the RX difference of two `Term` ``x`` and ``y``
+    In other words,  the RX difference of two `Terms` ``x`` and ``y``
     is defined as ``(x <<< 1) ^ y``.
 
     See `Difference` for more information.
@@ -422,7 +422,8 @@ class RXDiff(Difference):
                 else:
                     raise ValueError(msg)
 
-            # BvShl, Extract
+            # RX-model of BvAddCte not implemented (approximation with BvAdd too weak)
+            # RX-model of BvShl and BvLshr not implemented (non-linear w.r.t RX-diffs)
 
         if hasattr(op, "rx_derivative"):
             return op.rx_derivative(input_diff)

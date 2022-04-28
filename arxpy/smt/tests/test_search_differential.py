@@ -14,8 +14,8 @@ from arxpy.differential.characteristic import (
     BvCharacteristic, SingleKeyCh, RelatedKeyCh
 )
 
-import arxpy.smt.search
-from arxpy.smt.search import (
+import arxpy.smt.search_differential
+from arxpy.smt.search_differential import (
     SearchCh, SearchSkCh, SearchRkCh, DerMode, ChSearchMode, SkChSearchMode, RkChSearchMode, _get_smart_print
 )
 
@@ -355,5 +355,5 @@ class TestSMT(unittest.TestCase):
 
 def load_tests(loader, tests, ignore):
     """Add doctests."""
-    tests.addTests(doctest.DocTestSuite(arxpy.smt.search))
+    tests.addTests(doctest.DocTestSuite(arxpy.smt.search_differential))
     return tests
