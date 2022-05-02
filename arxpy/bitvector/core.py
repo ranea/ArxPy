@@ -1,10 +1,10 @@
 """Provide the basic bit-vector types."""
 import math
 
-from sympy.core import basic
+from sympy import preorder_traversal, Basic, Atom
 
 
-class Term(basic.Basic):
+class Term(Basic):
     """Represent bit-vector terms.
 
     Bit-vector terms are constants, variables and operations applied to terms.
@@ -173,7 +173,7 @@ class Term(basic.Basic):
 
     def __new__(cls, *args, width):
         assert isinstance(width, int) and 0 < width
-        obj = basic.Basic.__new__(cls, *args)
+        obj = Basic.__new__(cls, *args)
         obj._width = width
         return obj
 
@@ -278,7 +278,7 @@ class Term(basic.Basic):
     #
     #     """
     #     assert isinstance(t, Term)
-    #     for sub in basic.preorder_traversal(t):
+    #     for sub in preorder_traversal(t):
     #         if self == sub:
     #             return True
     #     else:
@@ -298,7 +298,7 @@ class Term(basic.Basic):
         if types:
             types = tuple(
                 [t if isinstance(t, type) else type(t) for t in types])
-        nodes = basic.preorder_traversal(self)
+        nodes = preorder_traversal(self)
         if types:
             result = {node for node in nodes if isinstance(node, types)}
         else:
@@ -306,7 +306,7 @@ class Term(basic.Basic):
         return result
 
 
-class Constant(basic.Atom, Term):
+class Constant(Atom, Term):
     """Represent bit-vector constants.
 
     Bit-vector constants are interpreted as unsigned integers in base 2,
@@ -429,7 +429,7 @@ class Constant(basic.Atom, Term):
         return format(self.val, '0=#{}o'.format(width))
 
 
-class Variable(basic.Atom, Term):
+class Variable(Atom, Term):
     """Represent bit-vector variables.
 
     Args:
